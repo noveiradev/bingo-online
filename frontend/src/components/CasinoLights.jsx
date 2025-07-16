@@ -1,6 +1,6 @@
-export default function CasinoLights({ location }) {
+export default function CasinoLights({ className }) {
   return (
-    <div className={`absolute ${location}-0 w-full h-[0.85rem] overflow-hidden bg-[#EFA418]`}>
+    <div className={className}>
       <div className="flex h-full items-center">
         {/* Contenedor animado */}
         <div className="flex animate-scroll-smooth">
