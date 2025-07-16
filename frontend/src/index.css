@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "tailwindcss";
 
 @theme {
   --color-layout: #0C0B07;
+  --color-header: #FFE2B0;
   --color-dark-gold: #DD8D1B;
   --color-gold: #FFC72C;
   --color-light-gold: #E5B01F;
@@ -16,10 +19,33 @@
   --color-dark-gray: #3C3C3A;
   --color-coffee-gray: #372C2C;
   --color-deep-blue: #44728E;
+  --color-ws-button: #075E54;
   --color-militar-green: #649042;
   --color-coral-red: #FD3D39;
   --color-simple-gold: #F2BC71;
   --color-gold-orange: #FFAE3A;
   --color-yellow-cake: #FFD14B;
   --color-deep-red: #FF4B4B;
+  --color-reminder: #D46613;
+
+  --font-inter: "Inter", sans-serif; 
+  --font-poppins: "Poppins", sans-serif; 
+}
+
+
+@keyframes scroll-smooth {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-5%);
+  }
+  100% {
+    transform: translateX(-10%);
+  }
+}
+
+.animate-scroll-smooth {
+  animation: scroll-smooth 2s linear infinite;
+  display: flex;
 }
