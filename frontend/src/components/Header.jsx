@@ -1,5 +1,5 @@
 import CasinoLights from "./CasinoLights";
-import WhatsApp from '@/icons/WhatsApp';
+import WhatsApp from "@/icons/WhatsApp";
 
 export default function Header() {
   return (
