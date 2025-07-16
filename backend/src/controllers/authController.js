@@ -4,7 +4,7 @@ import { hashPassword, comparePassword, signToken } from '../config/auth.js';
 export const registerUser = async (req, res) => {
   try {
     const {
-      name,
+      username,
       password,
       security_question,
       security_answer,
@@ -12,12 +12,12 @@ export const registerUser = async (req, res) => {
     } = req.body;
 
     // Validate required fields
-    if (!name || !password || !security_question || !security_answer || !phone) {
+    if (!username || !password || !security_question || !security_answer || !phone) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
     }
 
     // check if the user already exists
-    const existingUser = await User.findByName(name);
+    const existingUser = await User.findByName(username);
     if (existingUser) {
       return res.status(409).json({ error: 'El nombre de usuario ya está en uso.' });
     }
@@ -26,7 +26,7 @@ export const registerUser = async (req, res) => {
 
     // Create user instance
     const newUser = new User({
-      name,
+      username,
       password: hashedPwd,
       security_question,
       security_answer,
@@ -45,15 +45,15 @@ export const registerUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   try {
-    const { name, password } = req.body;
+    const { username, password } = req.body;
 
     // Validate required fields
-    if (!name || !password) {
+    if (!username || !password) {
       return res.status(400).json({ error: 'Nombre y contraseña son obligatorios.' });
     }
 
-    // Seach user by name
-    const user = await User.findByName(name);
+    // Seach user by username
+    const user = await User.findByName(username);
     if (!user) {
       return res.status(401).json({ error: 'Nombre de usuario no encontrado.' });
     }
@@ -72,7 +72,7 @@ export const loginUser = async (req, res) => {
       token,
       user: {
         id: user.id,
-        name: user.name,
+        username: user.username,
         role: user.role,
       }
     });
