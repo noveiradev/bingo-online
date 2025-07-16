@@ -1,4 +1,5 @@
-import lights from "@/assets/images/casino_lights.png";
+import CasinoLights from "./CasinoLights";
+import WhatsApp from '@/icons/WhatsApp';
 
 export default function Header() {
   return (
@@ -7,14 +8,14 @@ export default function Header() {
         Únete a nuestro grupo de WhatsApp para que puedas jugar tus cartones!
       </h1>
       <a
-        className="py-2 px-4 bg-ws-button text-white rounded-full"
+        className="py-2 px-4 bg-ws-button text-white rounded-full flex items-center gap-2"
         href="https://chat.whatsapp.com/G5uW3TqBgGD2NXecXxRDPV?mode=r_t"
         target="_blank"
-        noreferrer
+        noreferrer="true"
       >
-        Ir a WhatsApp
+        Ir a WhatsApp <WhatsApp w="16" h="16"></WhatsApp>
       </a>
-      <img src={lights} className="absolute bottom-0 left-0 w-full" alt="Casino Lights" />
+      <CasinoLights location={"bottom"}></CasinoLights>
     </header>
   );
 }
