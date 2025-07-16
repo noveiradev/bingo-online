@@ -15,7 +15,11 @@ export default function Header() {
       >
         Ir a WhatsApp <WhatsApp w="16" h="16"></WhatsApp>
       </a>
-      <CasinoLights location={"bottom"}></CasinoLights>
+      <CasinoLights
+        className={
+          "absolute bottom-0 w-full h-[0.85rem] overflow-hidden bg-[#EFA418]"
+        }
+      ></CasinoLights>
     </header>
   );
 }
