@@ -5,7 +5,7 @@ export const getProfile = async (req, res) => {
     const userId = req.user.id;
 
     const result = await client.execute({
-      sql: 'SELECT id, name, phone, registration_date, role FROM users WHERE id = ?',
+      sql: 'SELECT id, username, phone, registration_date, role FROM users WHERE id = ?',
       args: [userId],
     });
 
