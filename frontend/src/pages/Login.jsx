@@ -1,12 +1,46 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 import Logo from "@/assets/images/logo.png";
 import User from "@/icons/User.jsx";
 import Key from "@/icons/Key.jsx";
 
-import { Link } from "react-router-dom";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 
 export default function Login() {
+  const { login, user } = useAuth();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const [serverError, setServerError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    setServerError("");
+
+    try {
+      await login(data);
+
+      if (user?.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      setServerError(error.message || "Error al iniciar sesión");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <>
       <section className="max-w-[768px] mx-auto flex flex-col items-center justify-center pt-4">
@@ -20,23 +54,33 @@ export default function Login() {
         />
       </section>
       <section className="flex flex-col items-center justify-center">
-        <form className="flex flex-col mt-6">
+        <form className="flex flex-col mt-6" onSubmit={handleSubmit(onSubmit)}>
           <article className="flex flex-col gap-4">
             <Input
               type="text"
               name="username"
               id="username"
               placeholder="Nombre de usuario"
+              register={register}
+              error={errors.username}
+              {...register("username", {
+                required: "Por favor llena todos los campos",
+              })}
             >
-              <User w={"22"} h={"22"} />
+              <User w="22" h="22" />
             </Input>
+
             <Input
               type="password"
               name="password"
               id="password"
               placeholder="Contraseña"
+              register={register}
+              {...register("password", {
+                required: "Por favor llena todos los campos",
+              })}
             >
-              <Key w={"22"} h={"22"} />
+              <Key w="22" h="22" />
             </Input>
           </article>
           <Link to={"/forgot-password"} className="text-right">
@@ -53,9 +97,12 @@ export default function Login() {
               <span className="text-dark-gold text-sm font-semibold">
                 ¿No tienes cuenta?{" "}
               </span>
-                <Link to={"/register"} className="text-gold underline text-right font-inter text-sm">
-                  ➡️Regístrate⬅️
-                </Link>
+              <Link
+                to={"/register"}
+                className="text-gold underline text-right font-inter text-sm"
+              >
+                ➡️Regístrate⬅️
+              </Link>
             </div>
           </article>
         </form>
