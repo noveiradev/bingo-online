@@ -31,8 +31,8 @@ export default function Input({
       </div>
 
       {error && (
-        <p className="absolute bottom-35 text-red-400 text-xs font-bold">
-          {error.message} {/* Esto mostrará el mensaje de minLength */}
+        <p className="absolute left-0 bottom-30 w-full text-center text-red-400 text-xs font-bold">
+          {error.message}
         </p>
       )}
     </>
