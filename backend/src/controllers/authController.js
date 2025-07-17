@@ -81,3 +81,28 @@ export const loginUser = async (req, res) => {
     return res.status(500).json({ error: 'Error interno del servidor.' });
   }
 };
+
+export const recoverPassword = async (req, res) => {
+  const { username, security_question, security_answer, new_password } = req.body;
+
+  try {
+    if (!username || !security_question || !security_answer || !new_password) {
+      return res.status(400).json({ message: 'All fields are required.' });
+    }
+
+    const user = await User.findByUsernameAndSecurity(username, security_question, security_answer);
+
+    if (!user) {
+      return res.status(401).json({ message: 'Security information is incorrect.' });
+    }
+
+    const hashedPassword = await hashPassword(new_password);
+
+    await User.updatePassword(user.id, hashedPassword);
+
+    res.status(200).json({ message: 'Password successfully updated.' });
+  } catch (error) {
+    console.error('Error recovering password:', error);
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
+};
