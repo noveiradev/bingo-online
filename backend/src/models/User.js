@@ -33,7 +33,7 @@ class User {
     throw new Error("No fields to update.");
   }
 
-  // Creamos el SET dinámico tipo: "username = ?, phone = ?"
+  // Created a dynamic SQL update statement
   const setClause = keys.map(key => `${key} = ?`).join(', ');
 
   const sql = `UPDATE users SET ${setClause} WHERE id = ?`;
@@ -49,6 +49,28 @@ class User {
     throw error;
   }
 }
+
+  static async findByUsernameAndSecurity(username, question, answer) {
+    const result = await client.execute({
+      sql: `
+        SELECT * FROM users
+        WHERE username = ? AND security_question = ? AND security_answer = ?
+      `,
+      args: [username, question, answer],
+    });
+
+    return result.rows[0]; // return user if found, otherwise undefined
+  }
+
+    static async updatePassword(id, newPassword) {
+    await client.execute({
+      sql: `
+        UPDATE users SET password = ?
+        WHERE id = ?
+      `,
+      args: [newPassword, id],
+    });
+  }
 
   // Save new user to the database
   async save() {
