@@ -21,6 +21,7 @@ export function useAuth() {
     sessionStorage.removeItem('authToken');
     sessionStorage.removeItem('user');
     setUser(null);
+    window.location.href = '/login';
   };
 
   const isAuthenticated = () => {
