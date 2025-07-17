@@ -7,7 +7,9 @@ import Login from "@/pages/Login.jsx";
 import Register from "@/pages/Register.jsx";
 import ForgotPassword from "@/pages/ForgotPassword.jsx";
 
-import Dashboard from "@/pages/Dashboard.jsx";
+import Dashboard from "@/pages/Dashboard";
+import Cardboards from "@/pages/Cardboards";
+import ReserveCardboard from "@/pages/ReserveCardboard";
 
 export default function App() {
   return (
@@ -33,17 +35,27 @@ export default function App() {
               <Route
                 path="/cardboards"
                 element={
-                  <AuthRoute requiredRoles={["user", "admin"]}></AuthRoute>
+                  <AuthRoute requiredRoles={["user", "admin"]}>
+                    <Cardboards />
+                  </AuthRoute>
                 }
               />
               <Route
                 path="/reserve-cardboard"
                 element={
-                  <AuthRoute requiredRoles={["user", "admin"]}></AuthRoute>
+                  <AuthRoute requiredRoles={["user", "admin"]}>
+                    <ReserveCardboard />
+                  </AuthRoute>
                 }
               />
               <Route
                 path="/game-rules"
+                element={
+                  <AuthRoute requiredRoles={["user", "admin"]}></AuthRoute>
+                }
+              />
+              <Route
+                path="/patterns"
                 element={
                   <AuthRoute requiredRoles={["user", "admin"]}></AuthRoute>
                 }
@@ -60,7 +72,17 @@ export default function App() {
                   <AuthRoute requiredRoles={["user", "admin"]}></AuthRoute>
                 }
               />
+              <Route
+                path="/unauthorized"
+                element={
+                 <>a</>
+                }
+              />
               // Routes need Only (Admin role) to access
+              <Route
+                path="/admin/dashboard"
+                element={<AuthRoute requiredRoles={["admin"]}></AuthRoute>}
+              />
               <Route
                 path="/verify-cardboards"
                 element={<AuthRoute requiredRoles={["admin"]}></AuthRoute>}
