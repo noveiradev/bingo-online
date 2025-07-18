@@ -13,10 +13,10 @@ export default function Answer({ w, h, color }) {
         <path
           d="M1 1H13M1 6H7M1 11H13"
           stroke={color || "white"}
-          stroke-opacity="0.7"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeOpacity="0.7"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     </>

@@ -8,10 +8,13 @@ import Rules from "@/assets/images/rules.webp";
 import Settings from "@/assets/images/Settings.webp";
 
 import Exit from "@/icons/Exit";
+import ModalMobilePay from "@/components/ModalMobilePay";
 import { useAuth } from "@/hooks/useAuth";
+import { useState } from "react";
 
 export default function Dashboard() {
   const { logout } = useAuth();
+  const [payData, setPayData] = useState(false);
 
   let option = [
     { img: Cardboards, text: "Tus cartones", path: "/cardboards" },
@@ -20,7 +23,7 @@ export default function Dashboard() {
       text: "Apartar cartones",
       path: "/reserve-cardboard",
     },
-    { img: PayInformation, text: "Pago móvil", path: "" },
+    { img: PayInformation, text: "Pago móvil" },
     { img: Patterns, text: "Modalidades", path: "/patterns" },
     { img: Rules, text: "Reglas de juego", path: "/game-rules" },
     { img: Settings, text: "Configuración", path: "/settings" },
@@ -28,8 +31,14 @@ export default function Dashboard() {
 
   return (
     <>
-      <section className="max-w-[768px] mx-auto flex flex-col items-center justify-center pt-4 relative">
-        <span onClick={logout} className="absolute top-2 right-2 flex items-center text-green-apple font-poppins gap-1">
+      <section className="relative max-w-[768px] mx-auto flex flex-col items-center justify-center pt-4">
+        {payData && (
+          <ModalMobilePay modalFunction={setPayData} payData={payData} />
+        )}
+        <span
+          onClick={logout}
+          className="absolute top-2 right-2 flex items-center text-green-apple font-poppins gap-1"
+        >
           <Exit w="20" h="30" color="#8ACE56"></Exit>
           Salir
         </span>
@@ -46,6 +55,13 @@ export default function Dashboard() {
             <a
               key={i}
               href={opt.path}
+              onClick={
+                opt.path === undefined
+                  ? () => {
+                      setPayData(!payData);
+                    }
+                  : () => {}
+              }
               className="flex flex-col justify-center items-center p-2 bg-white/10 w-[9rem] text-option border-2 border-dark-red rounded-[12px] shadow-[#DF8E1C]/20 shadow-md"
             >
               <img

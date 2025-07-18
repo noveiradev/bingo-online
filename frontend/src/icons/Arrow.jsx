@@ -13,10 +13,10 @@ export default function Arrow({ w, h, color }) {
         <path
           d="M11 0.999999L6 6L1 1"
           stroke={color || "white"}
-          stroke-opacity="1"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeOpacity="1"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     </>
