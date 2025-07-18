@@ -1,6 +1,6 @@
 import GoBack from "@/components/GoBack";
 
-export default function GameRoom() {
+export default function Unauthorized() {
   return (
     <>
       <section className="max-w-[768px] mx-auto flex flex-col items-center justify-center pt-4">
@@ -9,5 +9,5 @@ export default function GameRoom() {
         </div>
       </section>
     </>
-  );
+  )
 }
