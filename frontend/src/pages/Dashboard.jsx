@@ -20,7 +20,7 @@ export default function Dashboard() {
       text: "Apartar cartones",
       path: "/reserve-cardboard",
     },
-    { img: PayInformation, text: "Pago móvil", path: "/pay-information" },
+    { img: PayInformation, text: "Pago móvil", path: "" },
     { img: Patterns, text: "Modalidades", path: "/patterns" },
     { img: Rules, text: "Reglas de juego", path: "/game-rules" },
     { img: Settings, text: "Configuración", path: "/settings" },
@@ -29,7 +29,7 @@ export default function Dashboard() {
   return (
     <>
       <section className="max-w-[768px] mx-auto flex flex-col items-center justify-center pt-4 relative">
-        <span onClick={logout} className="absolute top-2 left-2 flex items-center text-green-apple font-poppins gap-1">
+        <span onClick={logout} className="absolute top-2 right-2 flex items-center text-green-apple font-poppins gap-1">
           <Exit w="20" h="30" color="#8ACE56"></Exit>
           Salir
         </span>
