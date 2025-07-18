@@ -10,14 +10,23 @@ import ForgotPassword from "@/pages/ForgotPassword.jsx";
 import Dashboard from "@/pages/Dashboard";
 import Cardboards from "@/pages/Cardboards";
 import ReserveCardboard from "@/pages/ReserveCardboard";
+import GameRules from "@/pages/GameRules";
+import Settings from "@/pages/Settings";
+import GameRoom from "@/pages/GameRoom";
+import Unauthorized from "@/pages/Unauthorized";
+import AdminDashboard from "@/pages/AdminDashboard";
+import VerifyCardboard from "@/pages/VerifyCardboard";
+import PayInformation from "@/pages/PayInformation";
+import GamePatterns from "@/pages/GamePatterns";
+import CreatePatterns from "@/pages/CreatePatterns";
 
 export default function App() {
   return (
     <>
       <Router>
-        <div className="min-h-screen flex flex-col">
+        <div className="h-dvh flex flex-col">
           <Header />
-          <main className="flex-1 bg-layout">
+          <main className="flex-1 bg-layout overflow-y-hidden">
             <Routes>
               // Routes with access without authentication
               <Route path="/login" element={<Login />} />
@@ -51,57 +60,77 @@ export default function App() {
               <Route
                 path="/game-rules"
                 element={
-                  <AuthRoute requiredRoles={["user", "admin"]}></AuthRoute>
+                  <AuthRoute requiredRoles={["user", "admin"]}>
+                    <GameRules />
+                  </AuthRoute>
                 }
               />
               <Route
                 path="/patterns"
                 element={
-                  <AuthRoute requiredRoles={["user", "admin"]}></AuthRoute>
+                  <AuthRoute requiredRoles={["user", "admin"]}>
+                    <GamePatterns />
+                  </AuthRoute>
                 }
               />
               <Route
                 path="/settings"
                 element={
-                  <AuthRoute requiredRoles={["user", "admin"]}></AuthRoute>
+                  <AuthRoute requiredRoles={["user", "admin"]}>
+                    <Settings />
+                  </AuthRoute>
                 }
               />
               <Route
                 path="/game/room:id"
                 element={
-                  <AuthRoute requiredRoles={["user", "admin"]}></AuthRoute>
+                  <AuthRoute requiredRoles={["user", "admin"]}>
+                    <GameRoom />
+                  </AuthRoute>
                 }
               />
               <Route
                 path="/unauthorized"
                 element={
-                 <>a</>
+                 <Unauthorized />
                 }
               />
               // Routes need Only (Admin role) to access
               <Route
                 path="/admin/dashboard"
-                element={<AuthRoute requiredRoles={["admin"]}></AuthRoute>}
+                element={<AuthRoute requiredRoles={["admin"]}>
+                  <AdminDashboard />
+                </AuthRoute>}
               />
               <Route
                 path="/verify-cardboards"
-                element={<AuthRoute requiredRoles={["admin"]}></AuthRoute>}
+                element={<AuthRoute requiredRoles={["admin"]}>
+                  <VerifyCardboard />
+                </AuthRoute>}
               />
               <Route
                 path="/pay-information"
-                element={<AuthRoute requiredRoles={["admin"]}></AuthRoute>}
+                element={<AuthRoute requiredRoles={["admin"]}>
+                  <PayInformation />
+                </AuthRoute>}
               />
               <Route
                 path="/pay-information:id"
-                element={<AuthRoute requiredRoles={["admin"]}></AuthRoute>}
+                element={<AuthRoute requiredRoles={["admin"]}>
+                  <PayInformation />
+                </AuthRoute>}
               />
               <Route
                 path="/game-patterns"
-                element={<AuthRoute requiredRoles={["admin"]}></AuthRoute>}
+                element={<AuthRoute requiredRoles={["admin"]}>
+                  <GamePatterns />
+                </AuthRoute>}
               />
               <Route
                 path="/create-pattern"
-                element={<AuthRoute requiredRoles={["admin"]}></AuthRoute>}
+                element={<AuthRoute requiredRoles={["admin"]}>
+                  <CreatePatterns />
+                </AuthRoute>}
               />
             </Routes>
           </main>
