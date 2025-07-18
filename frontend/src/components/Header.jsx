@@ -3,12 +3,12 @@ import WhatsApp from "@/icons/WhatsApp";
 
 export default function Header() {
   return (
-    <header className="relative bg-header flex flex-col gap-3 items-center justify-center p-2 py-4">
+    <header className="relative bg-header flex flex-col stable:flex-row stable:py-6 gap-3 items-center justify-center p-2 py-4">
       <h1 className="text-md text-center">
-        Únete a nuestro grupo de WhatsApp para que puedas jugar tus cartones!
+        Únete a nuestro grupo de WhatsApp
       </h1>
       <a
-        className="py-2 px-4 bg-ws-button text-white rounded-full flex items-center gap-2"
+        className="py-1 px-4 shadow-[#000]/40 shadow-md bg-ws-button text-white rounded-full flex items-center justify-center gap-2"
         href="https://chat.whatsapp.com/G5uW3TqBgGD2NXecXxRDPV?mode=r_t"
         target="_blank"
         noreferrer="true"
