@@ -31,8 +31,18 @@
 
   --font-inter: "Inter", sans-serif; 
   --font-poppins: "Poppins", sans-serif; 
+
+  --breakpoint-stable: 30rem;
 }
 
+@layer utilities {
+  .border-gradient-rounded {
+    background: linear-gradient(var(--bg-color, #181714), #181714) padding-box,
+                linear-gradient(to top, transparent, #5A7420) border-box;
+    border: 2px solid transparent;
+    border-radius: 0.75rem 0.75rem 0 0;
+  }
+}
 
 @keyframes scroll-smooth {
   0% {
