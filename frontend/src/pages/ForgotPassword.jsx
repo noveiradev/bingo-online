@@ -33,7 +33,7 @@ export default function ForgotPassword() {
         new_password: data.password,
       };
 
-      const response = await passwordService.register(userData);
+      const response = await passwordService.password(userData);
 
       if (response) {
         setMessage("Recuperación exitosa!");
