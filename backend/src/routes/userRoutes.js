@@ -10,4 +10,7 @@ router.get('/profile', authenticateToken, UserController.getProfile);
 // Update user profile
 router.put('/profile', authenticateToken, UserController.updateProfile);
 
+// Delete user account
+router.delete('/deleteAccount', authenticateToken, UserController.deleteAccount);
+
 export default router;
