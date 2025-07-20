@@ -16,7 +16,7 @@ export const approveReservation = async (req, res) => {
     const { rowsAffected } = await BingoCard.approveReservation(cardId, userId);
 
     if (rowsAffected === 0) {
-      return res.status(400).json({ message: 'No se pudo aprobar la reserva. Verifica los datos.' });
+      return res.status(200).json({ success: false, message: 'No se pudo aprobar la reserva. Verifica los datos.' });
     }
 
     res.json({ message: 'Reserva aprobada exitosamente.' });
@@ -32,7 +32,7 @@ export const rejectReservation = async (req, res) => {
     const { rowsAffected } = await BingoCard.rejectReservation(cardId, userId);
 
     if (rowsAffected === 0) {
-      return res.status(400).json({ message: 'No se pudo rechazar la reserva. Verifica los datos.' });
+      return res.status(200).json({ success: false, message: 'No se pudo rechazar la reserva. Verifica los datos.' });
     }
 
     res.json({ message: 'Reserva rechazada y cartón liberado exitosamente.' });
