@@ -23,6 +23,19 @@ class User {
     return new User(result.rows[0]);
   }
 
+  // Find user by username
+  static async findByName(username) {
+    const result = await client.execute({
+      sql: 'SELECT * FROM users WHERE username = ?',
+      args: [username],
+    });
+    if (result.rows.length === 0) return null;
+
+    // Convert the first row to a User instance
+    return new User(result.rows[0]);
+  }
+
+
  // Update user by ID
   static async updateById(id, fields) {
     const keys = Object.keys(fields);
