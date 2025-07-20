@@ -12,17 +12,16 @@ class User {
   }
 
   // Find user by ID
-  static async findByName(username) {
+  static async findById(id) {
     const result = await client.execute({
-      sql: 'SELECT * FROM users WHERE username = ?',
-      args: [username],
+      sql: 'SELECT id, username, phone, registration_date, role FROM users WHERE id = ?',
+      args: [id],
     });
+
     if (result.rows.length === 0) return null;
 
-    // Convert the first row to a User instance
     return new User(result.rows[0]);
   }
-
 
  // Update user by ID
   static async updateById(id, fields) {

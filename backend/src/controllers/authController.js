@@ -3,23 +3,17 @@ import { hashPassword, comparePassword, signToken } from '../config/auth.js';
 
 export const registerUser = async (req, res) => {
   try {
-    const {
-      username,
-      password,
-      security_question,
-      security_answer,
-      phone
-    } = req.body;
+    const { username, password, security_question, security_answer, phone } = req.body;
 
     // Validate required fields
     if (!username || !password || !security_question || !security_answer || !phone) {
-      return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+      return res.status(200).json({ success: false, message: 'Todos los campos son obligatorios.' });
     }
 
     // check if the user already exists
     const existingUser = await User.findByName(username);
     if (existingUser) {
-      return res.status(409).json({ error: 'El nombre de usuario ya está en uso.' });
+      return res.status(200).json({ success: false, message: 'El nombre de usuario ya está en uso.' });
     }
 
     const hashedPwd = await hashPassword(password);
@@ -36,10 +30,10 @@ export const registerUser = async (req, res) => {
     // Save user in the database
     await newUser.save();
 
-    return res.status(201).json({ message: 'Usuario registrado exitosamente.' });
+    return res.status(200).json({ success: true, message: 'Usuario registrado exitosamente.' });
   } catch (error) {
     console.error('Error registrando usuario:', error);
-    return res.status(500).json({ error: 'Error interno del servidor.' });
+    return res.status(500).json({ success: false, message: 'Error interno del servidor.' });
   }
 };
 
@@ -49,25 +43,26 @@ export const loginUser = async (req, res) => {
 
     // Validate required fields
     if (!username || !password) {
-      return res.status(400).json({ error: 'Nombre y contraseña son obligatorios.' });
+      return res.status(200).json({ success: false, message: 'Nombre y contraseña son obligatorios.' });
     }
 
     // Seach user by username
     const user = await User.findByName(username);
     if (!user) {
-      return res.status(401).json({ error: 'Nombre de usuario no encontrado.' });
+      return res.status(200).json({ success: false, message: 'Nombre de usuario no encontrado.' });
     }
 
     // Compare password
     const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ error: 'Contraseña incorrecta.' });
+      return res.status(200).json({ success: false, message: 'Contraseña incorrecta.' });
     }
 
     // Generate JWT token
     const token = signToken(user);
 
-    return res.json({
+    return res.status(200).json({
+      success: true,
       message: 'Login exitoso.',
       token,
       user: {
@@ -78,7 +73,7 @@ export const loginUser = async (req, res) => {
     });
   } catch (error) {
     console.error('Error en login:', error);
-    return res.status(500).json({ error: 'Error interno del servidor.' });
+    return res.status(500).json({ success: false, message: 'Error interno del servidor.' });
   }
 };
 
@@ -87,22 +82,23 @@ export const recoverPassword = async (req, res) => {
 
   try {
     if (!username || !security_question || !security_answer || !new_password) {
-      return res.status(400).json({ message: 'All fields are required.' });
+      return res.status(200).json({ success: false, message: 'Todos los campos son obligatorios.' });
     }
 
+    // Validate user with security question and answer
     const user = await User.findByUsernameAndSecurity(username, security_question, security_answer);
 
     if (!user) {
-      return res.status(401).json({ message: 'Security information is incorrect.' });
+      return res.status(200).json({ success: false, message: 'La información de seguridad es incorrecta.' });
     }
 
     const hashedPassword = await hashPassword(new_password);
 
     await User.updatePassword(user.id, hashedPassword);
 
-    res.status(200).json({ message: 'Password successfully updated.' });
+    res.status(200).json({ success: true, message: 'Contraseña actualizada exitosamente.' });
   } catch (error) {
-    console.error('Error recovering password:', error);
-    res.status(500).json({ message: 'Something went wrong.' });
+    console.error('Error al recuperar la contraseña:', error);
+    res.status(500).json({ success: false, message: 'Algo salió mal.' });
   }
 };

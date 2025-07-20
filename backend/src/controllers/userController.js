@@ -1,26 +1,19 @@
-import client from '../config/db.js';
 import User from '../models/User.js';
 import { hashPassword } from '../config/auth.js';
 
 export const getProfile = async (req, res) => {
   try {
     const userId = req.user.id;
-
-    const result = await client.execute({
-      sql: 'SELECT id, username, phone, registration_date, role FROM users WHERE id = ?',
-      args: [userId],
-    });
-
-    const user = result.rows[0];
+    const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(200).json({ error: true, message: 'Usuario no encontrado.' }); 
     }
 
-    res.json({ user });
+    res.status(200).json({ error: false, user });
   } catch (error) {
-    console.error('Error fetching user profile:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error al obtener el perfil del usuario:', error);
+    res.status(500).json({ error: true, message: 'Error interno del servidor.' });
   }
 };
 
@@ -47,14 +40,14 @@ export const updateProfile = async (req, res) => {
     }
 
     if (Object.keys(fieldsToUpdate).length === 0) {
-      return res.status(400).json({ message: "No fields provided for update." });
+      return res.status(200).json({ error: true, message: "No se proporcionaron datos para actualizar." }); 
     }
 
     await User.updateById(userId, fieldsToUpdate);
 
-    res.status(200).json({ message: "Profile updated successfully." });
+    res.status(200).json({ error: false, message: "Perfil actualizado correctamente." });
   } catch (error) {
-    console.error("Error updating profile:", error.message);
-    res.status(500).json({ message: "Something went wrong." });
+    console.error("Error al actualizar el perfil:", error.message);
+    res.status(500).json({ error: true, message: "Algo salió mal, por favor intenta más tarde." });
   }
 };
