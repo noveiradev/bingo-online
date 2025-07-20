@@ -35,8 +35,33 @@ class User {
     return new User(result.rows[0]);
   }
 
+  // Find user by username and security question/answer
+  static async findByUsernameAndSecurity(username, question, answer) {
+    const result = await client.execute({
+      sql: `
+        SELECT * FROM users
+        WHERE username = ? AND security_question = ? AND security_answer = ?
+      `,
+      args: [username, question, answer],
+    });
 
- // Update user by ID
+    return result.rows[0]; // return user if found, otherwise undefined
+  }
+
+  // Find user by ID with password (for authentication)
+  static async findByIdWithPassword(id) {
+    try {
+      const sql = 'SELECT id, password FROM users WHERE id = ?';
+      const { rows } = await client.execute({ sql, args: [id] });
+
+      return rows.length ? rows[0] : null;
+    } catch (error) {
+      console.error('Error al buscar usuario con contraseña:', error.message);
+      throw error;
+    }
+  }
+
+  // Update user by ID
   static async updateById(id, fields) {
     const keys = Object.keys(fields);
     const values = Object.values(fields);
@@ -62,19 +87,8 @@ class User {
   }
 }
 
-  static async findByUsernameAndSecurity(username, question, answer) {
-    const result = await client.execute({
-      sql: `
-        SELECT * FROM users
-        WHERE username = ? AND security_question = ? AND security_answer = ?
-      `,
-      args: [username, question, answer],
-    });
-
-    return result.rows[0]; // return user if found, otherwise undefined
-  }
-
-    static async updatePassword(id, newPassword) {
+  // Update user password
+  static async updatePassword(id, newPassword) {
     await client.execute({
       sql: `
         UPDATE users SET password = ?
@@ -82,6 +96,18 @@ class User {
       `,
       args: [newPassword, id],
     });
+  }
+
+  // Delete user by ID
+  static async deleteById(id) {
+    try {
+      const sql = 'DELETE FROM users WHERE id = ?';
+      await client.execute({ sql, args: [id] });
+      return true;
+    } catch (error) {
+      console.error('Error al eliminar el usuario:', error.message);
+      throw error;
+    }
   }
 
   // Save new user to the database
