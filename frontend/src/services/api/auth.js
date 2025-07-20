@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3000/"
+const BASE_URL = "http://localhost:3000/";
 
 export const authService = {
   login: async (credentials) => {
@@ -61,7 +61,9 @@ export const passwordService = {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Error en la recuperación de contraseña");
+        throw new Error(
+          errorData.message || "Error en la recuperación de contraseña"
+        );
       }
 
       return await response.json();
@@ -79,14 +81,16 @@ export const updateService = {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
         },
         body: JSON.stringify(userData),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Error en la actualización de perfil");
+        throw new Error(
+          errorData.message || "Error en la actualización de perfil"
+        );
       }
 
       return await response.json();
