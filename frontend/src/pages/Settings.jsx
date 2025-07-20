@@ -46,7 +46,7 @@ export default function Settings() {
   
   return (
     <>
-      <section className="relative max-w-[768px] mx-auto flex flex-col items-center h-dvh overflow-hidden pt-4">
+      <section className="relative max-w-[768px] mx-auto flex flex-col items-center h-full overflow-hidden pt-4">
         {modalView && <ModalDeleteAcc modalFunction={setModalView} modalView={modalView}/>}
         <div className="flex w-full max-w-[500px] px-2">
           <GoBack></GoBack>
@@ -130,7 +130,7 @@ export default function Settings() {
           </article>
           <span
             onClick={() => setModalView(!modalView)}
-            className="text-[#FF9A9A] underline font-semibold font-poppins text-center mx-auto absolute bottom-50 left-0 right-0 cursor-pointer"
+            className="text-[#FF9A9A] underline font-semibold font-poppins text-center mx-auto absolute bottom-5 left-0 right-0 cursor-pointer"
           >
             Eliminar cuenta
           </span>
