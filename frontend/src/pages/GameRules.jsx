@@ -3,7 +3,7 @@ import GoBack from "@/components/GoBack";
 export default function GameRules() {
   return (
     <>
-      <section className="max-w-[768px] mx-auto flex flex-col items-center h-dvh overflow-hidden pt-4">
+      <section className="max-w-[768px] mx-auto flex flex-col items-center h-full overflow-hidden pt-4">
         <div className="flex w-full max-w-[500px] px-2">
           <GoBack></GoBack>
         </div>
