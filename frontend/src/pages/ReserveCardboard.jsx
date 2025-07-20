@@ -1,15 +1,53 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { availableCards } from "@/services/api/cards";
+
+// import { toast } from "@pheralb/toast";
 import GoBack from "@/components/GoBack";
 import Reminder from "@/components/Reminder";
+import CardToReserve from "@/components/Cards/CardToReserve";
 import Input from "@/components/Input";
 
 import Search from "@/icons/Search";
 export default function ReserveCardboard() {
   const [view, setView] = useState("grid");
+  const { user } = useAuth();
+  const [cardboards, setCardboards] = useState([]);
+  const [message, setMessage] = useState(null);
+
+  useEffect(() => {
+    const getCardboards = async () => {
+      try {
+        const response = await availableCards.availableCards();
+
+        if (response.length === 0) {
+          setMessage(
+            <p className="mx-auto w-full text-center text-[#FAF2E7] font-semibold font-poppins">
+              No hay cartones disponibles en estos momentos
+            </p>
+          );
+        } else {
+          setCardboards(response);
+          setMessage(null);
+        }
+      } catch (error) {
+        console.error("Error obteniendo cartones:", error);
+        setMessage(
+          <p className="mx-auto w-full text-center text-[#FAF2E7] font-semibold font-poppins">
+            Ocurrió un error al cargar los cartones, intentalo mas tarde!
+          </p>
+        );
+      }
+    };
+
+    if (user?.id) {
+      getCardboards();
+    }
+  }, [user]);
 
   return (
     <>
-      <section className="max-w-[768px] mx-auto flex flex-col items-center justify-center pt-4">
+      <section className="max-w-[768px] mx-auto h-full flex flex-col items-center justify-center pt-4">
         <div className="flex w-full max-w-[500px] px-2">
           <GoBack></GoBack>
         </div>
@@ -21,8 +59,14 @@ export default function ReserveCardboard() {
             Los cartones ya apartados por otros jugadores no se mostrarán en
             esta página.
           </p>
+          <p className="mt-2 font-medium">
+            Cada carton tiene un costo de{" "}
+            <span className="text-brilliant-green font-semibold text-[0.95rem]">
+              50Bs.
+            </span>
+          </p>
         </Reminder>
-        <div className="flex px-2 gap-2 items-center justify-between h-[4rem]">
+        <div className="flex px-2 py-2 gap-2 items-center justify-between h-[3.5rem]">
           <Input placeholder="Buscar por número">
             <Search />
           </Input>
@@ -30,7 +74,7 @@ export default function ReserveCardboard() {
             <button
               className={`${
                 view === "grid"
-                  ? "bg-deep-red/51 border-2 border-green-apple text-green-apple font-semibold"
+                  ? "bg-deep-red/51 outline-2 outline-green-apple text-green-apple font-semibold"
                   : "bg-white/20 text-[#FAF2E7]/60 font-semibold"
               } w-[6rem] px-2 py-2 rounded-md`}
               onClick={() => setView("grid")}
@@ -40,7 +84,7 @@ export default function ReserveCardboard() {
             <button
               className={`${
                 view === "list"
-                  ? "bg-deep-red/51 border-2 border-green-apple text-green-apple font-semibold"
+                  ? "bg-deep-red/51 outline-2 outline-green-apple text-green-apple font-semibold"
                   : "bg-white/20 text-[#FAF2E7]/60 font-semibold"
               } w-[6rem] px-2 py-2 rounded-md`}
               onClick={() => setView("list")}
@@ -49,7 +93,17 @@ export default function ReserveCardboard() {
             </button>
           </div>
         </div>
-        <article className="grid grid-cols-2 gap-2 mt-2 px-2"></article>
+        <article
+          className={`relative flex ${
+            view === "grid" ? "flex-wrap justify-center" : "flex-col"
+          } gap-2 w-[95%] h-full bg-white/10 border-2 border-gradient-rounded px-2 py-2 overflow-auto`}
+        >
+          {cardboards !== "" ? (
+            <CardToReserve cardsInfo={cardboards.data} viewMode={view} />
+          ) : (
+            <div className="w-full h-full flex items-center">{message}</div>
+          )}
+        </article>
       </section>
     </>
   );
