@@ -7,12 +7,13 @@ import { Link } from "react-router-dom";
 import Logo from "@/assets/images/logo.png";
 import User from "@/icons/User.jsx";
 import Key from "@/icons/Key.jsx";
+import { toast } from "@pheralb/toast";
 
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 
 export default function Login() {
-  const { login, user } = useAuth();
+const { login } = useAuth();
   const {
     register,
     handleSubmit,
@@ -20,25 +21,33 @@ export default function Login() {
   } = useForm();
 
   const [serverError, setServerError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    setIsLoading(true);
     setServerError("");
 
     try {
-      await login(data);
+      const response = await login(data);
 
-      if (user?.role === "admin") {
-        navigate("/admin/dashboard");
+      if (response.success) {
+        if (response.user?.role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/dashboard");
+        }
       } else {
-        navigate("/dashboard");
+        toast.error({
+          text: "Datos incorrectos",
+          description: "Verifica tus credenciales e inténtalo de nuevo",
+        });
       }
     } catch (error) {
       setServerError(error.message || "Error al iniciar sesión");
-    } finally {
-      setIsLoading(false);
+      console.log(serverError);
+      toast.error({
+        text: "Error",
+        description: error.message || "Ocurrió un error al iniciar sesión",
+      });
     }
   };
   return (
