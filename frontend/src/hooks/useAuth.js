@@ -1,38 +1,44 @@
-import { useState } from 'react';
-import { authService } from '@/services/api/auth';
+import { useState } from "react";
+import { authService } from "@/services/api/auth";
 
 export function useAuth() {
   const [user, setUser] = useState(() => {
-    const savedUser = sessionStorage.getItem('user');
+    const savedUser = sessionStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
   const login = async (credentials) => {
-    const response = await authService.login(credentials);
-    
-    sessionStorage.setItem('authToken', response.token);
-    sessionStorage.setItem('user', JSON.stringify(response.user));
-    
-    setUser(response.user);
-    return response;
+    try {
+      const response = await authService.login(credentials);
+
+      if (response.success) {
+        sessionStorage.setItem("authToken", response.token);
+        sessionStorage.setItem("user", JSON.stringify(response.user));
+        setUser(response.user);
+      }
+
+      return response;
+    } catch (error) {
+      console.error("Login error:", error);
+      return { success: false, error: error.message };
+    }
   };
 
   const logout = () => {
-    sessionStorage.removeItem('authToken');
-    sessionStorage.removeItem('user');
+    sessionStorage.removeItem("authToken");
+    sessionStorage.removeItem("user");
     setUser(null);
-    window.location.href = '/login';
+    window.location.href = "/login";
   };
 
   const isAuthenticated = () => {
-    return !!user && !!sessionStorage.getItem('authToken');
+    return !!user && !!sessionStorage.getItem("authToken");
   };
 
-  return { 
+  return {
     user,
-    login, 
+    login,
     logout,
-    isAuthenticated
+    isAuthenticated,
   };
 }
-
