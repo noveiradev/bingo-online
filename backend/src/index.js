@@ -5,6 +5,7 @@ import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import bingoCardRoutes from './routes/bingoCardRoutes.js';
 import adminBingoRoutes from './routes/adminBingoRoutes.js';
+import bingoPatternRoutes from './routes/bingoPatternRoutes.js';
 
 dotenv.config();
 
@@ -28,6 +29,9 @@ app.use('/api/cards', bingoCardRoutes);
 
 // Routes for admin bingo management
 app.use('/api/admin/cards', adminBingoRoutes);
+
+// Routes for bingo patterns
+app.use('/api/patterns', bingoPatternRoutes);
 
 // Base route
 app.get('/', (req, res) => {
