@@ -72,14 +72,22 @@ export class BingoCard {
 
   static async findReservedCards() {
     const query = `
-      SELECT bc.id, bc.numbers, r.user_id, r.date, r.payment_status
+      SELECT 
+        bc.id AS card_id, 
+        bc.numbers, 
+        r.user_id, 
+        u.username, 
+        u.phone, 
+        r.date, 
+        r.payment_status
       FROM bingo_cards bc
       JOIN reservations r ON bc.id = r.card_id
+      JOIN users u ON r.user_id = u.id
       WHERE r.payment_status = 'pending'
     `;
     return await client.execute({ sql: query });
   }
-
+  
   static async countPaidReservationsByUser(userId) {
     const query = `
       SELECT COUNT(*) AS total
