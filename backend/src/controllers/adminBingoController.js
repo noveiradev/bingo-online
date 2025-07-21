@@ -39,46 +39,6 @@ export const approveReservation = async (req, res) => {
   }
 };
 
-export const approveReservationWithBonus = async (req, res) => {
-  const { cardId, userId } = req.body;
-
-  try {
-    const result = await BingoCard.approveReservation(cardId, userId);
-
-    if (result.rowsAffected === 0) {
-      return res.status(404).json({ message: 'Reservation not found or already approved.' });
-    }
-
-    const paidCountResult = await BingoCard.countPaidReservationsByUser(userId);
-    const paidCount = paidCountResult.rows[0]?.count || 0;
-
-    if (paidCount % 3 === 0) {
-      const bonusResult = await BingoCard.assignFreeCardToUser(userId);
-
-      if (bonusResult.rowsAffected > 0) {
-        return res.status(200).json({ 
-          message: 'Reservation approved and bonus card assigned!',
-          bonusGranted: true
-        });
-      } else {
-        return res.status(200).json({ 
-          message: 'Reservation approved, but no bonus card available.',
-          bonusGranted: false
-        });
-      }
-    }
-
-    return res.status(200).json({ 
-      message: 'Reservation approved.',
-      bonusGranted: false 
-    });
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Internal server error.' });
-  }
-};
-
 export const rejectReservation = async (req, res) => {
   try {
     const { cardId, userId } = req.body;

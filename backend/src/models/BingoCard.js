@@ -6,28 +6,38 @@ export class BingoCard {
     return await client.execute({ sql: query, args: [id] });
   }
 
-  static async findByIdWithReservation(id) {
+  static async findByIdWithReservation(id, userId) {
     const query = `
       SELECT bc.*, r.user_id AS reserved_by, r.payment_status
       FROM bingo_cards bc
       LEFT JOIN reservations r
         ON bc.id = r.card_id AND r.payment_status IN ('pending', 'paid')
       WHERE bc.id = ?
-      ORDER BY r.date DESC
       LIMIT 1
     `;
-    return await client.execute({ sql: query, args: [id] });
+    const result = await client.execute({ sql: query, args: [id] });
+    const card = result.rows[0];
+
+    if (card && card.reserved_by && card.reserved_by !== userId) {
+      return null; 
+    }
+
+    return card;
   }
 
   static async findAllByUser(userId) {
     const query = `
-      SELECT bc.*
-      FROM bingo_cards bc
+      SELECT 
+        bc.*, 
+        r.payment_status, 
+        r.is_gift
+      FROM bingo_cards bc 
       JOIN reservations r ON bc.id = r.card_id
       WHERE r.user_id = ? AND r.payment_status IN ('pending', 'paid')
     `;
     return await client.execute({ sql: query, args: [userId] });
   }
+
 
   static async findAvailable() {
     const query = `
