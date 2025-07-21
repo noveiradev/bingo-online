@@ -1,13 +1,11 @@
 import client from '../config/db.js';
 
 export class BingoCard {
-
   static async findById(id) {
     const query = 'SELECT * FROM bingo_cards WHERE id = ?';
     return await client.execute({ sql: query, args: [id] });
   }
 
-  // New method to find a BingoCard by ID with reservation details
   static async findByIdWithReservation(id) {
     const query = `
       SELECT bc.*, r.user_id AS reserved_by, r.payment_status
@@ -21,7 +19,6 @@ export class BingoCard {
     return await client.execute({ sql: query, args: [id] });
   }
 
-  // Find all BingoCards reserved by a specific user
   static async findAllByUser(userId) {
     const query = `
       SELECT bc.*
@@ -32,20 +29,17 @@ export class BingoCard {
     return await client.execute({ sql: query, args: [userId] });
   }
 
-  // Find all available BingoCards that are not reserved
   static async findAvailable() {
-  const query = `
-    SELECT * FROM bingo_cards
-    WHERE id NOT IN (
-      SELECT card_id FROM reservations WHERE payment_status IN ('pending', 'paid')
-    )
-  `;
-  return await client.execute({ sql: query });
-}
+    const query = `
+      SELECT * FROM bingo_cards
+      WHERE id NOT IN (
+        SELECT card_id FROM reservations WHERE payment_status IN ('pending', 'paid')
+      )
+    `;
+    return await client.execute({ sql: query });
+  }
 
-  // Reserve a BingoCard for a user
   static async reserve(cardId, userId) {
-    // First check if the card is already reserved
     const checkQuery = `
       SELECT 1 FROM reservations
       WHERE card_id = ? AND payment_status IN ('pending', 'paid')
@@ -54,10 +48,9 @@ export class BingoCard {
     const { rows } = await client.execute({ sql: checkQuery, args: [cardId] });
 
     if (rows.length > 0) {
-      return { rowsAffected: 0 }; // Ya está reservado
+      return { rowsAffected: 0 };
     }
 
-    // Insert the reservation
     const insertQuery = `
       INSERT INTO reservations (user_id, card_id)
       VALUES (?, ?)
@@ -67,7 +60,6 @@ export class BingoCard {
     return { rowsAffected: 1 };
   }
 
-  // Cancel a reservation for a BingoCard
   static async cancelReservation(cardId, userId) {
     const updateQuery = `
       UPDATE reservations
@@ -75,10 +67,7 @@ export class BingoCard {
       WHERE card_id = ? AND user_id = ? AND payment_status IN ('pending', 'paid')
     `;
     const result = await client.execute({ sql: updateQuery, args: [cardId, userId] });
-
-    const rowsAffected = result.rowsAffected ?? 0;
-
-    return { rowsAffected };
+    return { rowsAffected: result.rowsAffected ?? 0 };
   }
 
   static async findReservedCards() {
@@ -91,14 +80,50 @@ export class BingoCard {
     return await client.execute({ sql: query });
   }
 
+  static async countPaidReservationsByUser(userId) {
+    const query = `
+      SELECT COUNT(*) AS total
+      FROM reservations
+      WHERE user_id = ? AND payment_status = 'paid'
+    `;
+    const { rows } = await client.execute({ sql: query, args: [userId] });
+    return rows[0]?.total || 0;
+  }
+
+  static async assignFreeCardToUser(userId) {
+    const availableCards = await this.findAvailable();
+    if (availableCards.rows.length === 0) {
+      return { success: false, message: 'No hay cartones disponibles para obsequiar.' };
+    }
+
+    const randomCard = availableCards.rows[Math.floor(Math.random() * availableCards.rows.length)];
+    const insertQuery = `
+      INSERT INTO reservations (user_id, card_id, payment_status, is_gift)
+      VALUES (?, ?, 'paid', TRUE)
+    `;
+    await client.execute({ sql: insertQuery, args: [userId, randomCard.id] });
+
+    return { success: true, cardId: randomCard.id };
+  }
+
   static async approveReservation(cardId, userId) {
     const query = `
       UPDATE reservations
       SET payment_status = 'paid'
       WHERE card_id = ? AND user_id = ? AND payment_status = 'pending'
     `;
+
     const result = await client.execute({ sql: query, args: [cardId, userId] });
+
     const rowsAffected = result.rowsAffected ?? 0;
+
+    if (rowsAffected > 0) {
+      const totalPaid = await this.countPaidReservationsByUser(userId);
+      if (totalPaid % 3 === 0) {
+        await this.assignFreeCardToUser(userId);
+      }
+    }
+
     return { rowsAffected };
   }
 
@@ -109,7 +134,6 @@ export class BingoCard {
       WHERE card_id = ? AND user_id = ? AND payment_status = 'pending'
     `;
     const result = await client.execute({ sql: query, args: [cardId, userId] });
-    const rowsAffected = result.rowsAffected ?? 0;
-    return { rowsAffected };
+    return { rowsAffected: result.rowsAffected ?? 0 };
   }
 }
