@@ -66,6 +66,7 @@ export const getAvailableCards = async (req, res) => {
     const { rows } = await BingoCard.findAvailable();
     res.status(200).json({
       success: true,
+       message: 'No hay cartones disponibles actualmente.',
       data: rows
     });
   } catch (err) {
