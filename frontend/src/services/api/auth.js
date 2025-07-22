@@ -100,3 +100,28 @@ export const updateService = {
     }
   },
 };
+
+export const deleteAccount = {
+  delete: async (credentials) => {
+    try {
+      const response = await fetch(`${BASE_URL}api/user/deleteAccount`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error en la autenticación");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error en authService:", error);
+      throw error;
+    }
+  },
+};
