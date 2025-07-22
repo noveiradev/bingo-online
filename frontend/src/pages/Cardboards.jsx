@@ -93,8 +93,9 @@ export default function Cardboards() {
             <OwnedCardboard
               key={card.id}
               cardNumber={card.id}
+              pay={card.payment_status}
+              is_gift={card.is_gift}
               numbersArray={card.parsedNumbers}
-              price={card.price}
             />
           ))}
         </article>
