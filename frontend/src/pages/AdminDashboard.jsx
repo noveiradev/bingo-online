@@ -1,10 +1,10 @@
 import Logo from "@/assets/images/logo.png";
 
 import Cardboards from "@/assets/images/tus_cartones.webp";
-import ReservedCardboard from "@/assets/images/apartar_cartones.webp";
 import PayInformation from "@/assets/images/pago_movil.webp";
 import Patterns from "@/assets/images/modalidades.webp";
-import Rules from "@/assets/images/rules.webp";
+import Live from "@/assets/images/live.webp";
+import Players from "@/assets/images/jugadores.webp";
 import Settings from "@/assets/images/Settings.webp";
 
 import Exit from "@/icons/Exit";
@@ -14,22 +14,25 @@ export default function Dashboard() {
   const { logout } = useAuth();
 
   let option = [
-    { img: Cardboards, text: "Tus cartones", path: "/cardboards" },
+    { img: Cardboards, text: "Validar cartones", path: "/admin/verify-cardboards" },
+    { img: PayInformation, text: "Pago móvil", path: "/admin/pay-information" },
+    { img: Patterns, text: "Gestionar modalidades", path: "/admin/game-patterns" },
     {
-      img: ReservedCardboard,
-      text: "Apartar cartones",
-      path: "/reserve-cardboard",
+      img: Live,
+      text: "Iniciar partida en directo",
+      path: "/admin/game/room",
     },
-    { img: PayInformation, text: "Pago móvil", path: "/pay-information" },
-    { img: Patterns, text: "Modalidades", path: "/patterns" },
-    { img: Rules, text: "Reglas de juego", path: "/game-rules" },
-    { img: Settings, text: "Configuración", path: "/settings" },
+    { img: Players, text: "Jugadores", path: "/admin/platform_players" },
+    { img: Settings, text: "Configuración", path: "/admin/settings" },
   ];
 
   return (
     <>
       <section className="max-w-[768px] mx-auto flex flex-col items-center justify-center pt-4 relative">
-        <span onClick={logout} className="absolute top-2 left-2 flex items-center text-green-apple font-poppins gap-1">
+        <span
+          onClick={logout}
+          className="absolute top-2 right-2 flex items-center text-green-apple font-poppins gap-1"
+        >
           <Exit w="20" h="30" color="#8ACE56"></Exit>
           Salir
         </span>
@@ -46,7 +49,7 @@ export default function Dashboard() {
             <a
               key={i}
               href={opt.path}
-              className="flex flex-col justify-center items-center p-2 bg-white/10 w-[9rem] text-option border-2 border-dark-red rounded-[12px] shadow-[#DF8E1C]/20 shadow-md"
+              className="flex flex-col h-[7rem] justify-center items-center p-2 bg-white/10 w-[9rem] text-option border-2 border-dark-red rounded-[12px] shadow-[#DF8E1C]/20 shadow-md"
             >
               <img
                 src={opt.img}
