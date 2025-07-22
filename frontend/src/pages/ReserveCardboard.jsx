@@ -7,8 +7,8 @@ import GoBack from "@/components/GoBack";
 import Reminder from "@/components/Reminder";
 import CardToReserve from "@/components/Cards/CardToReserve";
 import Input from "@/components/Input";
-
 import Search from "@/icons/Search";
+
 export default function ReserveCardboard() {
   const [view, setView] = useState("grid");
   const { user } = useAuth();
