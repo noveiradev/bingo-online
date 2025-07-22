@@ -62,7 +62,7 @@ export default function Dashboard() {
                     }
                   : () => {}
               }
-              className="flex flex-col justify-center items-center p-2 bg-white/10 w-[9rem] text-option border-2 border-dark-red rounded-[12px] shadow-[#DF8E1C]/20 shadow-md"
+              className="flex flex-col h-[7rem] justify-center items-center p-2 bg-white/10 w-[9rem] text-option border-2 border-dark-red rounded-[12px] shadow-[#DF8E1C]/20 shadow-md"
             >
               <img
                 src={opt.img}
