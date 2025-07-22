@@ -7,6 +7,6 @@ import { Toaster } from "@pheralb/toast";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <App />
-    <Toaster />
+    <Toaster maxToasts={1}/>
   </StrictMode>
 );
