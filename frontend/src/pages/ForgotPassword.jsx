@@ -52,7 +52,7 @@ export default function ForgotPassword() {
         <div className="flex w-full max-w-[500px]">
           <GoBack></GoBack>
         </div>
-        <h1 className="text-dark-gold font-semibold font-poppins text-2xl mt-2">
+        <h1 className="text-dark-gold font-semibold font-poppins text-2xl mt-2 stable:text-3xl">
           Recuperar contraseña
         </h1>
         <Reminder>
@@ -119,7 +119,7 @@ export default function ForgotPassword() {
           <article className="flex flex-col">
             <Button
               text="Confirmar"
-              className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-4 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613]"
+              className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-4 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] stable:text-[1.25rem]"
             />
             {message && <p className="text-gold text-center mt-2">{message}</p>}
           </article>

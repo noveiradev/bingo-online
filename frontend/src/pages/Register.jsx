@@ -54,7 +54,7 @@ export default function Register() {
         <div className="flex w-full max-w-[500px]">
           <GoBack></GoBack>
         </div>
-        <h1 className="text-dark-gold font-semibold font-poppins text-2xl">
+        <h1 className="text-dark-gold font-semibold font-poppins text-2xl stable:text-3xl">
           Registrate!
         </h1>
         <Reminder>
@@ -136,7 +136,7 @@ export default function Register() {
           <article className="flex flex-col">
             <Button
               text="Registrarse"
-              className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-4 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613]"
+              className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-4 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] stable:text-[1.25rem]"
             />
             {message && <p className="text-gold text-center mt-2">{message}</p>}
           </article>
