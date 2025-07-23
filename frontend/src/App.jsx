@@ -7,6 +7,7 @@ import Login from "@/pages/Login.jsx";
 import Register from "@/pages/Register.jsx";
 import ForgotPassword from "@/pages/ForgotPassword.jsx";
 
+import RedirectUser from "@/utils/redirectUser";
 import Dashboard from "@/pages/Dashboard";
 import Cardboards from "@/pages/Cardboards";
 import ReserveCardboard from "@/pages/ReserveCardboard";
@@ -29,6 +30,7 @@ export default function App() {
           <main className="flex-1 bg-layout overflow-y-hidden">
             <Routes>
               // Routes with access without authentication
+              <Route path="/" element={<RedirectUser />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -36,7 +38,7 @@ export default function App() {
               <Route
                 path="/dashboard"
                 element={
-                  <AuthRoute requiredRoles={["user", "admin"]}>
+                  <AuthRoute requiredRoles={["user"]}>
                     <Dashboard />
                   </AuthRoute>
                 }
@@ -44,7 +46,7 @@ export default function App() {
               <Route
                 path="/cardboards"
                 element={
-                  <AuthRoute requiredRoles={["user", "admin"]}>
+                  <AuthRoute requiredRoles={["user"]}>
                     <Cardboards />
                   </AuthRoute>
                 }
@@ -52,7 +54,7 @@ export default function App() {
               <Route
                 path="/reserve-cardboard"
                 element={
-                  <AuthRoute requiredRoles={["user", "admin"]}>
+                  <AuthRoute requiredRoles={["user"]}>
                     <ReserveCardboard />
                   </AuthRoute>
                 }
@@ -68,7 +70,7 @@ export default function App() {
               <Route
                 path="/patterns"
                 element={
-                  <AuthRoute requiredRoles={["user", "admin"]}>
+                  <AuthRoute requiredRoles={["user"]}>
                     <GamePatterns />
                   </AuthRoute>
                 }
@@ -103,31 +105,31 @@ export default function App() {
                 </AuthRoute>}
               />
               <Route
-                path="/verify-cardboards"
+                path="/admin/verify-cardboards"
                 element={<AuthRoute requiredRoles={["admin"]}>
                   <VerifyCardboard />
                 </AuthRoute>}
               />
               <Route
-                path="/pay-information"
+                path="/admin/pay-information"
                 element={<AuthRoute requiredRoles={["admin"]}>
                   <PayInformation />
                 </AuthRoute>}
               />
               <Route
-                path="/pay-information:id"
+                path="/admin/pay-information:id"
                 element={<AuthRoute requiredRoles={["admin"]}>
                   <PayInformation />
                 </AuthRoute>}
               />
               <Route
-                path="/game-patterns"
+                path="/admin/game-patterns"
                 element={<AuthRoute requiredRoles={["admin"]}>
                   <GamePatterns />
                 </AuthRoute>}
               />
               <Route
-                path="/create-pattern"
+                path="/admin/create-pattern"
                 element={<AuthRoute requiredRoles={["admin"]}>
                   <CreatePatterns />
                 </AuthRoute>}
