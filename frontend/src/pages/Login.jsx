@@ -12,8 +12,12 @@ import { toast } from "@pheralb/toast";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 
+import { Tailspin } from "ldrs/react";
+import "ldrs/react/Tailspin.css";
+
 export default function Login() {
   const { login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -25,17 +29,24 @@ export default function Login() {
 
   const onSubmit = async (data) => {
     setServerError("");
-
+    setIsLoading(true);
     try {
       const response = await login(data);
 
       if (response.success) {
         if (response.user?.role === "admin") {
-          navigate("/admin/dashboard");
+          setTimeout(() => {
+            setIsLoading(false);
+            navigate("/admin/dashboard");
+          }, [1000]);
         } else {
-          navigate("/dashboard");
+          setTimeout(() => {
+            setIsLoading(false);
+            navigate("/dashboard");
+          }, [1000]);
         }
       } else {
+        setIsLoading(false);
         toast.error({
           text: "Datos incorrectos",
           description: "Verifica tus credenciales e inténtalo de nuevo",
@@ -43,6 +54,7 @@ export default function Login() {
       }
     } catch (error) {
       setServerError(error.message || "Error al iniciar sesión");
+      setIsLoading(false);
       console.log(serverError);
       toast.error({
         text: "Error",
@@ -52,7 +64,20 @@ export default function Login() {
   };
   return (
     <>
-      <section className="max-w-[768px] mx-auto h-full flex flex-col items-center mt-12">
+      {isLoading && (
+        <article className="absolute top-0 left-0 z-30 w-full h-dvh bg-[#000]/85 flex items-center justify-center">
+          <div className="flex justify-center items-center flex-col gap-6 bg-carbon-gray px-6 py-5 rounded-2xl">
+            <Tailspin
+              width={40}
+              height={40}
+              color="#DD8D1B"
+              ariaLabel="Cargando..."
+            />
+            <p className="text-white text-lg font-poppins">Cargando...</p>
+          </div>
+        </article>
+      )}
+      <section className="max-w-[768px] mx-auto h-full flex flex-col items-center mt-12 relative">
         <h1 className="text-dark-gold font-semibold font-inter text-xl stable:text-4xl">
           Bienvenido al Bingo Online!
         </h1>
