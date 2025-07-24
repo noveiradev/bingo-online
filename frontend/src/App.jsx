@@ -1,25 +1,34 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthRoute } from "@/components/AuthRoute";
+import RedirectUser from "@/utils/redirectUser";
 
+// Componentes
+import { AuthRoute } from "@/components/AuthRoute";
 import Header from "@/components/Header.jsx";
 import Footer from "@/components/Footer.jsx";
+
 import Login from "@/pages/Login.jsx";
 import Register from "@/pages/Register.jsx";
 import ForgotPassword from "@/pages/ForgotPassword.jsx";
 
-import RedirectUser from "@/utils/redirectUser";
-import Dashboard from "@/pages/Dashboard";
-import Cardboards from "@/pages/Cardboards";
-import ReserveCardboard from "@/pages/ReserveCardboard";
-import GameRules from "@/pages/GameRules";
-import Settings from "@/pages/Settings";
-import GameRoom from "@/pages/GameRoom";
-import Unauthorized from "@/pages/Unauthorized";
-import AdminDashboard from "@/pages/AdminDashboard";
-import VerifyCardboard from "@/pages/VerifyCardboard";
-import PayInformation from "@/pages/PayInformation";
-import GamePatterns from "@/pages/GamePatterns";
-import CreatePatterns from "@/pages/CreatePatterns";
+// User pages
+import Dashboard from "@/pages/user/Dashboard";
+import Cardboards from "@/pages/user/Cardboards";
+import ReserveCardboard from "@/pages/user/ReserveCardboard";
+import GameRules from "@/pages/user/GameRules";
+
+// Shared pages
+import Unauthorized from "@/pages/shared/Unauthorized";
+import GameRoom from "@/pages/shared/GameRoom";
+import Settings from "@/pages/shared/Settings";
+import GamePatterns from "@/pages/shared/GamePatterns";
+
+// Admin pages
+import AdminDashboard from "@/pages/admin/AdminDashboard";
+import VerifyCardboard from "@/pages/admin/VerifyCardboard";
+import PlatformPlayers from "@/pages/admin/PlatformPlayers";
+import CreatePatterns from "@/pages/admin/CreatePatterns";
+import PayInformation from "@/pages/admin/PayInformation";
+
 
 export default function App() {
   return (
@@ -91,48 +100,71 @@ export default function App() {
                   </AuthRoute>
                 }
               />
-              <Route
-                path="/unauthorized"
-                element={
-                 <Unauthorized />
-                }
-              />
+              <Route path="/unauthorized" element={<Unauthorized />} />
               // Routes need Only (Admin role) to access
               <Route
                 path="/admin/dashboard"
-                element={<AuthRoute requiredRoles={["admin"]}>
-                  <AdminDashboard />
-                </AuthRoute>}
+                element={
+                  <AuthRoute requiredRoles={["admin"]}>
+                    <AdminDashboard />
+                  </AuthRoute>
+                }
               />
               <Route
                 path="/admin/verify-cardboards"
-                element={<AuthRoute requiredRoles={["admin"]}>
-                  <VerifyCardboard />
-                </AuthRoute>}
+                element={
+                  <AuthRoute requiredRoles={["admin"]}>
+                    <VerifyCardboard />
+                  </AuthRoute>
+                }
               />
               <Route
                 path="/admin/pay-information"
-                element={<AuthRoute requiredRoles={["admin"]}>
-                  <PayInformation />
-                </AuthRoute>}
+                element={
+                  <AuthRoute requiredRoles={["admin"]}>
+                    <PayInformation />
+                  </AuthRoute>
+                }
               />
               <Route
                 path="/admin/pay-information:id"
-                element={<AuthRoute requiredRoles={["admin"]}>
-                  <PayInformation />
-                </AuthRoute>}
+                element={
+                  <AuthRoute requiredRoles={["admin"]}>
+                    <PayInformation />
+                  </AuthRoute>
+                }
               />
               <Route
                 path="/admin/game-patterns"
-                element={<AuthRoute requiredRoles={["admin"]}>
-                  <GamePatterns />
-                </AuthRoute>}
+                element={
+                  <AuthRoute requiredRoles={["admin"]}>
+                    <GamePatterns />
+                  </AuthRoute>
+                }
+              />
+              <Route
+                path="/admin/platform_players"
+                element={
+                  <AuthRoute requiredRoles={["admin"]}>
+                    <PlatformPlayers />
+                  </AuthRoute>
+                }
               />
               <Route
                 path="/admin/create-pattern"
-                element={<AuthRoute requiredRoles={["admin"]}>
-                  <CreatePatterns />
-                </AuthRoute>}
+                element={
+                  <AuthRoute requiredRoles={["admin"]}>
+                    <CreatePatterns />
+                  </AuthRoute>
+                }
+              />
+              <Route
+                path="/admin/settings"
+                element={
+                  <AuthRoute requiredRoles={["admin"]}>
+                    <Settings />
+                  </AuthRoute>
+                }
               />
             </Routes>
           </main>
