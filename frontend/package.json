@@ -13,6 +13,7 @@
     "@emotion/react": "^11.14.0",
     "@pheralb/toast": "^1.0.0",
     "@tailwindcss/vite": "^4.1.11",
+    "ldrs": "^1.1.7",
     "prop-types": "^15.8.1",
     "react": "^19.1.0",
     "react-awesome-reveal": "^4.3.1",
