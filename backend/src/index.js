@@ -6,6 +6,10 @@ import userRoutes from './routes/userRoutes.js';
 import bingoCardRoutes from './routes/bingoCardRoutes.js';
 import adminBingoRoutes from './routes/adminBingoRoutes.js';
 import bingoPatternRoutes from './routes/bingoPatternRoutes.js';
+import gameRoutes from './routes/gameRoutes.js';
+import selectedCardRoutes  from './routes/selectedCardRoutes.js';
+import bingoMarkingRoutes from './routes/markedNumberRoutes.js';
+// import playerGameRoutes from './routes/playerGameRoutes.js';
 
 dotenv.config();
 
@@ -32,6 +36,18 @@ app.use('/api/admin/cards', adminBingoRoutes);
 
 // Routes for bingo patterns
 app.use('/api/patterns', bingoPatternRoutes);
+
+// Routes for game management
+app.use('/api/game', gameRoutes);
+
+// Routes for user cards
+app.use('/api/selected-cards', selectedCardRoutes);
+
+// Routes for marking numbers in bingo
+app.use('/api/marked-numbers', bingoMarkingRoutes);
+
+// Routes for player game actions
+// app.use('/api/player', playerGameRoutes);
 
 // Base route
 app.get('/', (req, res) => {

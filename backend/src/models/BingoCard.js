@@ -154,4 +154,14 @@ export class BingoCard {
     const result = await client.execute({ sql: query, args: [cardId, userId] });
     return { rowsAffected: result.rowsAffected ?? 0 };
   }
+
+  static async validatePaidReservation(reservationId, userId) {
+  const query = `
+    SELECT 1 FROM reservations
+    WHERE id = ? AND user_id = ? AND payment_status = 'paid'
+    LIMIT 1
+  `;
+  const result = await client.execute({ sql: query, args: [reservationId, userId] });
+  return result.rows.length > 0;
+}
 }
