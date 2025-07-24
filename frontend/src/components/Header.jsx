@@ -8,7 +8,7 @@ export default function Header() {
         Únete a nuestro grupo de WhatsApp
       </h1>
       <a
-        className="py-1 px-4 shadow-[#000]/40 shadow-md bg-ws-button text-white rounded-full flex items-center justify-center gap-2"
+        className="py-1 px-4 shadow-[#000]/40 shadow-md bg-ws-button text-white rounded-full flex items-center justify-center gap-2 mb-1 stable:mb-0"
         href="https://chat.whatsapp.com/G5uW3TqBgGD2NXecXxRDPV?mode=r_t"
         target="_blank"
         noreferrer="true"
