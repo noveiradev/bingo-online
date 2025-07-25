@@ -1,9 +1,9 @@
 import client from '../config/db.js';
-
 export class BingoCard {
   static async findById(id) {
     const query = 'SELECT * FROM bingo_cards WHERE id = ?';
-    return await client.execute({ sql: query, args: [id] });
+    const result = await client.execute({ sql: query, args: [id] });
+    return result.rows[0] || null;
   }
 
   static async findByIdWithReservation(id, userId) {

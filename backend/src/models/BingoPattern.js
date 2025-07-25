@@ -1,5 +1,4 @@
 import client from '../config/db.js';
-
 export class BingoPattern {
   static async create(name, description, pattern) {
     const result = await client.execute(
@@ -19,5 +18,10 @@ export class BingoPattern {
       description: row[2],
       pattern: JSON.parse(row[3]) 
     }));
+  }
+
+  static async findById(id) {
+    const result = await client.execute('SELECT * FROM bingo_patterns WHERE id = ?', [id]);
+    return result.rows[0] || null;
   }
 }
