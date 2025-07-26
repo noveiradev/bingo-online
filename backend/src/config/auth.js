@@ -10,7 +10,7 @@ const signToken = (user) => {
   return jwt.sign(
     { id: user.id, role: user.role },
     JWT_SECRET,
-    { expiresIn: '1h' }
+    { expiresIn: '12h' }
   );
 };
 
