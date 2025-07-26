@@ -1,11 +1,11 @@
 import client from '../config/db.js';
-
 export class MarkedNumber {
-  constructor({ id, reservation_id, marked_numbers, bingo_called }) {
+  constructor({ id, reservation_id, game_id, card_id, marked_numbers }) {
     this.id = id;
     this.reservation_id = reservation_id;
+    this.game_id = game_id;
+    this.card_id = card_id;
     this.marked_numbers = marked_numbers ? JSON.parse(marked_numbers) : [];
-    this.bingo_called = bingo_called === 1; // se guarda como INTEGER 0/1
   }
 
   static async findByReservationId(reservationId) {
@@ -13,35 +13,44 @@ export class MarkedNumber {
       `SELECT * FROM marked_numbers WHERE reservation_id = ?`,
       [reservationId]
     );
-    if (!result.rows || result.rows.length === 0) return null;
-    return new MarkedNumber(result.rows[0]);
+    const row = result.rows ? result.rows[0] : result[0];
+    if (!row) return null;
+    return new MarkedNumber(row);
   }
 
-  static async upsertMarkedNumbers(reservationId, markedNumbers, bingoCalled) {
-    const existing = await this.findByReservationId(reservationId);
-    if (existing) {
-      const query = `
-        UPDATE marked_numbers
-        SET marked_numbers = ?, bingo_called = ?
-        WHERE reservation_id = ?
-      `;
-      await client.execute(query, [
-        JSON.stringify(markedNumbers),
-        bingoCalled ? 1 : 0,
-        reservationId,
-      ]);
-      return await this.findByReservationId(reservationId);
-    } else {
-      const query = `
-        INSERT INTO marked_numbers (reservation_id, marked_numbers, bingo_called)
-        VALUES (?, ?, ?)
-      `;
-      await client.execute(query, [
-        reservationId,
-        JSON.stringify(markedNumbers),
-        bingoCalled ? 1 : 0,
-      ]);
-      return await this.findByReservationId(reservationId);
-    }
+  static async findByGameAndCard(gameId, cardId) {
+    const result = await client.execute(
+      `SELECT * FROM marked_numbers WHERE game_id = ? AND card_id = ?`,
+      [gameId, cardId]
+    );
+    const row = result.rows ? result.rows[0] : result[0];
+    if (!row) return null;
+    return new MarkedNumber(row);
   }
+
+  static async upsertMarkedNumbers(reservationId, userId, gameId, cardId, markedNumbers) {
+    if (!reservationId || !userId || !gameId || !cardId || !Array.isArray(markedNumbers)) {
+      throw new Error('Parámetros inválidos en upsertMarkedNumbers');
+    }
+
+  const markedNumbersJson = JSON.stringify(markedNumbers);
+
+  const existing = await this.findByReservationId(reservationId);
+  if (existing) {
+    const query = `
+      UPDATE marked_numbers
+      SET marked_numbers = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE reservation_id = ? AND user_id = ? AND game_id = ? AND card_id = ?
+    `;
+    await client.execute(query, [markedNumbersJson, reservationId, userId, gameId, cardId]);
+    return await this.findByReservationId(reservationId);
+  } else {
+    const query = `
+      INSERT INTO marked_numbers (reservation_id, user_id, game_id, card_id, marked_numbers)
+      VALUES (?, ?, ?, ?, ?)
+    `;
+    await client.execute(query, [reservationId, userId, gameId, cardId, markedNumbersJson]);
+    return await this.findByReservationId(reservationId);
+  }
+}
 }

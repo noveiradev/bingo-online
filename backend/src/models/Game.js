@@ -1,5 +1,4 @@
 import client from '../config/db.js';
-
 class Game {
   constructor({ id, date, status, called_numbers, winner_id, pattern_id }) {
     this.id = id;
@@ -97,6 +96,13 @@ class Game {
       sql,
       args: ['finished', JSON.stringify([]), null, this.id],
     });
+  }
+
+  static async updateWinner(gameId, winnerId) {
+    await client.execute(
+      'UPDATE games SET winner_id = ?, status = ? WHERE id = ?',
+      [winnerId, 'finished', gameId]
+    );
   }
 }
 

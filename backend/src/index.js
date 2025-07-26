@@ -9,7 +9,7 @@ import bingoPatternRoutes from './routes/bingoPatternRoutes.js';
 import gameRoutes from './routes/gameRoutes.js';
 import selectedCardRoutes  from './routes/selectedCardRoutes.js';
 import bingoMarkingRoutes from './routes/markedNumberRoutes.js';
-// import playerGameRoutes from './routes/playerGameRoutes.js';
+import playerGameRoutes from './routes/playerGameRoutes.js';
 
 dotenv.config();
 
@@ -47,7 +47,7 @@ app.use('/api/selected-cards', selectedCardRoutes);
 app.use('/api/marked-numbers', bingoMarkingRoutes);
 
 // Routes for player game actions
-// app.use('/api/player', playerGameRoutes);
+app.use('/api/player', playerGameRoutes);
 
 // Base route
 app.get('/', (req, res) => {
