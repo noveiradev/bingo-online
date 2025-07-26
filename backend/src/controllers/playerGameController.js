@@ -6,9 +6,10 @@ import { MarkedNumber } from '../models/MarkedNumber.js';
 
 export const validateBingo = async (req, res) => {
   try {
-    const { gameId, userId, cardId } = req.body;
+    const { gameId, cardId } = req.body;
+    const userId = req.user.id;
 
-    if (!gameId || !userId || !cardId) {
+    if (!gameId || !cardId) {
       return res.status(200).json({ error: 'Faltan datos necesarios para validar el bingo.' });
     }
 
