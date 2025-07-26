@@ -1,5 +1,4 @@
 import client from '../config/db.js';
-
 export class SelectedCard {
   constructor({ id, game_id, reservation_id }) {
     this.id = id;

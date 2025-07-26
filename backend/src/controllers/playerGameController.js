@@ -2,15 +2,38 @@ import Game from '../models/Game.js';
 import WinningCard from '../models/WinningCard.js';
 import { BingoPattern } from '../models/BingoPattern.js';
 import { BingoCard } from '../models/BingoCard.js';
+import { MarkedNumber } from '../models/MarkedNumber.js'; 
 
 export const validateBingo = async (req, res) => {
   try {
-    const { gameId, userId, cardId, markedNumbers } = req.body;
+    const { gameId, userId, cardId } = req.body;
 
-    if (!gameId || !userId || !cardId || !Array.isArray(markedNumbers)) {
-      return res.status(400).json({ error: 'Faltan datos necesarios para validar el bingo.' });
+    if (!gameId || !userId || !cardId) {
+      return res.status(200).json({ error: 'Faltan datos necesarios para validar el bingo.' });
     }
 
+   const marked = await MarkedNumber.findByGameAndCard(gameId, cardId);
+
+  if (!marked) {
+    console.warn(`No se encontraron números marcados para cardId=${cardId}, gameId=${gameId}`);
+    return res.status(200).json({ message: 'No se pudo validar el cartón en esta partida.' });
+  }
+
+  let markedNumbers;
+
+    try {
+      if (typeof marked.marked_numbers === 'string') {
+        markedNumbers = JSON.parse(marked.marked_numbers);
+      } else if (Array.isArray(marked.marked_numbers)) {
+        markedNumbers = marked.marked_numbers;
+      } else {
+        throw new Error('Tipo no válido en marked.marked_numbers');
+      }
+    } catch (error) {
+    console.error('Error parseando marked.marked_numbers:', error);
+    return res.status(500).json({ message: 'Ocurrió un error al validar los números marcados.' });
+  }
+  
     const game = await Game.findById(gameId);
     if (!game) return res.status(404).json({ error: 'La partida no fue encontrada.' });
 
@@ -38,7 +61,7 @@ export const validateBingo = async (req, res) => {
     }
 
     const card = await BingoCard.findById(cardId);
-    if (!card) return res.status(404).json({ error: 'No se encontró el cartón seleccionado.' });
+    if (!card) return res.status(200).json({ error: 'No se encontró el cartón seleccionado.' });
 
     if (!card.numbers) {
       return res.status(500).json({ error: 'Los números del cartón no están disponibles.' });
@@ -53,9 +76,9 @@ export const validateBingo = async (req, res) => {
 
     for (const num of markedNumbers) {
       if (!calledNumbers.includes(num)) {
-        return res.status(400).json({
+        return res.status(200).json({
           valid: false,
-          message: `El número ${num} que marcaste no ha sido cantado aún.`
+          message: `Uno o más números marcados no han sido cantados aún.`
         });
       }
     }
@@ -90,6 +113,7 @@ export const validateBingo = async (req, res) => {
     });
 
   } catch (error) {
+    console.error('Error al validar bingo:', error);
     return res.status(500).json({ error: 'Algo salió mal al validar el bingo. Inténtalo de nuevo.' });
   }
 };
