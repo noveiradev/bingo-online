@@ -54,3 +54,37 @@ export const rejectReservation = async (req, res) => {
     res.status(500).json({ message: 'Error al rechazar reserva.' });
   }
 };
+
+export const approveAllReservations = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Solicitud inválida.'
+      });
+    }
+
+    const { rowsAffected } = await BingoCard.approveAllReservationsByUser(userId);
+
+    if (rowsAffected === 0) {
+      return res.status(200).json({
+        success: false,
+        message: 'No hay reservaciones disponibles para validar.'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Se aprobaron ${rowsAffected} reservaciones exitosamente.`
+    });
+
+  } catch (err) {
+    console.error('Error al aprobar todas las reservaciones:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Ocurrió un error al procesar la solicitud.'
+    });
+  }
+};

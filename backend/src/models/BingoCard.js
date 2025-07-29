@@ -38,7 +38,6 @@ export class BingoCard {
     return await client.execute({ sql: query, args: [userId] });
   }
 
-
   static async findAvailable() {
     const query = `
       SELECT * FROM bingo_cards
@@ -163,5 +162,35 @@ export class BingoCard {
   `;
   const result = await client.execute({ sql: query, args: [reservationId, userId] });
   return result.rows.length > 0;
+}
+
+  static async approveAllReservationsByUser(userId) {
+  const selectQuery = `
+    SELECT card_id FROM reservations
+    WHERE user_id = ? AND payment_status = 'pending'
+  `;
+  const { rows } = await client.execute({ sql: selectQuery, args: [userId] });
+
+  if (rows.length === 0) return { rowsAffected: 0 };
+
+  const cardIds = rows.map(row => row.card_id);
+
+  const updateQuery = `
+    UPDATE reservations
+    SET payment_status = 'paid'
+    WHERE user_id = ? AND payment_status = 'pending'
+  `;
+  const result = await client.execute({ sql: updateQuery, args: [userId] });
+  const rowsAffected = result.rowsAffected ?? 0;
+
+  // Give away cards according to logic: 3 paid = 1 gift
+  const totalPaid = await this.countPaidReservationsByUser(userId);
+  const giftsToAssign = Math.floor(totalPaid / 3) - Math.floor((totalPaid - rowsAffected) / 3);
+
+  for (let i = 0; i < giftsToAssign; i++) {
+    await this.assignFreeCardToUser(userId);
+  }
+
+  return { rowsAffected };
 }
 }
