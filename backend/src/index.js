@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from "dotenv";
+
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import bingoCardRoutes from './routes/bingoCardRoutes.js';
@@ -10,6 +11,7 @@ import gameRoutes from './routes/gameRoutes.js';
 import selectedCardRoutes  from './routes/selectedCardRoutes.js';
 import bingoMarkingRoutes from './routes/markedNumberRoutes.js';
 import playerGameRoutes from './routes/playerGameRoutes.js';
+import mobilePaymentRoutes from './routes/mobilePaymentRoutes.js';
 
 dotenv.config();
 
@@ -48,6 +50,9 @@ app.use('/api/marked-numbers', bingoMarkingRoutes);
 
 // Routes for player game actions
 app.use('/api/player', playerGameRoutes);
+
+// Routes for mobile payments
+app.use('/api/payments', mobilePaymentRoutes);
 
 // Base route
 app.get('/', (req, res) => {
