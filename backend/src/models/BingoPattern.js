@@ -24,4 +24,29 @@ export class BingoPattern {
     const result = await client.execute('SELECT * FROM bingo_patterns WHERE id = ?', [id]);
     return result.rows[0] || null;
   }
+
+  static async isPatternInUse(patternId) {
+    const gamesResult = await client.execute(
+      `SELECT COUNT(*) AS count FROM games WHERE pattern_id = ?`,
+      [patternId]
+    );
+    const gamesCount = gamesResult.rows[0]?.count || 0;
+
+    if (gamesCount > 0) return true;
+
+    const winningCardsResult = await client.execute(
+      `SELECT COUNT(*) AS count FROM winning_cards WHERE pattern_id = ?`,
+      [patternId]
+    );
+    const winningCardsCount = winningCardsResult.rows[0]?.count || 0;
+
+    return winningCardsCount > 0;
+  }
+
+  static async deletePattern(patternId) {
+    await client.execute({
+      sql: 'DELETE FROM bingo_patterns WHERE id = ?',
+      args: [patternId],
+    });
+  }
 }
