@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RedirectUser from "@/utils/redirectUser";
 
-// Componentes
+// Components
 import { AuthRoute } from "@/components/AuthRoute";
 import Header from "@/components/Header.jsx";
 import Footer from "@/components/Footer.jsx";
@@ -18,7 +18,6 @@ import GameRules from "@/pages/user/GameRules";
 
 // Shared pages
 import Unauthorized from "@/pages/shared/Unauthorized";
-import GameRoom from "@/pages/shared/GameRoom";
 import Settings from "@/pages/shared/Settings";
 import GamePatterns from "@/pages/shared/GamePatterns";
 
@@ -26,9 +25,9 @@ import GamePatterns from "@/pages/shared/GamePatterns";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import VerifyCardboard from "@/pages/admin/VerifyCardboard";
 import PlatformPlayers from "@/pages/admin/PlatformPlayers";
+import GameRoom from "@/pages/admin/GameRoom";
 import CreatePatterns from "@/pages/admin/CreatePatterns";
 import PayInformation from "@/pages/admin/PayInformation";
-
 
 export default function App() {
   return (
@@ -96,7 +95,7 @@ export default function App() {
                 path="/game/room:id"
                 element={
                   <AuthRoute requiredRoles={["user", "admin"]}>
-                    <GameRoom />
+                    {/* <GameRoom /> */}
                   </AuthRoute>
                 }
               />
@@ -163,6 +162,14 @@ export default function App() {
                 element={
                   <AuthRoute requiredRoles={["admin"]}>
                     <Settings />
+                  </AuthRoute>
+                }
+              />
+              <Route
+                path="/admin/game/room"
+                element={
+                  <AuthRoute requiredRoles={["user", "admin"]}>
+                    <GameRoom />
                   </AuthRoute>
                 }
               />
