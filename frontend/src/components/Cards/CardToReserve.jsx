@@ -39,11 +39,20 @@ export default function CardToReserve({ cardsInfo = [], viewMode }) {
 
   const parseNumbers = (numbers) => {
     try {
-      return Array.isArray(numbers)
-        ? numbers
-        : JSON.parse(numbers.replace(/free/g, '"free"'));
+      if (Array.isArray(numbers)) {
+        return numbers;
+      }
+
+      if (typeof numbers === "string") {
+        const cleanedString = numbers.replace(/\s/g, "");
+        const parsed = JSON.parse(cleanedString);
+
+        return parsed.map((item) => (item === "free" ? "free" : item));
+      }
+
+      return [];
     } catch (error) {
-      console.error("Error parsing numbers:", error);
+      console.error("Error parsing bingo numbers:", error);
       return [];
     }
   };
