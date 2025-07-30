@@ -33,14 +33,21 @@ export const deletePattern = async (req, res) => {
     const inUse = await BingoPattern.isPatternInUse(id);
     if (inUse) {
       return res.status(200).json({
+        success: false,
         message: 'No se puede eliminar la modalidad porque ha sido usada en una o más partidas.',
       });
     }
 
     await BingoPattern.deletePattern(id);
-    res.status(200).json({ message: 'Modalidad eliminada exitosamente.' });
+    res.status(200).json({
+      success: true,
+      message: 'Modalidad eliminada exitosamente.',
+    });
   } catch (error) {
     console.error('Error al eliminar modalidad:', error);
-    res.status(500).json({ message: 'Error del servidor al intentar eliminar la modalidad.' });
+    res.status(500).json({
+      success: false,
+      message: 'Error del servidor al intentar eliminar la modalidad.',
+    });
   }
 };
