@@ -126,6 +126,25 @@ class User {
       ],
     });
   }
+
+  // Get all players with wins
+  static async getPlayersWithWins() {
+  const sql = `
+    SELECT 
+      u.id,
+      u.username,
+      u.phone,
+      COUNT(g.id) AS wins
+    FROM users u
+    LEFT JOIN games g ON g.winner_id = u.id
+    WHERE u.role = 'user'
+    GROUP BY u.id, u.username, u.phone
+    ORDER BY wins DESC
+  `;
+
+  const result = await client.execute({ sql });
+  return result.rows;
+}
 }
 
 export default User;
