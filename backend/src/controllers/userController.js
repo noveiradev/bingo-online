@@ -85,3 +85,20 @@ export const deleteAccount = async (req, res) => {
     return res.status(500).json({ success: false, message: 'Error del servidor.' });
   }
 };
+
+export const getAllPlayersWithWins = async (req, res) => {
+  try {
+    const players = await User.getPlayersWithWins();
+    return res.status(200).json({
+      success: true,
+      message: 'Jugadores obtenidos correctamente.',
+      data: players
+    });
+  } catch (error) {
+    console.error('Error al obtener jugadores con partidas ganadas:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Error al obtener los jugadores'
+    });
+  }
+}
