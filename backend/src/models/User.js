@@ -99,13 +99,49 @@ class User {
   }
 
   // Delete user by ID
-  static async deleteById(id) {
+   static async deleteById(id) {
     try {
       const sql = 'DELETE FROM users WHERE id = ?';
       await client.execute({ sql, args: [id] });
       return true;
     } catch (error) {
       console.error('Error al eliminar el usuario:', error.message);
+      throw error;
+    }
+  }
+
+  
+  static async deleteRelations(userId) {
+    try {
+      await client.execute({
+        sql: 'DELETE FROM winning_cards WHERE user_id = ?',
+        args: [userId],
+      });
+
+      const { rows: reservations } = await client.execute({
+        sql: 'SELECT id FROM reservations WHERE user_id = ?',
+        args: [userId],
+      });
+
+      for (const { id: reservationId } of reservations) {
+        await client.execute({
+          sql: 'DELETE FROM marked_numbers WHERE reservation_id = ?',
+          args: [reservationId],
+        });
+      }
+
+      await client.execute({
+        sql: 'DELETE FROM reservations WHERE user_id = ?',
+        args: [userId],
+      });
+
+      await client.execute({
+        sql: 'UPDATE games SET winner_id = NULL WHERE winner_id = ?',
+        args: [userId],
+      });
+
+    } catch (error) {
+      console.error('Error eliminando relaciones del usuario:', error.message);
       throw error;
     }
   }

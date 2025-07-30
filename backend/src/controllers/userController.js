@@ -73,6 +73,7 @@ export const deleteAccount = async (req, res) => {
       return res.status(200).json({ success: false, message: 'Contraseña incorrecta.' });
     }
 
+    await User.deleteRelations(userId);  
     const deleted = await User.deleteById(userId);
 
     if (!deleted) {
