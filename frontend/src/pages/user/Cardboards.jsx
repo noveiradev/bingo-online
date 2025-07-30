@@ -17,11 +17,18 @@ export default function Cardboards() {
 
   const parseBingoNumbers = (numbersString) => {
     try {
-      const cleanedString = numbersString
-        .replace(/(free)/gi, '"$1"')
-        .replace(/\s/g, "");
+      if (Array.isArray(numbersString)) {
+        return numbersString;
+      }
 
-      return JSON.parse(cleanedString);
+      if (typeof numbersString === "string") {
+        const cleanedString = numbersString.replace(/\s/g, "");
+        const parsed = JSON.parse(cleanedString);
+
+        return parsed.map((item) => (item === "free" ? "free" : item));
+      }
+
+      return [];
     } catch (error) {
       console.error("Error parsing bingo numbers:", error);
       return [];
