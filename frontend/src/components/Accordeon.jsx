@@ -8,6 +8,7 @@ import { toast } from "@pheralb/toast";
 import {
   rejectReserve,
   approveReserve,
+  approveAllReserves,
 } from "@/services/api/admin/manageCards";
 
 export default function Accordeon({ userID, username, phone, cards }) {
@@ -82,24 +83,15 @@ export default function Accordeon({ userID, username, phone, cards }) {
 
   const approveAll = async (event) => {
     try {
-      const promises = cards.map((card) =>
-        approveReserve.approveCard({
-          cardId: card.card_id,
-          userId: userID,
-        })
-      );
-
-      const results = await Promise.all(promises);
+      const results = await approveAllReserves.approveAll({
+        userId: userID,
+      });
 
       if (results) {
-        results.map((res) => {
-          if (res.message === "Reserva aprobada exitosamente.") {
-            event.target.closest("section").remove();
-            toast.success({
-              text: `Todos los cartones (${cards.length}) fueron validados`,
-            });
-          }
+        toast.success({
+          text: `Todos los cartones han sido validados para ${phone}`,
         });
+        event.target.closest("section").remove();
       } else {
         toast.error({
           text: "Algunos cartones no pudieron validarse",
