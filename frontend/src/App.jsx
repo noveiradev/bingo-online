@@ -15,6 +15,7 @@ import Dashboard from "@/pages/user/Dashboard";
 import Cardboards from "@/pages/user/Cardboards";
 import ReserveCardboard from "@/pages/user/ReserveCardboard";
 import GameRules from "@/pages/user/GameRules";
+import UserGameRoom from "@/pages/user/UserGameRoom.jsx";
 
 // Shared pages
 import Unauthorized from "@/pages/shared/Unauthorized";
@@ -28,6 +29,7 @@ import PlatformPlayers from "@/pages/admin/PlatformPlayers";
 import GameRoom from "@/pages/admin/GameRoom";
 import CreatePatterns from "@/pages/admin/CreatePatterns";
 import PayInformation from "@/pages/admin/PayInformation";
+import CreateNewPayMethod from "@/pages/admin/CreateNewPayMethod";
 
 export default function App() {
   return (
@@ -92,10 +94,10 @@ export default function App() {
                 }
               />
               <Route
-                path="/game/room:id"
+                path="/game/room/:id"
                 element={
-                  <AuthRoute requiredRoles={["user", "admin"]}>
-                    {/* <GameRoom /> */}
+                  <AuthRoute requiredRoles={["user"]}>
+                    <UserGameRoom />
                   </AuthRoute>
                 }
               />
@@ -126,10 +128,10 @@ export default function App() {
                 }
               />
               <Route
-                path="/admin/pay-information:id"
+                path="/admin/create_pay_method"
                 element={
                   <AuthRoute requiredRoles={["admin"]}>
-                    <PayInformation />
+                    <CreateNewPayMethod />
                   </AuthRoute>
                 }
               />
