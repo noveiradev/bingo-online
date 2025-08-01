@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { obtainAllPatterns } from "@/services/api/patterns";
+import { obtainAllPatterns, deletePattern } from "@/services/api/patterns";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Fade } from "react-awesome-reveal";
+import Button from "@/components/Button";
+import { toast } from "@pheralb/toast";
 
 import GoBack from "@/components/GoBack";
 import EmptyCardBoard from "@/assets/images/Carton-vacio.webp";
@@ -38,6 +40,28 @@ export default function GamePatterns() {
       setTimeout(() => {
         setIsLoading(false);
       }, [500]);
+    }
+  };
+
+  const handleDeletePattern = async (id, name, event) => {
+    try {
+      const patternToDelete = {
+        id: id,
+      };
+
+      const response = await deletePattern.delete(patternToDelete);
+      if (response.success) {
+        event.target.closest("article").remove();
+        toast.success({
+          text: `Patrón de ${name} eliminado correctamente!`,
+        });
+      } else {
+        toast.error({
+          text: `${response.message || "Error al eliminar el patrón"}`,
+        });
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 
@@ -81,6 +105,8 @@ export default function GamePatterns() {
                   className="flex flex-col items-center relative group"
                   key={i}
                 >
+                  <h2 className="text-dark-gold font-bold">{p.name}</h2>
+
                   <div className="absolute z-20 bottom-7 w-full h-0 overflow-hidden opacity-0 bg-coffee-gray rounded-xl p-2 text-sm text-center border-4 border-light-gold/75 text-white/90 transition-all duration-300 ease-in-out group-hover:h-[135px] group-hover:opacity-100">
                     <h2 className="font-bold text-[0.95rem] text-light-gold">
                       Descripción
@@ -104,7 +130,15 @@ export default function GamePatterns() {
                       className="outline-2 outline-[#000]/60 rounded-xl w-[7rem] h-auto absolute"
                     />
                   </div>
-                  <h2 className="text-dark-gold font-bold">{p.name}</h2>
+                  {user.role === "admin" ? (
+                    <Button
+                      text="Eliminar"
+                      className="text-white/90 bg-dark-red p-1 w-[75%] mx-auto text-sm rounded-md"
+                      onClick={(e) => handleDeletePattern(p.id, p.name, e)}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </article>
               ))
             ) : (
