@@ -306,7 +306,7 @@ export default function GameRoom() {
               )}
             </div>
             <Button
-              text="Limpiar tablero"
+              text="Reiniciar partida"
               className="bg-yellow-cake/28 text-white px-2 py-2 w-full rounded-md mt-2 text-sm cursor-pointer hover:bg-yellow-cake/50 transition-colors font-medium font-inter"
               onClick={() => {
                 setCleanModal(!cleanModal);
