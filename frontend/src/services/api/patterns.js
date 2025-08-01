@@ -52,3 +52,30 @@ export const registerPatterns = {
     }
   },
 };
+
+export const deletePattern = {
+  delete: async (credentials) => {
+    try {
+      const url = `${BASE_URL}api/patterns/${credentials.id}`;
+
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+        },
+        body: JSON.stringify(credentials)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error al eliminar el patrón");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error en deletePattern:", error);
+      throw error;
+    }
+  },
+};
