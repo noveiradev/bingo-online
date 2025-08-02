@@ -125,3 +125,27 @@ export const deleteAccount = {
     }
   },
 };
+
+export const getPlayers = {
+  players: async () => {
+    try {
+      const response = await fetch(`${BASE_URL}api/user/players`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error en la autenticación");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error en getPlayers:", error);
+      throw error;
+    }
+  },
+};
