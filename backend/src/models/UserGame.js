@@ -21,4 +21,17 @@ export class UserGame {
     );
     return result.rows?.[0] || null;
   }
+
+  static async getUsersByGame(gameId) {
+    const result = await client.execute(
+      `
+      SELECT u.id, u.username, u.phone 
+      FROM user_game ug
+      JOIN users u ON u.id = ug.user_id
+      WHERE ug.game_id = ?
+      `,
+      [gameId]
+    );
+    return result.rows;
+  }
 }

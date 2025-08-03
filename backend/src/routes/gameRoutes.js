@@ -1,5 +1,5 @@
 import express from 'express';
-import { startGame, nextNumber, getGameHistory, restartGame, getUserActiveGame } from '../controllers/gameController.js';
+import { startGame, nextNumber, getGameHistory, restartGame, getUserActiveGame, getUsersInGame } from '../controllers/gameController.js';
 import { authenticateToken } from '../middlewares/authMiddleware.js';
 import { isAdmin } from '../middlewares/isAdmin.js';
 
@@ -19,5 +19,8 @@ router.post('/restart', authenticateToken, isAdmin, restartGame);
 
 // Get active game for user (only for authenticated users)
 router.get('/active', authenticateToken, getUserActiveGame);
+
+// Get users in a specific game (only for admins)
+router.get('/:gameId/users', authenticateToken, isAdmin, getUsersInGame);
 
 export default router;
