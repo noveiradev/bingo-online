@@ -1,4 +1,5 @@
 import Game  from '../models/Game.js';
+import { UserGame } from '../models/UserGame.js';
 
 export const startGame = async (req, res) => {
   try {
@@ -107,5 +108,22 @@ export async function getUserActiveGame(req, res) {
       success: false,
       message: 'Error al obtener la partida activa'
     });
+  }
+}
+
+export async function getUsersInGame(req, res) {
+  try {
+    const { gameId } = req.params;
+
+    if (!gameId) {
+      return res.status(200).json({ success: false, message: 'Solicitud inválida. Por favor, verifica los datos e intenta nuevamente.' });
+    }
+
+    const users = await UserGame.getUsersByGame(gameId);
+
+    res.status(200).json({ success: true, users });
+  } catch (error) {
+    console.error('Error al obtener usuarios en la partida:', error);
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 }
