@@ -1,5 +1,6 @@
 import { SelectedCard } from '../models/SelectedCard.js';
 import { BingoCard } from '../models/BingoCard.js';
+import { UserGame } from '../models/UserGame.js';
 
 export async function assignSelectedCards(req, res) {
   try {
@@ -14,6 +15,11 @@ export async function assignSelectedCards(req, res) {
     }
 
     await SelectedCard.assignCardsToGame(gameId, reservationIds);
+
+    const exists = await UserGame.findUserGame(userId, gameId);
+    if (!exists) {
+      await UserGame.addUserToGame(userId, gameId);
+    }
 
     res.status(200).json({ message: 'Cartones seleccionados para la partida correctamente.' });
   } catch (error) {
