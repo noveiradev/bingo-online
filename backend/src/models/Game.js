@@ -104,6 +104,28 @@ class Game {
       [winnerId, 'finished', gameId]
     );
   }
+
+  static async findActiveGameByUserId(userId) {
+    const query = `
+      SELECT 
+        g.id AS game_id,
+        g.status,
+        g.called_numbers,
+        g.pattern_id,
+        bp.name AS pattern_name,
+        bp.pattern
+      FROM user_game ug
+      JOIN games g ON ug.game_id = g.id
+      JOIN bingo_patterns bp ON g.pattern_id = bp.id
+      WHERE ug.user_id = ?
+        AND g.status != 'finished'
+      ORDER BY g.id DESC
+      LIMIT 1
+    `;
+
+    const result = await client.execute({ sql: query, args: [userId] });
+    return result.rows[0] || null;
+  }
 }
 
 export default Game;

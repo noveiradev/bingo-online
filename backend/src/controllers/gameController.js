@@ -84,3 +84,28 @@ export const restartGame = async (req, res) => {
     res.status(500).json({ message: 'Error al reiniciar partida' });
   }
 };
+
+export async function getUserActiveGame(req, res) {
+  try {
+    const userId = req.user.id; 
+    const game = await Game.findActiveGameByUserId(userId);
+
+    if (!game) {
+      return res.status(200).json({
+        success: false,
+        message: 'No estás unido a ninguna partida activa'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: game
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener la partida activa'
+    });
+  }
+}
