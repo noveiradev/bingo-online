@@ -1,4 +1,5 @@
 import { BingoCard } from '../models/BingoCard.js';
+import { SelectedCard } from '../models/SelectedCard.js';
 
 export const getReservedCards = async (req, res) => {
   try {
@@ -85,6 +86,32 @@ export const approveAllReservations = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Ocurrió un error al procesar la solicitud.'
+    });
+  }
+};
+
+export const releaseUsedCards = async (req, res) => {
+  try {
+    const usedReservationIds = await SelectedCard.getUsedReservationIds();
+
+    if (!usedReservationIds.length) {
+      return res.status(200).json({
+        success: true,
+        message: 'No se encontraron cartones usados para liberar.'
+      });
+    }
+
+    await BingoCard.cancelReservationsByIds(usedReservationIds);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Cartones usados, liberados exitosamente.'
+    });
+  } catch (error) {
+    console.error('Error al liberar los cartones usados:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error interno del servidor.'
     });
   }
 };

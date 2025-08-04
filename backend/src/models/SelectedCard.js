@@ -29,4 +29,10 @@ export class SelectedCard {
     if (!result.rows || result.rows.length === 0) return [];
     return result.rows.map(row => new SelectedCard(row));
   }
+
+  static async getUsedReservationIds() {
+    const query = `SELECT DISTINCT reservation_id FROM selected_cards`;
+    const result = await client.execute(query);
+    return result.rows.map(row => row.reservation_id);
+  }
 }
