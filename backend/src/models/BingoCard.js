@@ -29,6 +29,7 @@ export class BingoCard {
     const query = `
       SELECT 
         bc.*, 
+        r.id AS reservation_id,
         r.payment_status, 
         r.is_gift
       FROM bingo_cards bc 
