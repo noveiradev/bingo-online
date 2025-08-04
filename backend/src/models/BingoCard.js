@@ -156,42 +156,49 @@ export class BingoCard {
   }
 
   static async validatePaidReservation(reservationId, userId) {
-  const query = `
-    SELECT 1 FROM reservations
-    WHERE id = ? AND user_id = ? AND payment_status = 'paid'
-    LIMIT 1
-  `;
-  const result = await client.execute({ sql: query, args: [reservationId, userId] });
-  return result.rows.length > 0;
-}
-
-  static async approveAllReservationsByUser(userId) {
-  const selectQuery = `
-    SELECT card_id FROM reservations
-    WHERE user_id = ? AND payment_status = 'pending'
-  `;
-  const { rows } = await client.execute({ sql: selectQuery, args: [userId] });
-
-  if (rows.length === 0) return { rowsAffected: 0 };
-
-  const cardIds = rows.map(row => row.card_id);
-
-  const updateQuery = `
-    UPDATE reservations
-    SET payment_status = 'paid'
-    WHERE user_id = ? AND payment_status = 'pending'
-  `;
-  const result = await client.execute({ sql: updateQuery, args: [userId] });
-  const rowsAffected = result.rowsAffected ?? 0;
-
-  // Give away cards according to logic: 3 paid = 1 gift
-  const totalPaid = await this.countPaidReservationsByUser(userId);
-  const giftsToAssign = Math.floor(totalPaid / 3) - Math.floor((totalPaid - rowsAffected) / 3);
-
-  for (let i = 0; i < giftsToAssign; i++) {
-    await this.assignFreeCardToUser(userId);
+    const query = `
+      SELECT 1 FROM reservations
+      WHERE id = ? AND user_id = ? AND payment_status = 'paid'
+      LIMIT 1
+    `;
+    const result = await client.execute({ sql: query, args: [reservationId, userId] });
+    return result.rows.length > 0;
   }
 
-  return { rowsAffected };
-}
+  static async approveAllReservationsByUser(userId) {
+    const selectQuery = `
+      SELECT card_id FROM reservations
+      WHERE user_id = ? AND payment_status = 'pending'
+    `;
+    const { rows } = await client.execute({ sql: selectQuery, args: [userId] });
+
+    if (rows.length === 0) return { rowsAffected: 0 };
+
+    const cardIds = rows.map(row => row.card_id);
+
+    const updateQuery = `
+      UPDATE reservations
+      SET payment_status = 'paid'
+      WHERE user_id = ? AND payment_status = 'pending'
+    `;
+    const result = await client.execute({ sql: updateQuery, args: [userId] });
+    const rowsAffected = result.rowsAffected ?? 0;
+
+    // Give away cards according to logic: 3 paid = 1 gift
+    const totalPaid = await this.countPaidReservationsByUser(userId);
+    const giftsToAssign = Math.floor(totalPaid / 3) - Math.floor((totalPaid - rowsAffected) / 3);
+
+    for (let i = 0; i < giftsToAssign; i++) {
+      await this.assignFreeCardToUser(userId);
+    }
+
+    return { rowsAffected };
+  }
+
+  static async cancelReservationsByIds(reservationIds) {
+    if (!reservationIds.length) return;
+    const placeholders = reservationIds.map(() => '?').join(', ');
+    const query = `UPDATE reservations SET payment_status = 'canceled' WHERE id IN (${placeholders})`;
+    await client.execute(query, reservationIds);
+  }
 }
