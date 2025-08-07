@@ -31,12 +31,16 @@ import CreatePatterns from "@/pages/admin/CreatePatterns";
 import PayInformation from "@/pages/admin/PayInformation";
 import CreateNewPayMethod from "@/pages/admin/CreateNewPayMethod";
 
+import { useAuth } from "@/hooks/useAuth";
+
 export default function App() {
+  const { user } = useAuth();
+
   return (
     <>
       <Router>
         <div className="h-dvh flex flex-col">
-          <Header />
+          <Header isAdmin={user?.role === "admin" ? user?.role : ""} />
           <main className="flex-1 bg-layout overflow-y-hidden">
             <Routes>
               // Routes with access without authentication
