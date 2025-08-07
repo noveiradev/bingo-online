@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { updateService } from "@/services/api/auth";
+import { clearCardboards } from "@/services/api/admin/manageCards";
+import { toast } from "@pheralb/toast";
 
 import Input from "@/components/Input";
 import GoBack from "@/components/GoBack";
@@ -8,11 +10,13 @@ import GoBack from "@/components/GoBack";
 import Button from "@/components/Button";
 import Phone from "@/icons/Phone";
 import Key from "@/icons/Key";
-import ModalDeleteAcc from "@/components/ModalDeleteAcc"
+import ModalDeleteAcc from "@/components/ModalDeleteAcc";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Settings() {
   const [message, setMessage] = useState("");
   const [modalView, setModalView] = useState(false);
+  const { user } = useAuth();
 
   const {
     register,
@@ -40,12 +44,33 @@ export default function Settings() {
     } catch (error) {
       console.error("Registration error:", error);
     }
-  };  
-  
+  };
+
+  const releaseCards = async () => {
+    try {
+      const response = await clearCardboards.releaseCards();
+
+      if(response.success) {
+        toast.success({
+          text: "Cartones liberados exitosamente!"
+        })
+      } else {
+        toast.error({
+          text: "Ha ocurrido un error al liberar los cartones."
+        })
+      }
+
+    } catch (error) {
+      console.error("Release error: ", error)
+    }
+  }
+
   return (
     <>
       <section className="relative max-w-[768px] mx-auto flex flex-col items-center h-full overflow-hidden pt-4">
-        {modalView && <ModalDeleteAcc modalFunction={setModalView} modalView={modalView}/>}
+        {modalView && (
+          <ModalDeleteAcc modalFunction={setModalView} modalView={modalView} />
+        )}
         <div className="flex w-full max-w-[500px] px-2">
           <GoBack></GoBack>
         </div>
@@ -125,6 +150,18 @@ export default function Settings() {
               className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-4 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613]"
             />
             {message && <p className="text-gold text-center mt-2">{message}</p>}
+
+            <div className="mt-7 w-full gap-2 flex flex-col items-center justify-center">
+              <p className="text-sm text-center text-simple-gold underline font-poppins font-semibold">
+                Reestablece los cartones
+              </p>
+              <span
+                className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] text-center cursor-pointer"
+                onClick={() => {releaseCards()}}
+              >
+                Vaciar cartones
+              </span>
+            </div>
           </article>
           <span
             onClick={() => setModalView(!modalView)}

@@ -11,9 +11,11 @@ import { obtainAllPatterns } from "@/services/api/patterns";
 import { startGame, boardNumbers } from "@/services/api/admin/liveMatch";
 import CleanModal from "@/components/CleanModal";
 import BingoBall from "@/components/BingoBall";
+import PlayersInMatch from "@/components/PlayersInMatch";
 
 export default function GameRoom() {
   const [cleanModal, setCleanModal] = useState(false);
+  const [playersMatch, setPlayersMatch] = useState(false);
 
   const getLocalStorage = (key, fallback) => {
     if (typeof window === "undefined") return fallback;
@@ -256,14 +258,14 @@ export default function GameRoom() {
         />
       )}
 
-      <section className="max-w-[768px] mx-auto flex flex-col h-full items-center justify-center pt-4">
+      <section className="max-w-[768px] mx-auto flex flex-col h-full items-center justify-center pt-4 relative">
         <section className="grid grid-cols-2 md:grid-cols-2 p-2 w-full h-full gap-2">
           <article className="flex flex-col items-center">
             <div className="w-full p-1 flex flex-col items-center rounded-xl">
               <img
                 src={Logo}
                 alt="Bingo risas y cartones logo"
-                className="size-[8.1rem] mb-4 drop-shadow-[0_0_10px_rgba(83,63,27,0.70)]"
+                className="size-[8rem] mb-1 drop-shadow-[0_0_10px_rgba(83,63,27,0.70)]"
               />
 
               <div className="w-full">
@@ -281,8 +283,8 @@ export default function GameRoom() {
               </div>
             </div>
 
-            <div className="bg-blue-gray w-full p-3 mt-2 flex flex-col gap-3 items-center rounded-xl">
-              <BingoBall lastCalled={lastCalled}/>
+            <div className="bg-blue-gray w-full p-3 mt-1 flex flex-col gap-2 items-center rounded-xl">
+              <BingoBall lastCalled={lastCalled} />
               {!matchState && (
                 <Button
                   text="Iniciar partida"
@@ -316,7 +318,7 @@ export default function GameRoom() {
           </article>
 
           {/* Second column */}
-          <article className="relative rounded-lg h-[33.5rem] overflow-hidden bg-white/10">
+          <article className="relative rounded-lg h-[31.25rem] overflow-hidden bg-white/10">
             <header className="bg-dark-red/85 h-[2rem] grid grid-cols-5">
               {BINGO_COLUMNS.map((col) => (
                 <div
@@ -336,6 +338,17 @@ export default function GameRoom() {
             />
           </article>
         </section>
+        {playersMatch ? (
+          <PlayersInMatch view={playersMatch} setView={setPlayersMatch} />
+        ) : (
+          <Button
+            text="Ver jugadores en la partida"
+            className="text-white absolute bottom-17 text-sm py-2 px-4 bg-blue-gray rounded-lg shadow-lg cursor-pointer"
+            onClick={() => {
+              setPlayersMatch(!playersMatch);
+            }}
+          />
+        )}
         <PatternAdvice></PatternAdvice>
       </section>
     </>

@@ -100,4 +100,29 @@ export const rejectReserve = {
   },
 };
 
+export const clearCardboards = {
+  releaseCards: async (credentials) => {
+    try {
+      const response = await fetch(`${BASE_URL}api/admin/cards/release-used-cards`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error en la autenticación");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error en clearCardboards.rejectCard:", error);
+      throw error;
+    }
+  },
+};
+
 
