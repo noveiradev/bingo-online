@@ -12,7 +12,7 @@ export default function BingoBoard({ BINGO_COLUMNS, activeNumbers, newlyCalled, 
             return (
               <div
                 key={number}
-                className={`h-8 flex mb-[0.10rem] font-semibold font-inter items-center justify-center transition-all duration-200
+                className={`h-[1.85rem] flex mb-[0.10rem] font-semibold font-inter items-center justify-center transition-all duration-200
                   ${
                     isLastCalled
                       ? "bg-green-apple/75 text-white animate-pulse"
