@@ -25,8 +25,8 @@ export function useAuth() {
   };
 
   const logout = () => {
-    sessionStorage.removeItem("authToken");
-    sessionStorage.removeItem("user");
+    sessionStorage.clear();
+    localStorage.clear();
     setUser(null);
     window.location.href = "/login";
   };
