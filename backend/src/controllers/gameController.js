@@ -1,5 +1,6 @@
 import Game  from '../models/Game.js';
 import { UserGame } from '../models/UserGame.js';
+import { getIO } from '../sockets/socket.js';
 
 export const startGame = async (req, res) => {
   try {
@@ -47,6 +48,15 @@ export const nextNumber = async (req, res) => {
 
     const newNumber = availableNumbers[Math.floor(Math.random() * availableNumbers.length)];
     await game.addCalledNumber(newNumber);
+
+    const io = getIO();
+    const room = `game_${game.id}`;
+    io.to(room).emit('NEW_NUMBER', {
+      number: newNumber,
+      history: game.called_numbers, 
+      pattern: game.pattern_id, 
+      status: game.status
+    });
 
     res.status(200).json({
       message: 'Nuevo número generado',

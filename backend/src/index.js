@@ -1,7 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from "dotenv";
+import http from 'http';
 
+import { initSocket } from './sockets/socket.js'; 
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import bingoCardRoutes from './routes/bingoCardRoutes.js';
@@ -59,7 +61,14 @@ app.get('/', (req, res) => {
   res.send('🎉 Bingo Online backend with Turso is running!');
 });
 
-app.listen(PORT, () => {
+// Create server http
+const server = http.createServer(app);
+
+// Initialize socket.io with the server
+initSocket(server);
+
+// Start the server 
+server.listen(PORT, () => {
   console.log(`🚀 Server listening at http://localhost:${PORT}`);
 });
 
