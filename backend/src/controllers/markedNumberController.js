@@ -2,12 +2,22 @@ import { MarkedNumber } from '../models/MarkedNumber.js';
 
 export async function getMarkedNumbers(req, res) {
   try {
-    const { reservationId } = req.params;
-    if (!reservationId) {
-      return res.status(400).json({ message: 'Falta reservationId' });
+    const { reservationId, gameId, cardId } = req.params;
+
+    if (!reservationId || !gameId || !cardId) {
+      return res.status(400).json({ message: 'Faltan parámetros: reservationId, gameId o cardId' });
     }
-    const marked = await MarkedNumber.findByReservationId(reservationId);
-    if (!marked) return res.status(404).json({ message: 'No se encontró registro' });
+
+    const marked = await MarkedNumber.findByReservationGameAndCard(
+      Number(reservationId),
+      Number(gameId),
+      Number(cardId)
+    );
+
+    if (!marked) {
+      return res.status(404).json({ message: 'No se encontró registro para esta partida y cartón' });
+    }
+
     res.json(marked);
   } catch (error) {
     console.error('Error obteniendo números marcados:', error);
@@ -19,7 +29,7 @@ export async function updateMarkedNumbers(req, res) {
   try {
     const { reservationId, gameId, cardId, markedNumbers } = req.body;
     const userId = req.user?.id;
-    
+
     if (
       typeof reservationId !== 'number' ||
       typeof userId !== 'number' ||
@@ -30,7 +40,14 @@ export async function updateMarkedNumbers(req, res) {
       return res.status(400).json({ message: 'Datos inválidos' });
     }
 
-    const updated = await MarkedNumber.upsertMarkedNumbers(reservationId, userId, gameId, cardId, markedNumbers);
+    const updated = await MarkedNumber.upsertMarkedNumbers(
+      reservationId,
+      userId,
+      gameId,
+      cardId,
+      markedNumbers
+    );
+
     res.json({ message: 'Marcados actualizados', data: updated });
   } catch (error) {
     console.error('Error actualizando números marcados:', error);
