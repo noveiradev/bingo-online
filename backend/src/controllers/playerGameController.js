@@ -3,6 +3,7 @@ import WinningCard from '../models/WinningCard.js';
 import { BingoPattern } from '../models/BingoPattern.js';
 import { BingoCard } from '../models/BingoCard.js';
 import { MarkedNumber } from '../models/MarkedNumber.js'; 
+import { getIO } from '../sockets/socket.js';
 
 export const validateBingo = async (req, res) => {
   try {
@@ -106,6 +107,16 @@ export const validateBingo = async (req, res) => {
       card_id: cardId,
       pattern_id: game.pattern_id,
       user_id: userId,
+    });
+
+    const io = getIO();
+    const room = `game_${gameId}`;
+    io.to(room).emit('BINGO_WINNER', {
+      userId,
+      gameId,
+      message: '¡BINGO! Tenemos un ganador 🎉',
+      patternId: game.pattern_id,
+      gameStatus: 'finished'
     });
 
     return res.status(200).json({
