@@ -11,14 +11,19 @@ export class SelectedCard {
       throw new Error('reservationIds debe ser un arreglo no vacío');
     }
 
-    const insertQueries = reservationIds.map(reservationId =>
-      client.execute(
-        `INSERT INTO selected_cards (game_id, reservation_id) VALUES (?, ?)`,
-        [gameId, reservationId]
-      )
-    );
+    for (const reservationId of reservationIds) {
+      const existing = await client.execute(
+        `SELECT id FROM selected_cards WHERE reservation_id = ? AND game_id = ?`,
+        [reservationId, gameId]
+      );
 
-    await Promise.all(insertQueries);
+      if (existing.rows.length === 0) {
+        await client.execute(
+          `INSERT INTO selected_cards (game_id, reservation_id) VALUES (?, ?)`,
+          [gameId, reservationId]
+        );
+      }
+    }
   }
 
   static async findByGame(gameId) {
@@ -31,8 +36,9 @@ export class SelectedCard {
   }
 
   static async getUsedReservationIds() {
-    const query = `SELECT DISTINCT reservation_id FROM selected_cards`;
-    const result = await client.execute(query);
+    const result = await client.execute(
+      `SELECT DISTINCT reservation_id FROM selected_cards`
+    );
     return result.rows.map(row => row.reservation_id);
   }
 }

@@ -8,6 +8,17 @@ export class MarkedNumber {
     this.marked_numbers = marked_numbers ? JSON.parse(marked_numbers) : [];
   }
 
+  static async findByReservationGameAndCard(reservationId, gameId, cardId) {
+    const result = await client.execute(
+      `SELECT * FROM marked_numbers 
+       WHERE reservation_id = ? AND game_id = ? AND card_id = ?`,
+      [reservationId, gameId, cardId]
+    );
+    const row = result.rows ? result.rows[0] : result[0];
+    if (!row) return null;
+    return new MarkedNumber(row);
+  }
+
   static async findByReservationId(reservationId) {
     const result = await client.execute(
       `SELECT * FROM marked_numbers WHERE reservation_id = ?`,
@@ -33,24 +44,25 @@ export class MarkedNumber {
       throw new Error('Parámetros inválidos en upsertMarkedNumbers');
     }
 
-  const markedNumbersJson = JSON.stringify(markedNumbers);
+    const markedNumbersJson = JSON.stringify(markedNumbers);
 
-  const existing = await this.findByReservationId(reservationId);
-  if (existing) {
-    const query = `
-      UPDATE marked_numbers
-      SET marked_numbers = ?, updated_at = CURRENT_TIMESTAMP
-      WHERE reservation_id = ? AND user_id = ? AND game_id = ? AND card_id = ?
-    `;
-    await client.execute(query, [markedNumbersJson, reservationId, userId, gameId, cardId]);
-    return await this.findByReservationId(reservationId);
-  } else {
-    const query = `
-      INSERT INTO marked_numbers (reservation_id, user_id, game_id, card_id, marked_numbers)
-      VALUES (?, ?, ?, ?, ?)
-    `;
-    await client.execute(query, [reservationId, userId, gameId, cardId, markedNumbersJson]);
-    return await this.findByReservationId(reservationId);
+    const existing = await this.findByReservationGameAndCard(reservationId, gameId, cardId);
+
+    if (existing) {
+      const query = `
+        UPDATE marked_numbers
+        SET marked_numbers = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE reservation_id = ? AND user_id = ? AND game_id = ? AND card_id = ?
+      `;
+      await client.execute(query, [markedNumbersJson, reservationId, userId, gameId, cardId]);
+      return await this.findByReservationGameAndCard(reservationId, gameId, cardId);
+    } else {
+      const query = `
+        INSERT INTO marked_numbers (reservation_id, user_id, game_id, card_id, marked_numbers)
+        VALUES (?, ?, ?, ?, ?)
+      `;
+      await client.execute(query, [reservationId, userId, gameId, cardId, markedNumbersJson]);
+      return await this.findByReservationGameAndCard(reservationId, gameId, cardId);
+    }
   }
-}
 }
