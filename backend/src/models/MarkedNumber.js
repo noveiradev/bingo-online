@@ -65,4 +65,21 @@ export class MarkedNumber {
       return await this.findByReservationGameAndCard(reservationId, gameId, cardId);
     }
   }
+
+    static async findAllByGame(game_id) {
+    try {
+      const result = await client.execute(
+        `SELECT * FROM marked_numbers WHERE game_id = ?`,
+        [game_id]
+      );
+
+      if (Array.isArray(result)) return result;
+      if (result && Array.isArray(result.rows)) return result.rows;
+
+      return [];
+    } catch (error) {
+      console.error('Error en findAllByGame:', error);
+      return [];
+    }
+  }
 }

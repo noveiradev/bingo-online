@@ -14,6 +14,7 @@ import selectedCardRoutes  from './routes/selectedCardRoutes.js';
 import bingoMarkingRoutes from './routes/markedNumberRoutes.js';
 import playerGameRoutes from './routes/playerGameRoutes.js';
 import mobilePaymentRoutes from './routes/mobilePaymentRoutes.js';
+import possibleWinnersRoutes from './routes/possibleWinnersRoutes.js';
 
 dotenv.config();
 
@@ -55,6 +56,9 @@ app.use('/api/player', playerGameRoutes);
 
 // Routes for mobile payments
 app.use('/api/payments', mobilePaymentRoutes);
+
+// Routes for possible winners
+app.use('/api/games', possibleWinnersRoutes);
 
 // Base route
 app.get('/', (req, res) => {
