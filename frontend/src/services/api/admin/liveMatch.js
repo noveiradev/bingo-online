@@ -104,3 +104,29 @@ export const playerMatch = {
     }
   },
 };
+
+export const possibleWinners = {
+  get: async (credentials) => {
+    try {
+      const url = `${BASE_URL}api/games/${credentials.gameId}/possible-winners`;
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error al obtener los posibles ganadores de la partida");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error en possibleWinners:", error);
+      throw error;
+    }
+  },
+};
