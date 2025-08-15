@@ -12,8 +12,6 @@ import BINGO from "@/assets/images/BingoBoard.webp";
 import { JackInTheBox } from "react-awesome-reveal";
 import { useParams } from "react-router-dom";
 
-const GAME_DATA = "game_data";
-
 export default function PlayCard({
   cardNumber,
   numbersArray,
@@ -24,7 +22,7 @@ export default function PlayCard({
   processed,
 }) {
   const { user } = useAuth();
-  const { id } = useParams(); // room id
+  const { id } = useParams();
   const { width, height } = useWindowSize();
   const [showConfetti, setShowConfetti] = useState(false);
 
@@ -56,12 +54,29 @@ export default function PlayCard({
     }
   }, [markedItems, storageKey]);
 
-  // obtiene los valores marcados (no índices)
+  useEffect(() => {
+    const markedValues = markedItems
+      .map((it) => it.value)
+      .filter((v) => v != null);
+
+    const cardData = {
+      reservationId,
+      gameId: Number(id),
+      cardId,
+      markedNumbers: markedValues,
+    };
+
+    const existingCards = JSON.parse(localStorage.getItem("cards_data")) || [];
+    const updatedCards = existingCards.filter((c) => c.cardId !== cardId);
+    updatedCards.push(cardData);
+
+    localStorage.setItem("cards_data", JSON.stringify(updatedCards));
+  }, [markedItems, reservationId, id, cardId]);
+
   const getMarkedValues = () => {
     return markedItems.map((it) => it.value).filter((v) => v != null);
   };
 
-  // toggle con validación: solo si el cartón ya fue procesado y el número salió
   const toggleCell = useCallback(
     (idx) => {
       if (!processed) {
@@ -148,10 +163,11 @@ export default function PlayCard({
           toast.success({
             text: `${bingoResponse.message} con tu cartón ${cardId}`,
           });
+
           setTimeout(() => {
-            window.location.reload();
-            localStorage.clear();
-          }, 10000);
+          window.location.reload();
+          localStorage.clear();
+          }, 120000);
         } else {
           toast.info({
             text: `Aún no tienes BINGO con el cartón ${cardId}`,
