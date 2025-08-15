@@ -1,79 +1,161 @@
+import { useState, useEffect, useRef } from "react";
+import { toast } from "@pheralb/toast";
+import { useAuth } from "@/hooks/useAuth";
+
+import EmptyCardboard from "@/assets/images/Carton-vacio.webp";
+
 import GoBack from "@/components/GoBack";
-import Logo from "/public/logo.png";
 import Button from "@/components/Button";
 import PatternCard from "@/components/Cards/PatternCard";
-import { useState, useEffect } from "react";
 import PatternAdvice from "@/components/PatternAdvice";
-import { toast } from "@pheralb/toast";
 import BingoBoard from "@/components/BingoBoard";
 import NumbersHistory from "@/components/NumbersHistory";
-import { obtainAllPatterns } from "@/services/api/patterns";
-import { startGame, boardNumbers } from "@/services/api/admin/liveMatch";
 import CleanModal from "@/components/CleanModal";
 import BingoBall from "@/components/BingoBall";
 import PlayersInMatch from "@/components/PlayersInMatch";
 
+import BINGO_COLUMNS from "@/utils/bingoColumns";
+
+import { obtainAllPatterns } from "@/services/api/patterns";
+import { cardById } from "@/services/api/cards";
+import {
+  startGame,
+  boardNumbers,
+  possibleWinners,
+} from "@/services/api/admin/liveMatch";
+
+import Logo from "/public/logo.png";
+
+import { io } from "socket.io-client";
+
 export default function GameRoom() {
-  const [cleanModal, setCleanModal] = useState(false);
-  const [playersMatch, setPlayersMatch] = useState(false);
+  const { user } = useAuth();
+  const userId = user.id;
+  const socketRef = useRef(null);
 
-  const getLocalStorage = (key, fallback) => {
-    if (typeof window === "undefined") return fallback;
-    const stored = localStorage.getItem(key);
-    try {
-      return stored ? JSON.parse(stored) : fallback;
-    } catch (error) {
-      return fallback;
-    }
-  };
+  const [gameId, setGameId] = useState(() => {
+    if (typeof window !== "undefined")
+      return localStorage.getItem("gameId") || null;
+    return null;
+  });
+  const [bingoWinner, setBingoWinner] = useState("");
+  const [possibleWinnersContent, setPossibleWinnersContent] = useState([]);
+  const [showPossibleWinners, setShowPossibleWinners] = useState(false);
 
-  // Estados inicializados desde localStorage
   const [activeNumbers, setActiveNumbers] = useState(() =>
-    getLocalStorage("activeNumbers", {})
+    typeof window !== "undefined" && localStorage.getItem("activeNumbers")
+      ? JSON.parse(localStorage.getItem("activeNumbers"))
+      : {}
   );
   const [newlyCalled, setNewlyCalled] = useState(() =>
-    getLocalStorage("newlyCalled", {})
+    typeof window !== "undefined" && localStorage.getItem("newlyCalled")
+      ? JSON.parse(localStorage.getItem("newlyCalled"))
+      : {}
   );
   const [lastCalled, setLastCalled] = useState(() =>
-    getLocalStorage("lastCalled", { num: "?", letter: "" })
+    typeof window !== "undefined" && localStorage.getItem("lastCalled")
+      ? JSON.parse(localStorage.getItem("lastCalled"))
+      : { num: "?", letter: "" }
   );
   const [allNumbers, setAllNumbers] = useState(() =>
-    getLocalStorage("allNumbers", [])
+    typeof window !== "undefined" && localStorage.getItem("allNumbers")
+      ? JSON.parse(localStorage.getItem("allNumbers"))
+      : []
   );
   const [matchState, setMatchState] = useState(() =>
-    getLocalStorage("matchState", false)
+    typeof window !== "undefined" && localStorage.getItem("matchState")
+      ? JSON.parse(localStorage.getItem("matchState"))
+      : false
   );
   const [patternSelected, setPatternSelected] = useState(() =>
-    getLocalStorage("patternSelected", false)
+    typeof window !== "undefined" && localStorage.getItem("patternSelected")
+      ? JSON.parse(localStorage.getItem("patternSelected"))
+      : false
   );
 
-  const [bCalls] = useState([
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-  ]);
-  const [iCalls] = useState([
-    16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-  ]);
-  const [nCalls] = useState([
-    31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
-  ]);
-  const [gCalls] = useState([
-    46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
-  ]);
-  const [oCalls] = useState([
-    61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75,
-  ]);
-
+  const [cleanModal, setCleanModal] = useState(false);
+  const [playersMatch, setPlayersMatch] = useState(false);
   const [patterns, setPatterns] = useState("");
   const [modalPattern, setModalPattern] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [canCallNext, setCanCallNext] = useState(true);
 
-  const BINGO_COLUMNS = [
-    { letter: "B", range: [1, 15], calls: bCalls, color: "bg-simple-gold/20" },
-    { letter: "I", range: [16, 30], calls: iCalls, color: "bg-simple-gold/20" },
-    { letter: "N", range: [31, 45], calls: nCalls, color: "bg-simple-gold/20" },
-    { letter: "G", range: [46, 60], calls: gCalls, color: "bg-simple-gold/20" },
-    { letter: "O", range: [61, 75], calls: oCalls, color: "bg-simple-gold/20" },
-  ];
+  useEffect(() => {
+    localStorage.setItem("activeNumbers", JSON.stringify(activeNumbers));
+    localStorage.setItem("newlyCalled", JSON.stringify(newlyCalled));
+    localStorage.setItem("lastCalled", JSON.stringify(lastCalled));
+    localStorage.setItem("allNumbers", JSON.stringify(allNumbers));
+    localStorage.setItem("matchState", JSON.stringify(matchState));
+    localStorage.setItem("patternSelected", JSON.stringify(patternSelected));
+    if (gameId) localStorage.setItem("gameId", gameId);
+  }, [
+    activeNumbers,
+    newlyCalled,
+    lastCalled,
+    allNumbers,
+    matchState,
+    patternSelected,
+    gameId,
+  ]);
+
+  useEffect(() => {
+    const socket = io("http://localhost:3000", {
+      transports: ["websocket"],
+    });
+
+    socketRef.current = socket;
+
+    socket.on("connect", () => {
+      console.log("Socket connected:", socket.id);
+
+      if (gameId) {
+        socket.emit("joinGame", { gameId, userId });
+      }
+    });
+
+    socket.on("BINGO_WINNER", (data) => {
+      if (data.message) {
+        toast.info({
+          text: `¡${data.message} La partida se reiniciará en breve.`,
+        });
+        setBingoWinner(data);
+
+        // setTimeout(() => {
+        //   resetStates();
+        //   localStorage.clear();
+        //   setBingoWinner("");
+
+        //   socketRef.current.off("connect");
+        //   socketRef.current.disconnect();
+        //   socketRef.current = null;
+        // }, 120000);
+      }
+    });
+
+  }, [userId, gameId]);
+
+  const resetStates = () => {
+    setActiveNumbers({});
+    setNewlyCalled({});
+    setLastCalled({ num: "?", letter: "" });
+    setAllNumbers([]);
+    setMatchState(false);
+    setPatternSelected(false);
+    setGameId(null);
+
+    localStorage.removeItem("activeNumbers");
+    localStorage.removeItem("newlyCalled");
+    localStorage.removeItem("lastCalled");
+    localStorage.removeItem("allNumbers");
+    localStorage.removeItem("matchState");
+    localStorage.removeItem("patternSelected");
+    localStorage.removeItem("gameId");
+
+    localStorage.removeItem("patternId");
+    localStorage.removeItem("pattern");
+    localStorage.removeItem("patternName");
+    localStorage.removeItem("patternDescription");
+  };
 
   const toggleNumber = (number) => {
     const isCurrentlyActive = activeNumbers[number];
@@ -95,8 +177,6 @@ export default function GameRoom() {
 
     setActiveNumbers((prev) => ({ ...prev, [number]: !prev[number] }));
   };
-
-  const [canCallNext, setCanCallNext] = useState(true);
 
   const callNextNumber = async () => {
     if (!canCallNext) return;
@@ -125,62 +205,51 @@ export default function GameRoom() {
   const startMatch = async () => {
     setIsLoading(true);
     setPatternSelected(true);
+    const patternId = localStorage.getItem("patternId");
+    if (!patternId) {
+      toast.error({
+        text: "Debes seleccionar una modalidad para iniciar la partida",
+      });
+      setIsLoading(false);
+      setPatternSelected(false);
+      return;
+    }
     const matchData = {
-      patternId: Number(localStorage.getItem("patternId")),
+      patternId: Number(patternId),
     };
     try {
       const response = await startGame.start(matchData);
       if (
-        response.message == "Se requiere la modalidad para iniciar la partida"
+        response.message === "Se requiere la modalidad para iniciar la partida"
       ) {
         toast.error({
           text: "Debes seleccionar una modalidad para iniciar la partida",
         });
         setIsLoading(false);
+        setPatternSelected(false);
         return;
       } else {
         setIsLoading(false);
         setMatchState(true);
-        localStorage.setItem("matchState", true);
-
         toast.success({
           text: "Partida iniciada correctamente",
         });
+        setGameId(response.game.id);
         localStorage.setItem("matchData", JSON.stringify(response.game));
       }
     } catch (error) {
       console.error("Registration error:", error);
+      setIsLoading(false);
+      setPatternSelected(false);
     }
   };
 
-  const clearBoard = async () => {
-    setActiveNumbers({});
-    setNewlyCalled({});
-    setLastCalled({ num: "?", color: "" });
-    setAllNumbers([]);
-    setMatchState(false);
-
-    localStorage.removeItem("activeNumbers");
-    localStorage.removeItem("newlyCalled");
-    localStorage.setItem("lastCalled", JSON.stringify({ num: "?", color: "" }));
-    localStorage.removeItem("allNumbers");
-    localStorage.removeItem("matchButton");
-    localStorage.removeItem("matchData");
-    localStorage.setItem("matchState", false);
-
-    // Pattern data delete
-    localStorage.removeItem("patternId");
-    localStorage.removeItem("pattern");
-    localStorage.removeItem("patternName");
-    localStorage.removeItem("patternDescription");
+  const clearBoard = () => {
+    resetStates();
 
     toast.success({
       text: "Tablero limpiado correctamente",
     });
-
-    setTimeout(() => {
-      window.location.reload();
-    }, 500);
   };
 
   const patternModal = () => {
@@ -209,31 +278,168 @@ export default function GameRoom() {
     localStorage.setItem("patternName", name);
     localStorage.setItem("patternDescription", description);
 
-    setModalPattern(!modalPattern);
+    setModalPattern(false);
   };
-
-  useEffect(() => {
-    localStorage.setItem("activeNumbers", JSON.stringify(activeNumbers));
-  }, [activeNumbers]);
-
-  useEffect(() => {
-    localStorage.setItem("newlyCalled", JSON.stringify(newlyCalled));
-  }, [newlyCalled]);
-
-  useEffect(() => {
-    localStorage.setItem("lastCalled", JSON.stringify(lastCalled));
-  }, [lastCalled]);
-
-  useEffect(() => {
-    localStorage.setItem("allNumbers", JSON.stringify(allNumbers));
-  }, [allNumbers]);
 
   useEffect(() => {
     getPatterns();
   }, []);
 
+  const handlePossibleWinners = async () => {
+    try {
+      const response = await possibleWinners.get({ gameId });
+
+      if (!response || response === false) {
+        setShowPossibleWinners(false);
+        setPossibleWinnersContent([]);
+        return;
+      }
+
+      console.log(response);
+
+      const responseWithCards = await Promise.all(
+        response.map(async (res) => {
+          const cardData = await cardById.cardById(Number(res.card_id));
+          console.log(cardData);
+          return {
+            ...res,
+            cardInfo: cardData,
+          };
+        })
+      );
+
+      setPossibleWinnersContent(responseWithCards);
+    } catch (error) {
+      console.error("Error handlePossibleWinners function: ", error);
+    }
+  };
+
   return (
     <>
+      {bingoWinner && (
+        <section className="absolute top-0 left-0 z-30 w-full h-dvh bg-[#000]/85 flex items-center justify-center px-4">
+          <article className="flex max-w-[450px] flex-col items-center w-full h-[35rem] stable:h-[25rem] gap-2 bg-borgon p-4 rounded-2xl overflow-auto relative text-gold border-4 border-gold/50">
+            <button
+              className="absolute top-2 right-2 text-white bg-red-400 rounded-full w-6 h-auto flex items-center justify-center font-bold hover:bg-red-500 transition-colors"
+              onClick={() => setBingoWinner("")}
+            >
+              ✕
+            </button>
+
+            {showPossibleWinners && possibleWinnersContent.length > 0 ? (
+              <>
+                <h2 className="text-gold text-[1.25rem] font-inter font-bold">
+                  Posibles ganadores
+                </h2>
+                <article className="text-lg w-full h-full text-yellow-cake flex flex-col gap-2 rounded bg-coral-red/50 p-2 overflow-auto">
+                  {possibleWinnersContent.map((winner, i) => (
+                    <div
+                      key={i}
+                      className="bg-borgon/40 outline-2 outline-gold/30 rounded p-2 text-sm flex flex-col gap-2 justify-center"
+                    >
+                      <div>
+                        <p>Nombre de usuario: {winner.user_id}</p>
+                        <p>
+                          Número de teléfono:{" "}
+                          {winner.cardInfo?.phone || "Sin dato"}
+                        </p>
+                        <p>Cartón: {winner.card_id}</p>
+                        <p>
+                          Hora:{" "}
+                          {winner.created_at &&
+                            new Date(winner.created_at).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-5 grid-rows-5 w-[112px] h-[140px] px-[0.6rem] pb-[1rem] relative pt-[1.85rem] items-center justify-items-center self-center">
+                        {winner.cardInfo?.numbers?.map((number, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center justify-center text-xs font-bold z-10"
+                          >
+                            {number === "free" ? (
+                              <span className="text-[8px]"></span>
+                            ) : (
+                              number
+                            )}
+                          </div>
+                        ))}
+                        <img
+                          src={EmptyCardboard}
+                          alt="Bingo cardboard"
+                          className="w-30 h-auto absolute"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </article>
+              </>
+            ) : (
+              <>
+                <div className="text-center w-full">
+                  <h2 className="text-gold text-[2.3rem] font-inter font-bold mt-4">
+                    {bingoWinner?.message?.split(" ")[0]}
+                  </h2>
+                  <h3 className="text-gold text-[1.75rem] font-inter font-bold">
+                    {bingoWinner?.message?.slice(8)}
+                  </h3>
+                </div>
+                <div className="text-lg w-full h-full text-yellow-cake flex flex-col gap-2 justify-center rounded bg-coral-red/50 px-4 py-2">
+                  <p className="font-poppins font-medium">
+                    Usuario ganador:{" "}
+                    <span className="px-1 outline-2 rounded">
+                      {bingoWinner?.username}
+                    </span>
+                  </p>
+                  <p className="font-poppins font-medium">
+                    Número de teléfono:{" "}
+                    <span className="px-1 outline-2 rounded">
+                      {bingoWinner?.phone}
+                    </span>
+                  </p>
+                  <p className="font-poppins font-medium">
+                    Estado de la partida:{" "}
+                    <span className="px-1 outline-2 rounded">
+                      {bingoWinner?.gameStatus === "finished"
+                        ? "Finalizado"
+                        : "En curso"}
+                    </span>
+                  </p>
+                  <p className="font-poppins font-medium">
+                    Número de la partida ganada:{" "}
+                    <span className="px-1 outline-2 rounded">
+                      #{bingoWinner?.gameId}
+                    </span>
+                  </p>
+                </div>
+              </>
+            )}
+
+            <div className="flex gap-2 w-full h-[4rem]">
+              <Button
+                text="Volver"
+                className="w-1/2 bg-[#44728E] text-white px-2 py-3 rounded text-sm"
+                onClick={() => setShowPossibleWinners(false)}
+              />
+              <Button
+                text={"Posibles ganadores"}
+                className="w-full px-2 py-3 bg-militar-green rounded text-white text-sm"
+                onClick={async () => {
+                  setShowPossibleWinners(true);
+
+                  if (possibleWinnersContent.length === 0) {
+                    await handlePossibleWinners();
+                  }
+                }}
+              />
+            </div>
+          </article>
+        </section>
+      )}
+
       {modalPattern && (
         <article
           className="absolute top-0 left-0 z-30 w-full h-dvh bg-[#000]/85 flex items-center justify-center px-4"
@@ -300,9 +506,9 @@ export default function GameRoom() {
                   text="Siguiente número"
                   className={`${
                     canCallNext
-                      ? "bg-[#FFFEFD]"
-                      : "bg-[#FFFEFD]/50 cursor-not-allowed"
-                  }  px-2 py-2 w-full text-xs rounded-md text-[#272624] font-medium font-inter cursor-pointer hover:bg-[#FFFEFD]/80 transition-colors`}
+                      ? "bg-[#FFFEFD] cursor-pointer"
+                      : "bg-[#FFFEFD]/35 cursor-not-allowed"
+                  }  px-2 py-2 w-full text-xs rounded-md text-[#272624] font-medium font-inter transition-colors`}
                   onClick={callNextNumber}
                 />
               )}
