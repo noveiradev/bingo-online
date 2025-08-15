@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3000/";
+import { BASE_URL } from "@/utils/utilURL";
 
 export const startGame = {
   start: async (credentials) => {
