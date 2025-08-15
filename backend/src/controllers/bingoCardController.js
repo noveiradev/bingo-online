@@ -65,7 +65,6 @@ export const getAvailableCards = async (req, res) => {
   }
 };
 
-
 export const reserveCard = async (req, res) => {
   try {
     const cardId = req.params.id;
@@ -111,5 +110,28 @@ export const cancelReservedCard = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ message: 'Error al cancelar reserva del cartón.' });
+  }
+};
+
+export const getCardByIdAdmin = async (req, res) => {
+  const cardId = req.params.id;
+
+  try {
+    const card = await BingoCard.findById(cardId);
+
+    if (!card) {
+      return res.status(200).json({
+        success: false,
+        message: 'Cartón no encontrado.'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: card
+    });
+  } catch (err) {
+    console.error('Error al obtener el cartón.', err);
+    res.status(500).json({ message: 'Error al obtener el cartón.' });
   }
 };
