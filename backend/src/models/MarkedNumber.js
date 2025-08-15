@@ -1,4 +1,5 @@
 import client from '../config/db.js';
+
 export class MarkedNumber {
   constructor({ id, reservation_id, game_id, card_id, marked_numbers }) {
     this.id = id;

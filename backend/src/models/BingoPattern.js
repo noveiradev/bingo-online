@@ -1,4 +1,5 @@
 import client from '../config/db.js';
+
 export class BingoPattern {
   static async create(name, description, pattern) {
     const result = await client.execute(

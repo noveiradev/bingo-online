@@ -1,4 +1,5 @@
 import client from '../config/db.js';
+
 class User {
   constructor({ id, username, password, security_question, security_answer, phone, registration_date, role }) {
     this.id = id;
