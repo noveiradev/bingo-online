@@ -1,4 +1,5 @@
 import client from '../config/db.js';
+
 class Game {
   constructor({ id, date, status, called_numbers, winner_id, pattern_id }) {
     this.id = id;

@@ -1,4 +1,5 @@
 import client from '../config/db.js';
+
 export class BingoCard {
   static async findById(id) {
     const query = 'SELECT * FROM bingo_cards WHERE id = ?';
