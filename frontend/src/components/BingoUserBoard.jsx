@@ -1,4 +1,3 @@
-
 export default function BingoUserBoard({ BINGO_COLUMNS, activeNumbers, newlyCalled, lastCalled }) {
   return (
     <section className="grid grid-cols-5 grid-rows-15 overflow-y-auto">
@@ -16,9 +15,9 @@ export default function BingoUserBoard({ BINGO_COLUMNS, activeNumbers, newlyCall
                 className={`h-5 flex mb-[0.06rem] font-semibold text-sm font-inter items-center justify-center transition-all duration-200
                   ${
                     isLastCalled
-                      ? "bg-green-apple/75 text-white animate-pulse"
+                      ? "bg-green-apple/85 text-white animate-pulse"
                       : isActive
-                      ? `${col.color} text-white ${isNew ? "animate-pulse" : ""}`
+                      ? `${col.color} text-white ${isNew ? "" : ""}`
                       : "bg-white/5 text-white/70 hover:bg-white/10"
                   }
                   cursor-pointer relative`}
