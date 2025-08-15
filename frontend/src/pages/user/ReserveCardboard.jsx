@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { availableCards } from "@/services/api/cards";
+import { availableCards, cardPrice } from "@/services/api/cards";
 
 import GoBack from "@/components/GoBack";
 import Reminder from "@/components/Reminder";
@@ -18,6 +18,7 @@ export default function ReserveCardboard() {
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [cardPriceValue, setCardPriceValue] = useState("");
 
   useEffect(() => {
     const getCardboards = async () => {
@@ -54,6 +55,22 @@ export default function ReserveCardboard() {
     if (user?.id) {
       getCardboards();
     }
+
+    const handleCardPrice = async () => {
+      try {
+        const response = await cardPrice.obtain();
+        if (response?.price) {
+          setCardPriceValue(response.price);
+        } else {
+          setCardPriceValue(0);
+        }
+      } catch (error) {
+        console.error("Error handleCardPrice function: ", error);
+      }
+    };
+
+    handleCardPrice();
+
   }, [user]);
 
   const filteredCardboards =
@@ -78,7 +95,7 @@ export default function ReserveCardboard() {
           <p className="mt-2 font-medium">
             Cada carton tiene un costo de{" "}
             <span className="text-brilliant-green font-semibold text-[0.95rem]">
-              50Bs.
+              {cardPriceValue}Bs.
             </span>
           </p>
         </Reminder>
