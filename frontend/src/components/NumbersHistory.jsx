@@ -19,8 +19,8 @@ export default function NumbersHistory({ allNumbers, viewType }) {
         Historial de números
       </h2>
 
-      <div className="flex flex-col justify-center">
-        <div className="grid grid-cols-5 grid-rows-2 h-[5rem] overflow-y-hidden gap-1">
+      <div className="flex flex-col justify-center items-center">
+        <div className="grid grid-cols-5 grid-rows-2 w-full justify-items-center h-[5rem] overflow-y-hidden gap-1">
           {matchNumbers.map((n, i) => (
             <span
               key={n != null ? `num-${n}` : `empty-${i}`}
@@ -31,7 +31,7 @@ export default function NumbersHistory({ allNumbers, viewType }) {
           ))}
         </div>
         {viewType && (
-          <span className="text-white w-full h-[6rem] flex items-center bg-blue-gray/70 rounded-md p-2 text-sm text-center col-span-5">
+          <span className="text-white w-full h-[6rem] flex justify-center items-center bg-blue-gray/70 rounded-md p-2 text-sm text-center col-span-5">
             {allNumbers.length > 0
               ? `El último número llamado fue: ${allNumbers[allNumbers.length - 1]}`
               : "No hay números llamados"}
