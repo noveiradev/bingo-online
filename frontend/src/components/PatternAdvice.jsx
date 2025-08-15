@@ -9,7 +9,7 @@ export default function PatternAdvice() {
       {id && (
         <section className="absolute bottom-0 w-full p-2 bg-coffee-gray">
           <p className="text-white text-center text-sm">
-            El patron seleccionado fue {name}, el cual es {description} {id}
+            El patron seleccionado fue {name}, el cual es {description}
           </p>
         </section>
       )}
