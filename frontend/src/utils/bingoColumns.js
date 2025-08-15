@@ -5,10 +5,10 @@ const gCalls = [46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60];
 const oCalls = [61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75];
 
 const BINGO_COLUMNS = [
-  { letter: "B", range: [1, 15], calls: bCalls, color: "bg-simple-gold/20" },
-  { letter: "I", range: [16, 30], calls: iCalls, color: "bg-simple-gold/20" },
-  { letter: "N", range: [31, 45], calls: nCalls, color: "bg-simple-gold/20" },
-  { letter: "G", range: [46, 60], calls: gCalls, color: "bg-simple-gold/20" },
-  { letter: "O", range: [61, 75], calls: oCalls, color: "bg-simple-gold/20" },
+  { letter: "B", range: [1, 15], calls: bCalls, color: "bg-simple-gold/30" },
+  { letter: "I", range: [16, 30], calls: iCalls, color: "bg-simple-gold/30" },
+  { letter: "N", range: [31, 45], calls: nCalls, color: "bg-simple-gold/30" },
+  { letter: "G", range: [46, 60], calls: gCalls, color: "bg-simple-gold/30" },
+  { letter: "O", range: [61, 75], calls: oCalls, color: "bg-simple-gold/30" },
 ];
 export default BINGO_COLUMNS;
