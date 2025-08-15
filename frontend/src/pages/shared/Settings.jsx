@@ -50,20 +50,19 @@ export default function Settings() {
     try {
       const response = await clearCardboards.releaseCards();
 
-      if(response.success) {
+      if (response.success) {
         toast.success({
-          text: "Cartones liberados exitosamente!"
-        })
+          text: "Cartones liberados exitosamente!",
+        });
       } else {
         toast.error({
-          text: "Ha ocurrido un error al liberar los cartones."
-        })
+          text: "Ha ocurrido un error al liberar los cartones.",
+        });
       }
-
     } catch (error) {
-      console.error("Release error: ", error)
+      console.error("Release error: ", error);
     }
-  }
+  };
 
   return (
     <>
@@ -151,17 +150,21 @@ export default function Settings() {
             />
             {message && <p className="text-gold text-center mt-2">{message}</p>}
 
-            <div className="mt-7 w-full gap-2 flex flex-col items-center justify-center">
-              <p className="text-sm text-center text-simple-gold underline font-poppins font-semibold">
-                Reestablece los cartones
-              </p>
-              <span
-                className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] text-center cursor-pointer"
-                onClick={() => {releaseCards()}}
-              >
-                Vaciar cartones
-              </span>
-            </div>
+            {user?.role === "admin" ? (
+              <div className="mt-7 w-full gap-2 flex flex-col items-center justify-center">
+                <p className="text-sm text-center text-simple-gold underline font-poppins font-semibold">
+                  Reestablece los cartones
+                </p>
+                <span
+                  className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] text-center cursor-pointer"
+                  onClick={() => {
+                    releaseCards();
+                  }}
+                >
+                  Vaciar cartones
+                </span>
+              </div>
+            ) : null}
           </article>
           <span
             onClick={() => setModalView(!modalView)}
