@@ -13,7 +13,7 @@ import "ldrs/react/Tailspin.css";
 const SELECTED_KEY = "active_selected_cardboards";
 const PROCESSED_KEY = "processed_cardboards";
 
-export default function CardboardsPlay({ roomId }) {
+export default function CardboardsPlay({ roomId, updateActiveMatchData }) {
   const { user } = useAuth();
   const [cardboards, setCardboards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -103,6 +103,10 @@ export default function CardboardsPlay({ roomId }) {
         gameId: Number(roomId),
       });
 
+      if (response.message) {
+        updateActiveMatchData();
+      }
+
       setProcessed((prev) =>
         Array.from(new Set([...prev, ...toProcess])).map(String)
       );
@@ -116,8 +120,8 @@ export default function CardboardsPlay({ roomId }) {
     <>
       <section
         className={`absolute bottom-0 left-0 right-0 flex justify-center items-center px-2 w-full ${
-          showCardBoards ? "h-[17rem]" : "h-[3.2rem]"
-        } z-35 transition-all duration-300`}
+          showCardBoards ? "h-[17rem] stable:h-[24.5rem]" : "h-[3.2rem]"
+        } z-35 transition-all duration-300 `}
       >
         <article className="bg-dark-gold w-full h-full rounded-t-xl flex flex-col">
           {/* HEADER */}
@@ -169,7 +173,11 @@ export default function CardboardsPlay({ roomId }) {
                   <div className={`w-full my-2 flex justify-center gap-2`}>
                     <button
                       onClick={selected.length === 0 ? null : processSelected}
-                      className={`px-2 py-2 text-xs rounded ${selected.length === 0 ? "bg-red-500/70 text-white/85" : "bg-red-500 text-white"}`}
+                      className={`px-2 py-2 text-xs rounded ${
+                        selected.length === 0
+                          ? "bg-red-500/70 text-white/85"
+                          : "bg-red-500 text-white"
+                      }`}
                     >
                       Seleccionar cartones
                     </button>
