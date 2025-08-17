@@ -59,7 +59,7 @@ export const availableCards = {
 export const cardById = {
   cardById: async (cardId) => {
     try {
-      const response = await fetch(`${BASE_URL}api/cards/${cardId}`, {
+      const response = await fetch(`${BASE_URL}api/cards/${cardId}/admin`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
