@@ -4,14 +4,14 @@ import { Slide } from "react-awesome-reveal";
 export default function CleanModal({ showModal, modalState, clearBoard }) {
   return (
     <>
-      <section className="bg-[#000]/70 absolute z-20 top-0 left-0 w-full h-dvh">
+      <section className="bg-[#000]/70 absolute z-20 top-0 left-0 w-full h-dvh overflow-hidden">
         <Slide
           direction="up"
           triggerOnce
           duration={600}
-          className="w-full h-full absolute"
+          className="w-full h-full absolute flex items-center"
         >
-          <article className="max-w-[350px] w-[95%] h-fit pb-4 bg-white/10 mx-auto mt-24 backdrop-blur-2xl rounded-2xl shadow-[#000]/50 shadow-lg outline-[#4E4E4B] outline-3 font-poppins">
+          <article className="max-w-[350px] w-[95%] h-fit pb-4 bg-white/10 mx-auto backdrop-blur-2xl rounded-2xl shadow-[#000]/50 shadow-lg outline-[#4E4E4B] outline-3 font-poppins">
             <div className="p-4 py-5 flex flex-col gap-4">
               <h1 className="text-center font-bold text-[1.3rem] text-[#FAF2E7]">
                 Estas seguro que quieres limpiar el tablero?
