@@ -6,6 +6,7 @@ import { io } from "socket.io-client";
 
 import { matchService } from "@/services/api/user/match";
 import Logo from "/public/logo.png";
+import Button from "@/components/Button";
 import BingoUserBoard from "@/components/BingoUserBoard";
 import NumbersHistory from "@/components/NumbersHistory";
 import BINGO_COLUMNS from "@/utils/bingoColumns";
@@ -34,6 +35,7 @@ export default function UserGameRoom() {
   const { user } = useAuth();
   const { id } = useParams();
   const socketRef = useRef(null);
+  const intervalRef = useRef(null);
   const [haveWinner, setHaveWinner] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(0);
 
@@ -207,7 +209,6 @@ export default function UserGameRoom() {
     });
 
     socket.on("BINGO_WINNER", async (data) => {
-      console.log("Bingo winner recibido:", data);
       const cardsData = JSON.parse(localStorage.getItem("cards_data")) || [];
       if (!cardsData.length) {
         console.warn("No hay cartones en localStorage para procesar.");
@@ -215,12 +216,32 @@ export default function UserGameRoom() {
         return;
       }
 
+      // Solo mostrar modal si el ganador no eres tú
       if (data.userId === user.id) {
         setHaveWinner(false);
       } else {
-        setHaveWinner(!haveWinner);
+        setHaveWinner(true);
         setSecondsLeft(120);
+
+        // Limpiar interval previo si existe
+        if (intervalRef.current) clearInterval(intervalRef.current);
+
+        intervalRef.current = setInterval(() => {
+          setSecondsLeft((prev) => {
+            if (prev <= 1) {
+              clearInterval(intervalRef.current);
+              intervalRef.current = null;
+              setHaveWinner(false);
+              localStorage.clear();
+              window.location.reload();
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
       }
+
+      // Marcado de cartones (lo de tu código original)
       let markedCount = 0;
       try {
         for (const card of cardsData) {
@@ -233,38 +254,15 @@ export default function UserGameRoom() {
             console.warn("Cartón incompleto, se omite:", card);
             continue;
           }
-
           const payload = {
             reservationId: Number(card.reservationId),
             gameId: Number(card.gameId),
             cardId: Number(card.cardId),
             markedNumbers: card.markedNumbers,
           };
-
           const response = await matchService.markedNumbers(payload);
-
-          if (response?.data) {
-            console.log(`Cartón ${card.cardId} marcado correctamente`, payload);
-            // eslint-disable-next-line no-unused-vars
-            markedCount++;
-          } else {
-            console.warn(`Error marcando cartón ${card.cardId}`, payload);
-          }
+          if (response?.data) markedCount++;
         }
-
-        const interval = setInterval(() => {
-          setSecondsLeft((prev) => {
-            if (prev <= 1) {
-              clearInterval(interval);
-              setHaveWinner(false);
-              localStorage.clear();
-              window.location.reload();
-              return 0;
-            }
-            return prev - 1;
-          });
-        }, 1000);
-
       } catch (error) {
         console.error("Error procesando los cartones:", error);
         toast.error({ text: "Ocurrió un error al marcar los cartones." });
@@ -327,19 +325,28 @@ export default function UserGameRoom() {
     <>
       {haveWinner && (
         <article className="flex justify-center items-center absolute top-0 left-0 w-full h-dvh z-70 bg-black/50">
-          <div className="bg-borgon text-gold border-4 border-gold/50 w-[80%] h-[25rem] stable:h-[18rem] p-6 rounded-2xl shadow-lg text-center">
-            <h2 className="text-3xl mt-4 font-inter font-bold">
+          <div className="bg-borgon text-gold border-4 border-gold/50 w-[80%] h-[25rem] stable:h-[20rem] p-6 rounded-2xl shadow-lg text-center">
+            <h2 className="text-3xl mt-1 font-inter font-bold">
               ¡Tenemos un ganador!
             </h2>
             <p className="text-xl mt-4">
-              La partida se reanudará pronto, estamos validando el bingo...
+              Pronto empezaremos una nueva partida, estamos validando el
+              bingo...
             </p>
-            <p className="mt-10 text-5xl font-bold font-poppins">
+            <p className="mt-7 text-5xl font-bold font-poppins">
               {Math.floor(secondsLeft / 60)
                 .toString()
                 .padStart(2, "0")}
               :{(secondsLeft % 60).toString().padStart(2, "0")}
             </p>
+            <Button
+              className="text-lg mt-4 w-[13rem] text-white bg-militar-green rounded font-medium"
+              text="Click aqui para reestablecer tu tablero"
+              onClick={() => {
+                localStorage.clear();
+                window.location.reload();
+              }}
+            />
           </div>
         </article>
       )}
