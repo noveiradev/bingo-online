@@ -131,7 +131,6 @@ export default function GameRoom() {
         // }, 120000);
       }
     });
-
   }, [userId, gameId]);
 
   const resetStates = () => {
@@ -295,12 +294,13 @@ export default function GameRoom() {
         return;
       }
 
-      console.log(response);
+      const filteredResponse = bingoWinner
+        ? response.filter((res) => res.user_id !== bingoWinner.userId)
+        : response;
 
       const responseWithCards = await Promise.all(
-        response.map(async (res) => {
+        filteredResponse.map(async (res) => {
           const cardData = await cardById.cardById(Number(res.card_id));
-          console.log(cardData);
           return {
             ...res,
             cardInfo: cardData,
@@ -318,7 +318,7 @@ export default function GameRoom() {
     <>
       {bingoWinner && (
         <section className="absolute top-0 left-0 z-30 w-full h-dvh bg-[#000]/85 flex items-center justify-center px-4">
-          <article className="flex max-w-[450px] flex-col items-center w-full h-[35rem] stable:h-[25rem] gap-2 bg-borgon p-4 rounded-2xl overflow-auto relative text-gold border-4 border-gold/50">
+          <article className="flex max-w-[450px] flex-col items-center w-full h-[35rem] stable:h-[29rem] gap-2 bg-borgon p-4 rounded-2xl overflow-auto relative text-gold border-4 border-gold/50">
             <button
               className="absolute top-2 right-2 text-white bg-red-400 rounded-full w-6 h-auto flex items-center justify-center font-bold hover:bg-red-500 transition-colors"
               onClick={() => setBingoWinner("")}
@@ -338,11 +338,11 @@ export default function GameRoom() {
                       className="bg-borgon/40 outline-2 outline-gold/30 rounded p-2 text-sm flex flex-col gap-2 justify-center"
                     >
                       <div>
-                        <p>Nombre de usuario: {winner.user_id}</p>
-                        <p>
-                          Número de teléfono:{" "}
-                          {winner.cardInfo?.phone || "Sin dato"}
+                        <p className="mb-2 font-bold">
+                          Partida #{winner.game_id}
                         </p>
+                        <p>Nombre de usuario: {winner.username}</p>
+                        <p>Número de teléfono: {winner.phone}</p>
                         <p>Cartón: {winner.card_id}</p>
                         <p>
                           Hora:{" "}
@@ -355,18 +355,20 @@ export default function GameRoom() {
                       </div>
 
                       <div className="grid grid-cols-5 grid-rows-5 w-[112px] h-[140px] px-[0.6rem] pb-[1rem] relative pt-[1.85rem] items-center justify-items-center self-center">
-                        {winner.cardInfo?.numbers?.map((number, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center justify-center text-xs font-bold z-10"
-                          >
-                            {number === "free" ? (
-                              <span className="text-[8px]"></span>
-                            ) : (
-                              number
-                            )}
-                          </div>
-                        ))}
+                        {JSON.parse(winner.cardInfo.data.numbers).map(
+                          (number, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center justify-center text-xs font-bold z-10 text-black"
+                            >
+                              {number === "free" ? (
+                                <span className="text-[8px]"></span>
+                              ) : (
+                                number
+                              )}
+                            </div>
+                          )
+                        )}
                         <img
                           src={EmptyCardboard}
                           alt="Bingo cardboard"
