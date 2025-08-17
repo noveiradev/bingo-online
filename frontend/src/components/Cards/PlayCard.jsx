@@ -259,6 +259,7 @@ export default function PlayCard({
                 e.stopPropagation();
                 handleBingo(cardId);
               }}
+              type={"button"}
               className="w-full flex justify-center text-xs font-medium text-white font-inter bg-green-600 px-2 py-1 rounded"
             />
           ) : selected ? (
