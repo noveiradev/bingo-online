@@ -87,10 +87,7 @@ export default function PlayCard({
       }
 
       const value = numbers[idx];
-      if (value === "free") {
-        // opcionalmente permitir o ignorar free
-      }
-
+      
       let called = [];
       try {
         called = JSON.parse(localStorage.getItem("game_all_numbers") || "[]");
@@ -260,7 +257,7 @@ export default function PlayCard({
                 handleBingo(cardId);
               }}
               type={"button"}
-              className="w-full flex justify-center text-xs font-medium text-white font-inter bg-green-600 px-2 py-1 rounded"
+              className="cursor-pointer w-full flex justify-center text-xs font-medium text-white font-inter bg-green-600 hover:bg-green-500 px-2 py-1 rounded"
             />
           ) : selected ? (
             <div className="flex w-full justify-center items-center gap-1 text-sm text-white">

@@ -62,7 +62,7 @@ export default function PlatformPlayers() {
         <h1 className="text-dark-gold font-semibold font-poppins text-2xl mb-4">
           Jugadores
         </h1>
-        <article className="bg-white/5 w-[95%] h-full flex justify-center flex-wrap gap-2 rounded-lg border border-[#DD8D1B]/30 px-1 py-4 overflow-auto max-w-[500px] shadow-lg">
+        <article className="bg-white/5 w-[95%] h-full flex justify-center flex-wrap gap-2 border-2 border-gradient-rounded px-8 py-4 overflow-auto max-w-[500px]">
           {isLoading ? (
             <div className="flex justify-center items-center h-full">
               <Tailspin
@@ -79,14 +79,18 @@ export default function PlatformPlayers() {
                   <tr className="bg-gradient-to-r from-[#DD8D1B]/35 to-[#DD8D1B]/15 text-[#FAF2E7] font-medium font-poppins">
                     <th className="py-3 px-2 text-left text-sm">Usuario</th>
                     <th className="py-3 px-2 text-left text-sm">Teléfono</th>
-                    <th className="py-3 px-1 text-right text-sm">Victorias🏆</th>
+                    <th className="py-3 px-1 text-right text-sm">
+                      Victorias🏆
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {players.map((p, i) => (
-                    <tr 
+                    <tr
                       key={i}
-                      className={`${i % 2 === 0 ? 'bg-white/5' : 'bg-white/10'} hover:bg-[#DD8D1B]/20 transition-colors duration-200`}
+                      className={`${
+                        i % 2 === 0 ? "bg-white/5" : "bg-white/10"
+                      } hover:bg-[#DD8D1B]/20 transition-colors duration-200`}
                     >
                       <td className="py-2 px-2 text-[#FAF2E7] font-inter text-sm">
                         {p.username}
@@ -94,7 +98,11 @@ export default function PlatformPlayers() {
                       <td className="py-2 px-2 text-[#FAF2E7] font-inter text-sm">
                         {p.phone}
                       </td>
-                      <td className={`py-2 px-2 text-right ${p.wins === 0 ? "text-red-400" : "text-green-apple/70"} font-inter font-semibold text-sm`}>
+                      <td
+                        className={`py-2 px-2 text-right ${
+                          p.wins === 0 ? "text-red-400" : "text-green-apple/70"
+                        } font-inter font-semibold text-sm`}
+                      >
                         {p.wins}
                       </td>
                     </tr>

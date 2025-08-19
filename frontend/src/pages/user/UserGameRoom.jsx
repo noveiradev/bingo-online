@@ -6,6 +6,8 @@ import { io } from "socket.io-client";
 
 import { matchService } from "@/services/api/user/match";
 import Logo from "/public/logo.png";
+
+import GoBack from "@/components/GoBack";
 import Button from "@/components/Button";
 import BingoUserBoard from "@/components/BingoUserBoard";
 import NumbersHistory from "@/components/NumbersHistory";
@@ -91,7 +93,6 @@ export default function UserGameRoom() {
     }
   });
 
-  // Persistencia en localStorage
   useEffect(() => {
     localStorage.setItem(ALL_NUMBERS_KEY, JSON.stringify(allNumbers));
   }, [allNumbers]);
@@ -111,7 +112,6 @@ export default function UserGameRoom() {
     localStorage.setItem(GAME_DATA, JSON.stringify(gameData));
   }, [gameData]);
 
-  // Función que trae info actualizada del match
   const fetchActiveMatch = async () => {
     try {
       const response = await matchService.activeMatch();
@@ -171,7 +171,6 @@ export default function UserGameRoom() {
         setLastCalled({ num: lastNum, letter: lastLetter });
         setNewlyCalled(newly);
 
-        // Conectar socket solo si no está conectado aún
         if (!socketRef.current) {
           initSocket(gameId);
         }
@@ -185,7 +184,6 @@ export default function UserGameRoom() {
     }
   };
 
-  // Inicializar socket
   const initSocket = (gameId) => {
     if (!gameId || !user?.id) return;
 
@@ -201,6 +199,8 @@ export default function UserGameRoom() {
     socket.on("PLAYER_JOINED", ({ userId: joinedId }) => {
       if (joinedId !== userId) {
         toast.success({ text: `Jugador ${joinedId} se unió a la partida.` });
+      } else {
+        toast.success({ text: `Te has unido a la partida 🎊` });
       }
     });
 
@@ -216,14 +216,12 @@ export default function UserGameRoom() {
         return;
       }
 
-      // Solo mostrar modal si el ganador no eres tú
       if (data.userId === user.id) {
         setHaveWinner(false);
       } else {
         setHaveWinner(true);
         setSecondsLeft(120);
 
-        // Limpiar interval previo si existe
         if (intervalRef.current) clearInterval(intervalRef.current);
 
         intervalRef.current = setInterval(() => {
@@ -241,7 +239,6 @@ export default function UserGameRoom() {
         }, 1000);
       }
 
-      // Marcado de cartones (lo de tu código original)
       let markedCount = 0;
       try {
         for (const card of cardsData) {
@@ -311,7 +308,6 @@ export default function UserGameRoom() {
   useEffect(() => {
     fetchActiveMatch();
 
-    // Cleanup socket
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect();
@@ -351,7 +347,10 @@ export default function UserGameRoom() {
         </article>
       )}
 
-      <section className="max-w-[768px] mx-auto flex flex-col h-full items-center justify-center relative">
+      <section className="max-w-[600px] mx-auto flex flex-col h-full items-center justify-center relative pt-4">
+        <div className="flex w-full max-w-[600px] px-2 pb-3">
+          <GoBack viewType={false} />
+        </div>
         <section className="grid grid-rows-[auto_1fr] p-2 w-full h-full gap-1">
           <article className="relative rounded-lg h-[21.21rem] overflow-hidden bg-white/10">
             <header className="bg-dark-red/85 h-[1.5rem] grid grid-cols-5">

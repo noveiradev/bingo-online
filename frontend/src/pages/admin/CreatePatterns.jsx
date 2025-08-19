@@ -2,12 +2,14 @@ import GoBack from "@/components/GoBack";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Check from "@/icons/Check";
+import { useNavigate } from "react-router-dom";
 import EmptyCardBoard from "@/assets/images/Carton-vacio.webp";
 import { useState } from "react";
 import { registerPatterns } from "@/services/api/patterns";
 import { toast } from "@pheralb/toast";
 
 export default function CreatePatterns() {
+  const navigate = useNavigate();
   const [pattern, setPattern] = useState(
     Array(5)
       .fill()
@@ -47,6 +49,9 @@ export default function CreatePatterns() {
           toast.success({
             text: `Patrón de ${name} registrado correctamente!`,
           });
+          setTimeout(() => {
+            navigate('/admin/game-patterns')
+          }, 1500)
           setPattern(
             Array(5)
               .fill()
@@ -73,10 +78,10 @@ export default function CreatePatterns() {
       <h1 className="text-dark-gold font-semibold font-poppins text-2xl mb-2">
         Crear modalidad
       </h1>
-      <article className="bg-white/5 w-[95%] h-full flex items-center flex-col gap-2 border-2 border-gradient-rounded px-2 py-4 pt-0 overflow-hidden">
+      <article className="bg-white/5 w-[500px] h-full flex items-center flex-col gap-2 border-2 border-gradient-rounded px-2 py-4 pt-0 overflow-hidden">
         <header className="flex items-center justify-between gap-4 w-full max-w-[350px] h-[5rem]">
           <Input
-            placeholder="Nombre"
+            placeholder="Nombre del patrón"
             value={name}
             id="name"
             type="text"
@@ -117,7 +122,7 @@ export default function CreatePatterns() {
           name="description"
           id="description"
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Describe tu patrón!"
+          placeholder="Coloca una descripción de tu patrón"
           className="mx-auto mt-3 bg-white/10 p-3 w-[16rem] stable:w-[21rem] rounded-lg resize-none border-2 border-white/15 text-white outline-none"
         ></textarea>
       </article>

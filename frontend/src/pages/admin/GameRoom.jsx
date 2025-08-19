@@ -119,16 +119,6 @@ export default function GameRoom() {
           text: `¡${data.message} La partida se reiniciará en breve.`,
         });
         setBingoWinner(data);
-
-        // setTimeout(() => {
-        //   resetStates();
-        //   localStorage.clear();
-        //   setBingoWinner("");
-
-        //   socketRef.current.off("connect");
-        //   socketRef.current.disconnect();
-        //   socketRef.current = null;
-        // }, 120000);
       }
     });
   }, [userId, gameId]);
@@ -141,6 +131,7 @@ export default function GameRoom() {
     setMatchState(false);
     setPatternSelected(false);
     setGameId(null);
+    setBingoWinner("");
 
     localStorage.removeItem("activeNumbers");
     localStorage.removeItem("newlyCalled");
@@ -466,7 +457,10 @@ export default function GameRoom() {
         />
       )}
 
-      <section className="max-w-[768px] mx-auto flex flex-col h-full items-center justify-center pt-4 relative">
+      <section className="max-w-[600px] mx-auto flex flex-col h-full items-center justify-center pt-4 relative">
+        <div className="flex w-full max-w-[600px] px-2 pb-3">
+          <GoBack viewType={false} />
+        </div>
         <section className="grid grid-cols-2 md:grid-cols-2 p-2 w-full h-full gap-2">
           <article className="flex flex-col items-center">
             <div className="w-full p-1 flex flex-col items-center rounded-xl">
@@ -551,7 +545,7 @@ export default function GameRoom() {
         ) : (
           <Button
             text="Ver jugadores en la partida"
-            className="text-white absolute bottom-17 text-sm py-2 px-4 bg-blue-gray rounded-lg shadow-lg cursor-pointer"
+            className="text-white absolute bottom-12 text-sm py-2 px-4 bg-blue-gray rounded-lg shadow-lg cursor-pointer"
             onClick={() => {
               setPlayersMatch(!playersMatch);
             }}

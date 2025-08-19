@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
 
-export default function Button({ text, onClick, className, disabled = false, type }) {
+export default function Button({ text, onClick, className, disabled = false, type, children }) {
   return (
     <button className={className} onClick={onClick} disabled={disabled} type={type}>
       {text}
+      {children}
     </button>
   );
 }

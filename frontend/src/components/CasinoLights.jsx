@@ -2,7 +2,6 @@ export default function CasinoLights({ className }) {
   return (
     <div className={className}>
       <div className="flex h-full items-center">
-        {/* Contenedor animado */}
         <div className="flex animate-scroll-smooth">
           {Array.from({ length: 100 }).map((_, index) => (
             <div
@@ -12,7 +11,6 @@ export default function CasinoLights({ className }) {
           ))}
         </div>
         
-        {/* Contenedor duplicado (para efecto continuo) */}
         <div className="flex animate-scroll-smooth">
           {Array.from({ length: 100 }).map((_, index) => (
             <div

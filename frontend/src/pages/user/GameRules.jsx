@@ -11,40 +11,71 @@ export default function GameRules() {
           Reglas del juego
         </h1>
 
-        <article className="bg-white/5 w-[95%] h-full border-2 border-gradient-rounded px-8 py-4 overflow-hidden max-w-[500px]">
-          <h2 className="text-[#FAF2E7] text-center font-poppins text-[14px] font-semibold">
-            Risas y Cartones - Reglas
+        <article className="bg-white/5 w-[95%] h-full border-2 border-gradient-rounded px-8 py-4 overflow-x-hidden max-w-[500px]">
+          <h2 className="text-[#FAF2E7] text-center font-poppins text-lg mb-6 font-semibold">
+            Risas y Cartones - Normas
           </h2>
-          <ol className="list-decimal text-gold-orange text-sm font-medium font-poppins flex flex-col gap-2">
+          <ol className="list-decimal text-gold-orange text-sm font-medium font-poppins flex flex-col gap-4">
             <li>
-              <h3>Como jugar?</h3>
+              <h3 className="underline">Durante la partida</h3>
               <ul className="pl-4 list-disc text-[#FAF2E7] text-xs font-light">
-                <li>Cada jugador compra uno o más cartones.</li>
-                <li>El cantor saca bolas al azar y anuncia los números.</li>
+                <li>
+                  Cada 15 números se dará una pausa de 2 minutos para revisar
+                  los números que han salido.
+                </li>
               </ul>
             </li>
+
             <li>
-              <h3>Activación de BINGO</h3>
-              <p className="pl-4 list-disc text-[#FAF2E7] text-xs font-light">
-                Al momento de activar el BINGO, debes asegurarte de haber
-                completado el patrón establecido en la ronda que se esta
-                jugando, de no ser asi, el cartón que estas jugando en esa
-                ronda, será descalificado.
-              </p>
-            </li>
-            <li>
-              <h3>Tipos de Patrones (Ejemplos)</h3>
+              <h3 className="underline">Cantar BINGO</h3>
               <ul className="pl-4 list-disc text-[#FAF2E7] text-xs font-light">
-                <li><strong>Figuras:</strong> Letras, esquinas, formas específicas.</li>
-                <li><strong>Cartón Lleno:</strong> Todos los números del cartón.</li>
+                <li>
+                  El BINGO solo será válido si coincide con los números cantados
+                  y el patrón de la partida.
+                </li>
+                <li>
+                  Si tiene BINGO y no le dio tiempo de cantarlo porque otro jugador lo canto, debe avisar por el grupo para que lo verifiquen.
+                </li>
               </ul>
             </li>
+
             <li>
-              <h3>Validación del ganador</h3>
+              <h3 className="underline">Múltiples ganadores</h3>
               <ul className="pl-4 list-disc text-[#FAF2E7] text-xs font-light">
-                <li>El sistema verificará que los números marcados coincidan con los cantados.</li>
-                <li>Si es correcto, se declara al ganador; si no, el juego continúa.</li>
-                <li>En caso de múltiples ganadores, el premio puede repartirse.</li>
+                <li>
+                  Si al validar se confirma que varios jugadores tenían BINGO al mismo tiempo, el premio se comparte.
+                </li>
+                <li>
+                  Si hay BINGO y tenemos mas de 2 posibles ganadores, se realizará un desempate.
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <h3 className="underline">Obligaciones de los jugadores</h3>
+              <ul className="pl-4 list-disc text-[#FAF2E7] text-xs font-light">
+                <li>
+                  Estar atentos a los números narrados por el sistema.
+                </li>
+                <li>
+                  Seleccionar sus cartones para jugar al entrar en la partida.
+                </li>
+                <li>
+                  Marcar los números de sus cartones para poder cantar BINGO.
+                </li>
+                <li>
+                  Si no tienes luz, notifícalo antes de comenzar; si no, tus cartones pasarán a la siguiente ronda.
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <h3 className="underline">Validación del ganador</h3>
+              <ul className="pl-4 list-disc text-[#FAF2E7] text-xs font-light">
+                <li>El sistema verificará automáticamente los números.</li>
+                <li>
+                  Si es correcto, se declara ganador; si no, la partida continúa.
+                </li>
               </ul>
             </li>
           </ol>

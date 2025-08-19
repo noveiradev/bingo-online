@@ -107,7 +107,7 @@ export default function GamePatterns() {
                 >
                   <h2 className="text-dark-gold font-bold">{p.name}</h2>
 
-                  <div className="absolute z-20 bottom-7 w-full h-0 overflow-hidden opacity-0 bg-coffee-gray rounded-xl p-2 text-sm text-center border-4 border-light-gold/75 text-white/90 transition-all duration-300 ease-in-out group-hover:h-[135px] group-hover:opacity-100">
+                  <div className={`absolute z-20 ${user.role === "admin" ? "bottom-8" : "bottom-1"} w-full h-0 overflow-hidden opacity-0 bg-coffee-gray rounded-xl p-2 text-sm text-center border-4 border-light-gold/75 text-white/90 transition-all duration-300 ease-in-out group-hover:h-[135px] group-hover:opacity-100`}>
                     <h2 className="font-bold text-[0.95rem] text-light-gold">
                       Descripción
                     </h2>
@@ -133,7 +133,7 @@ export default function GamePatterns() {
                   {user.role === "admin" ? (
                     <Button
                       text="Eliminar"
-                      className="text-white/90 bg-dark-red p-1 w-[75%] mx-auto text-sm rounded-md"
+                      className="text-white/90 bg-dark-red p-1 w-[75%] mx-auto text-sm rounded-md cursor-pointer"
                       onClick={(e) => handleDeletePattern(p.id, p.name, e)}
                     />
                   ) : (

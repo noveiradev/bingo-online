@@ -1,9 +1,7 @@
 export default function NumbersHistory({ allNumbers, viewType }) {
-  // tomar hasta los últimos 10 y luego invertir para que el más reciente esté primero
   const recent = allNumbers && allNumbers.length > 0 ? allNumbers.slice(-10) : [];
   const reversed = [...recent].reverse();
 
-  // rellenar hasta 10 con valores falsy
   const matchNumbers = [
     ...reversed,
     ...Array.from({ length: Math.max(0, 10 - reversed.length) }),
@@ -20,11 +18,11 @@ export default function NumbersHistory({ allNumbers, viewType }) {
       </h2>
 
       <div className="flex flex-col justify-center items-center">
-        <div className="grid grid-cols-5 grid-rows-2 w-full justify-items-center h-[5rem] overflow-y-hidden gap-1">
+        <div className="grid grid-cols-5 grid-rows-2 w-full justify-items-center h-[5rem] overflow-y-hidden ">
           {matchNumbers.map((n, i) => (
             <span
               key={n != null ? `num-${n}` : `empty-${i}`}
-              className={`bg-[#372C2C]/60 w-[1.35rem] h-[1.35rem] font-medium rounded-sm text-sm text-white text-center leading-[1.25rem]`}
+              className={`bg-[#372C2C] w-[1.35rem] h-[1.35rem] font-medium rounded-sm text-sm text-white text-center leading-[1.25rem]`}
             >
               {n || " "}
             </span>

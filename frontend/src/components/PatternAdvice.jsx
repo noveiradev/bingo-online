@@ -1,7 +1,6 @@
 export default function PatternAdvice() {
   const id = localStorage.getItem("patternId");
   const name = localStorage.getItem("patternName");
-  const pattern = localStorage.getItem("pattern");
   const description = localStorage.getItem("patternDescription");
 
   return (

@@ -31,17 +31,19 @@ export default function Dashboard() {
 
   return (
     <>
-      <section className="relative max-w-[768px] mx-auto flex flex-col items-center justify-center pt-4">
+      <section className="max-w-[768px] mx-auto flex flex-col items-center justify-center pt-4">
         {payData && (
           <ModalMobilePay modalFunction={setPayData} payData={payData} />
         )}
-        <span
-          onClick={logout}
-          className="absolute top-2 right-2 flex items-center text-green-apple font-poppins gap-1"
-        >
-          <Exit w="20" h="30" color="#8ACE56"></Exit>
-          Salir
-        </span>
+        <article className="w-full max-w-[500px] relative">
+          <span
+            onClick={logout}
+            className="absolute top-2 right-4 flex items-center text-green-apple font-poppins gap-1"
+          >
+            <Exit w="20" h="30" color="#8ACE56"></Exit>
+            Salir
+          </span>
+        </article>
         <img
           src={Logo}
           alt="Bingo Online Logo"
@@ -50,7 +52,7 @@ export default function Dashboard() {
         <h1 className="text-dark-gold font-semibold font-inter text-2xl">
           Menú
         </h1>
-        <article className="grid grid-cols-2 gap-2 mt-2 px-2">
+        <article className="grid grid-cols-2 gap-2 mt-2 px-2 stable:gap-x-3 stable:gap-y-4">
           {option.map((opt, i) => (
             <a
               key={i}
@@ -62,12 +64,12 @@ export default function Dashboard() {
                     }
                   : () => {}
               }
-              className="flex flex-col h-[7rem] justify-center items-center p-2 bg-white/10 w-[9rem] text-option border-2 border-dark-red rounded-[12px] shadow-[#DF8E1C]/20 shadow-md"
+              className="flex flex-col h-[7rem] justify-center items-center p-2 bg-white/10 w-[9rem] stable:w-[10.5rem] text-option border-2 border-dark-red rounded-[12px] shadow-[#DF8E1C]/20 shadow-md"
             >
               <img
                 src={opt.img}
                 alt={opt.text}
-                className="w-12 h-12 drop-shadow-[0_0_10px_rgba(119,255,0,0.08)]"
+                className="size-12 stable:size-13 drop-shadow-[0_0_10px_rgba(119,255,0,0.08)]"
               />
               <span className="text-md font-medium text-center">
                 {opt.text}

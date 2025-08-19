@@ -174,7 +174,7 @@ export default function App() {
               <Route
                 path="/admin/game/room"
                 element={
-                  <AuthRoute requiredRoles={["user", "admin"]}>
+                  <AuthRoute requiredRoles={["admin"]}>
                     <GameRoom />
                   </AuthRoute>
                 }

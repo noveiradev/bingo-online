@@ -39,11 +39,11 @@ export default function PayCard({
   };
 
   return (
-    <article className="flex w-full flex-col items-center gap-2 bg-white/8 border-2 border-white/15 rounded-lg p-3">
+    <article className="flex w-full flex-col stable:flex-row stable:gap-6 items-center gap-2 bg-white/8 border-2 border-white/15 rounded-lg p-3">
       <span className="hidden stable:block">
         <BankIcon w={"64"} h={"64"} color={"#FFFFFF50"} />
       </span>
-      <div className="flex flex-col gap-2 justify-between items-center w-full">
+      <div className="flex flex-col stable:flex-row gap-2 justify-between items-center w-full">
         <div className="flex w-full flex-col">
           <h3 className="text-white font-medium font-poppins">{bank}</h3>
           <p className="text-sm text-[#F6BB2D] font-inter">{name}</p>
@@ -52,7 +52,7 @@ export default function PayCard({
           </p>
           <p className="text-sm text-[#F6BB2D] font-inter">Teléfono: {phone}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 stable:flex-col">
           <Button
             text={`${isActive ? "En uso" : "Usar"}`}
             disabled={isActive}

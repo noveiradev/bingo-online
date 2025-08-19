@@ -62,7 +62,7 @@ export default function PayInformation() {
         <h1 className="text-dark-gold font-semibold font-poppins text-2xl mb-2">
           Pago móvil
         </h1>
-        <article className="bg-white/5 w-[95%] h-full border-2 border-gradient-rounded px-2 py-4 overflow-auto max-w-[500px]">
+        <article className="bg-white/5 w-[95%] h-full border-2 border-gradient-rounded px-2 py-4 overflow-auto stable:overflow-hidden max-w-[500px]">
           <h2 className="text-center font-bold font-inter text-lg text-white">
             Bancos registrados para pago móvil
           </h2>

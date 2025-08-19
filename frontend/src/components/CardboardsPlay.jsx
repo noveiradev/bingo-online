@@ -120,11 +120,10 @@ export default function CardboardsPlay({ roomId, updateActiveMatchData }) {
     <>
       <section
         className={`absolute bottom-0 left-0 right-0 flex justify-center items-center px-2 w-full ${
-          showCardBoards ? "h-[17rem] stable:h-[24.5rem]" : "h-[3.2rem]"
+          showCardBoards ? "h-[18.5rem] stable:h-[25.4rem]" : "h-[3.2rem]"
         } z-35 transition-all duration-300 `}
       >
         <article className="bg-dark-gold w-full h-full rounded-t-xl flex flex-col">
-          {/* HEADER */}
           <div className="flex flex-col justify-center items-center">
             <button
               onClick={() => setShowCardboards(!showCardBoards)}
@@ -175,15 +174,12 @@ export default function CardboardsPlay({ roomId, updateActiveMatchData }) {
                       onClick={selected.length === 0 ? null : processSelected}
                       className={`px-2 py-2 text-xs rounded ${
                         selected.length === 0
-                          ? "bg-red-500/70 text-white/85"
-                          : "bg-red-500 text-white"
+                          ? "bg-red-500/70 text-white/85 cursor-not-allowed"
+                          : "bg-red-500 text-white cursor-pointer"
                       }`}
                     >
                       Seleccionar cartones
                     </button>
-                    {/* <div className="text-sm text-white bg-carbon-gray/45 w-1/2 px-2 py-2 rounded">
-                      {selected.join(", ") || "—"}
-                    </div> */}
                   </div>
                   <div className="grid grid-cols-2 justify-center items-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full pb-4">
                     {cardboards

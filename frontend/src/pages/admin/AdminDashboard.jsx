@@ -14,9 +14,17 @@ export default function Dashboard() {
   const { logout } = useAuth();
 
   let option = [
-    { img: Cardboards, text: "Validar cartones", path: "/admin/verify-cardboards" },
+    {
+      img: Cardboards,
+      text: "Validar cartones",
+      path: "/admin/verify-cardboards",
+    },
     { img: PayInformation, text: "Pago móvil", path: "/admin/pay-information" },
-    { img: Patterns, text: "Gestionar modalidades", path: "/admin/game-patterns" },
+    {
+      img: Patterns,
+      text: "Gestionar modalidades",
+      path: "/admin/game-patterns",
+    },
     {
       img: Live,
       text: "Iniciar partida en directo",
@@ -28,14 +36,16 @@ export default function Dashboard() {
 
   return (
     <>
-      <section className="max-w-[768px] mx-auto flex flex-col items-center justify-center pt-4 relative">
-        <span
-          onClick={logout}
-          className="absolute top-2 right-2 flex items-center text-green-apple font-poppins gap-1"
-        >
-          <Exit w="20" h="30" color="#8ACE56"></Exit>
-          Salir
-        </span>
+      <section className="max-w-[768px] mx-auto flex flex-col items-center justify-center pt-4">
+        <article className="w-full max-w-[500px] relative">
+          <span
+            onClick={logout}
+            className="absolute top-2 right-4 flex items-center text-green-apple font-poppins gap-1"
+          >
+            <Exit w="20" h="30" color="#8ACE56"></Exit>
+            Salir
+          </span>
+        </article>
         <img
           src={Logo}
           alt="Bingo Online Logo"
@@ -44,9 +54,9 @@ export default function Dashboard() {
         <h1 className="text-dark-gold font-semibold font-inter text-2xl">
           Menú
         </h1>
-        <article className="grid grid-cols-2 gap-2 mt-2 px-2">
+        <article className="grid grid-cols-2 gap-2 stable:gap-x-3 stable:gap-y-4 mt-2 px-2">
           {option.map((opt, i) => (
-            <LinkOption index={i} opt={opt}/>
+            <LinkOption index={i} opt={opt} />
           ))}
         </article>
       </section>

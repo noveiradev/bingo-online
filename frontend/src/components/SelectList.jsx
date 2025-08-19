@@ -11,7 +11,6 @@ export default function SelectList({
   validation, 
   className = ""
 }) {
-  // Opciones por defecto si no se proporcionan
   const defaultOptions = [
     { value: "", label: `${error ? `Pregunta de seguridad *` : "Pregunta de seguridad"}` },
     { value: "1", label: "¿Cuál es tu color favorito?" },
@@ -24,14 +23,12 @@ export default function SelectList({
 
   return (
     <div className={`relative w-full ${className}`}>
-      {/* Icono */}
       {children && (
         <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/50">
           {children}
         </div>
       )}
 
-      {/* Select */}
       <select
         id={id}
         name={name}
