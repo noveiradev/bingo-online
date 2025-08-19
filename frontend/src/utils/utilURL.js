@@ -1,1 +1,1 @@
-export const BASE_URL = "http://localhost:3000/";
+export const BASE_URL = "https://bingo-online-c97r.onrender.com";
