@@ -8,6 +8,7 @@ export default function Input({
   children,
   register,
   error,
+  onChange
 }) {
   return (
     <>
@@ -21,11 +22,12 @@ export default function Input({
           id={id}
           autoComplete="off"
           placeholder={placeholder + (error ? ` *` : "")}
+          onChange={onChange}
           className={`w-full bg-white/15 border-2 ${
             error ? "border-red-500" : "border-yellow-cake/28"
           } rounded-[7px] py-2 pl-10 pr-3 text-white/70 focus:outline-none focus:border-yellow-cake/70 transition-colors duration-200 font-inter text-sm ${
             error ? "placeholder-red-400" : "placeholder-white/50"
-          }`}
+          } stable:text-[1rem]`}
           {...(register && register(name))}
         />
       </div>
@@ -46,5 +48,6 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   children: PropTypes.node,
   register: PropTypes.func,
+  onChange: PropTypes.func,
   error: PropTypes.object,
 };

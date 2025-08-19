@@ -13,7 +13,7 @@ export default function BankCenter({ w, h, color }) {
         <path
           d="M22 42V23.6667M30.3333 42V23.6667M13.6667 42V23.6667M2 15.3333L22 2L42 15.3333M38.6667 42V18.2944C33.2362 17.4424 27.6698 17 22 17C16.3302 17 10.7638 17.4424 5.33333 18.2944V42M2 42H42M22 10.3333H22.0167V10.35H22V10.3333Z"
           stroke={color || "white"}
-          strokeOpacity="0.3"
+          strokeOpacity="1"
           strokeWidth="4"
           strokeLinecap="round"
           strokeLinejoin="round"
