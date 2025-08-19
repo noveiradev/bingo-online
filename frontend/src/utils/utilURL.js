@@ -1,1 +1,1 @@
-export const BASE_URL = "https://bingo-online-c97r.onrender.com";
+export const BASE_URL = "https://bingo-online-c97r.onrender.com/";
