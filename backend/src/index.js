@@ -77,7 +77,7 @@ initSocket(server);
 
 // Start the server 
 server.listen(PORT, () => {
-  console.log(`🚀 Server listening at http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port${PORT}`);
 });
 
 export default app;
