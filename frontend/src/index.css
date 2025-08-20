@@ -33,6 +33,9 @@
   --font-poppins: "Poppins", sans-serif;
 
   --breakpoint-stable: 30rem;
+  --breakpoint-desk: 62rem;
+  --breakpoint-desklg: 90rem;
+  
 }
 
 @layer utilities {
@@ -77,4 +80,31 @@
   height: 100%;
   border-radius: 50%;
   box-shadow: inset 0 -6px 10px rgba(0, 0, 0, 0.4);
+}
+
+body {
+  --sb-track-color: #252d31;
+  --sb-thumb-color: #8e5a10;
+  --sb-size: 5px;
+}
+
+::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 12px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  body {
+      scrollbar-color: var(--sb-thumb-color)
+                     var(--sb-track-color);
+  }
 }
