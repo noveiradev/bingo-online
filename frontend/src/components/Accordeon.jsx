@@ -106,10 +106,10 @@ export default function Accordeon({ userID, username, phone, cards }) {
   };
 
   return (
-    <section className="relative w-full mb-3">
+    <section className="relative w-full mb-3 flex flex-col items-center justify-center">
       <article
         onClick={() => setAccordeonView(!accordeonView)}
-        className="relative z-10 w-full bg-coffee-gray h-[4rem] rounded-xl text-[#FFC62C] flex items-center justify-between px-6 cursor-pointer"
+        className="relative z-10 w-full bg-coffee-gray h-[4rem] rounded-xl text-[#FFC62C] flex items-center justify-between px-6 cursor-pointer max-w-[500px] mx-auto"
       >
         <p className="font-semibold font-inter text-sm text-white">
           {phone}{" "}
@@ -125,7 +125,7 @@ export default function Accordeon({ userID, username, phone, cards }) {
       </article>
 
       <article
-        className={`w-[95%] relative -mt-1 mx-auto bg-[#372c2c] rounded-b-xl transition-all duration-300 overflow-hidden border-3 border-[#FFC62C]/10 shadow-[#FFC623]/25 shadow-md flex flex-col ${
+        className={`w-[65%] max-w-[500px] relative -mt-1 mx-auto bg-[#372c2c] rounded-b-xl transition-all duration-300 overflow-hidden border-3 border-[#FFC62C]/10 shadow-[#FFC623]/25 shadow-md flex flex-col ${
           accordeonView
             ? `max-h-[${200 * cards.length}px] p-2 pt-3 text-[#FFC62C]`
             : "max-h-0 text-transparent opacity-0"

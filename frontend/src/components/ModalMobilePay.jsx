@@ -35,7 +35,7 @@ export default function ModalMobilePay({ modalFunction, payData }) {
 
   return (
     <>
-      <section className="bg-[#000]/70 absolute z-10 top-0 left-0 w-full h-dvh">
+      <section className="bg-[#000]/70 absolute z-10 top-0 left-0 w-full h-dvh overflow-hidden">
         <Slide
           direction="up"
           triggerOnce

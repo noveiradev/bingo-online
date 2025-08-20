@@ -13,9 +13,9 @@ export default function PayInformation() {
   const [isLoading, setIsLoading] = useState(true);
   const [message] = useState(
     <div className="mx-auto w-full h-[75%] flex flex-col justify-center items-center text-center text-[#FAF2E7] font-semibold font-poppins gap-4">
-      <p>Por los momentos no existen métodos de pago registrados</p>
+      <p className="w-[75%]">Por los momentos no existen métodos de pago registrados</p>
       <Link
-        className="text-white bg-green-apple/60 py-1 rounded-lg font-inter text-lg w-[85%] text-center"
+        className="text-white bg-green-apple/60 py-1 rounded-lg font-inter text-lg w-[85%] text-center stable:w-[50%]"
         to={"/admin/create_pay_method"}
       >
         Crea uno ya!

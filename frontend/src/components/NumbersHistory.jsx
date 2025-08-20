@@ -10,15 +10,15 @@ export default function NumbersHistory({ allNumbers, viewType }) {
   return (
     <div
       className={`bg-[#3C3A3A] ${
-        viewType ? "h-full" : "h-[6.5rem]"
-      } w-full p-2 mt-2 rounded-md`}
+        viewType ? "h-full" : "h-[6.5rem] desk:h-[5.9rem]"
+      } w-full p-2 mt-2 desk:mt-1 rounded-md`}
     >
       <h2 className="text-white text-xs text-center mb-2 font-inter">
         Historial de números
       </h2>
 
       <div className="flex flex-col justify-center items-center">
-        <div className="grid grid-cols-5 grid-rows-2 w-full justify-items-center h-[5rem] overflow-y-hidden ">
+        <div className="grid grid-cols-5 grid-rows-2 w-full justify-items-center h-[5rem] overflow-y-hidden desk:h-[4rem]">
           {matchNumbers.map((n, i) => (
             <span
               key={n != null ? `num-${n}` : `empty-${i}`}

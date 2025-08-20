@@ -74,7 +74,7 @@ export default function CardToReserve({ cardsInfo = [], viewMode }) {
     <>
       <Fade cascade damping={0.25}>
         {viewMode === "grid" ? (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 desklg:gap-2 desklg:grid-cols-3">
             {cardsInfo.map((card) => {
               const numbersArray = parseNumbers(card.numbers);
 
@@ -102,7 +102,7 @@ export default function CardToReserve({ cardsInfo = [], viewMode }) {
                     />
                   </div>
                   <button
-                    className="bg-green-apple/63 text-white mt-2 font-medium px-2 py-1 rounded-md text-center text-sm w-full"
+                    className="bg-green-apple/63 text-white mt-2 font-medium px-2 py-1 rounded-md text-center text-sm w-full cursor-pointer"
                     onClick={(e) => handleCardboardReserve(card.id, user.id, e)}
                   >
                     Apartar

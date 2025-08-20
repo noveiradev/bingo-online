@@ -49,7 +49,7 @@ export default function Dashboard() {
         <img
           src={Logo}
           alt="Bingo Online Logo"
-          className="size-[12rem] drop-shadow-[0_0_30px_rgba(83,63,27,0.50)]"
+          className="size-[12rem] desk:size-[7rem] desklg:size-[12rem] drop-shadow-[0_0_30px_rgba(83,63,27,0.50)]"
         />
         <h1 className="text-dark-gold font-semibold font-inter text-2xl">
           Menú

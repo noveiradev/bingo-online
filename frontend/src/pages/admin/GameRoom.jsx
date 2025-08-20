@@ -467,13 +467,13 @@ export default function GameRoom() {
               <img
                 src={Logo}
                 alt="Bingo risas y cartones logo"
-                className="size-[8rem] mb-1 drop-shadow-[0_0_10px_rgba(83,63,27,0.70)]"
+                className="size-[8rem] desk:size-[6rem] desklg:size-[8rem] mb-1 drop-shadow-[0_0_10px_rgba(83,63,27,0.70)]"
               />
 
               <div className="w-full">
                 <Button
                   text="Seleccionar modalidad"
-                  className="bg-dark-gold w-full text-xs px-2 py-3 rounded-md text-white font-medium cursor-pointer hover:bg-dark-gold/80 transition-colors"
+                  className="bg-dark-gold w-full text-xs px-2 py-3 rounded-md text-white font-medium cursor-pointer hover:bg-dark-gold/80 transition-colors desk:py-1 desklg:py-3"
                   onClick={() => {
                     patternSelected
                       ? toast.error({
@@ -485,7 +485,7 @@ export default function GameRoom() {
               </div>
             </div>
 
-            <div className="bg-blue-gray w-full p-3 mt-1 flex flex-col gap-2 items-center rounded-xl">
+            <div className="bg-blue-gray w-full p-3 mt-1 flex flex-col gap-2 items-center rounded-xl desk:p-2 desk:gap-1 desklg:gap-2 desklg:p-3">
               <BingoBall lastCalled={lastCalled} />
               {!matchState && (
                 <Button
@@ -493,7 +493,7 @@ export default function GameRoom() {
                   onClick={() => {
                     startMatch();
                   }}
-                  className={`bg-[#FFFEFD] px-2 py-2 w-full text-xs rounded-md text-[#272624] font-medium font-inter cursor-pointer hover:bg-[#FFFEFD]/80 transition-colors`}
+                  className={`bg-[#FFFEFD] p-2 desk:p-1 desklg:p-2 w-full text-xs rounded-md text-[#272624] font-medium font-inter cursor-pointer hover:bg-[#FFFEFD]/80 transition-colors`}
                 />
               )}
 
@@ -504,14 +504,14 @@ export default function GameRoom() {
                     canCallNext
                       ? "bg-[#FFFEFD] cursor-pointer"
                       : "bg-[#FFFEFD]/35 cursor-not-allowed"
-                  }  px-2 py-2 w-full text-xs rounded-md text-[#272624] font-medium font-inter transition-colors`}
+                  }  p-2 w-full text-xs rounded-md text-[#272624] font-medium font-inter transition-colors desk:p-1 desklg:p-2`}
                   onClick={callNextNumber}
                 />
               )}
             </div>
             <Button
               text="Reiniciar partida"
-              className="bg-yellow-cake/28 text-white px-2 py-2 w-full rounded-md mt-2 text-sm cursor-pointer hover:bg-yellow-cake/50 transition-colors font-medium font-inter"
+              className="bg-yellow-cake/28 text-white p-2 desk:p-1 desk:mt-1 desklg:p-2 desklg:mt-2 w-full rounded-md mt-2 text-sm desk:text-xs cursor-pointer hover:bg-yellow-cake/50 transition-colors font-medium font-inter"
               onClick={() => {
                 setCleanModal(!cleanModal);
               }}
@@ -520,7 +520,7 @@ export default function GameRoom() {
           </article>
 
           {/* Second column */}
-          <article className="relative rounded-lg h-[31.25rem] overflow-hidden bg-white/10">
+          <article className="relative rounded-lg h-[31.25rem] desk:h-[25.5rem] desklg:h-[30.15rem] overflow-hidden bg-white/10">
             <header className="bg-dark-red/85 h-[2rem] grid grid-cols-5">
               {BINGO_COLUMNS.map((col) => (
                 <div
@@ -545,7 +545,7 @@ export default function GameRoom() {
         ) : (
           <Button
             text="Ver jugadores en la partida"
-            className="text-white absolute bottom-12 text-sm py-2 px-4 bg-blue-gray rounded-lg shadow-lg cursor-pointer"
+            className="text-white absolute bottom-12 desk:top-1 desk:h-[1.5rem] desk:px-2 desk:py-0 text-sm py-2 px-4 bg-blue-gray rounded-lg shadow-lg cursor-pointer"
             onClick={() => {
               setPlayersMatch(!playersMatch);
             }}
