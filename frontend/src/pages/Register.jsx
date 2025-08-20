@@ -8,6 +8,7 @@ import { registerService } from "@/services/api/auth";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "@pheralb/toast";
 
 import User from "@/icons/User";
 import Phone from "@/icons/Phone";
@@ -16,7 +17,6 @@ import Answer from "@/icons/Answer";
 import Question from "@/icons/Question";
 
 export default function Register() {
-  const [message, setMessage] = useState("");
   const {
     register,
     handleSubmit,
@@ -38,7 +38,9 @@ export default function Register() {
       const response = await registerService.register(userData);
 
       if (response) {
-        setMessage("Registro exitoso!");
+        toast.success({
+          text: "Registro exitoso!",
+        });
         setTimeout(() => {
           navigate("/login", { state: { registrationSuccess: true } });
         }, 2000);
@@ -54,7 +56,7 @@ export default function Register() {
         <div className="flex w-full max-w-[500px]">
           <GoBack></GoBack>
         </div>
-        <h1 className="text-dark-gold font-semibold font-poppins text-2xl stable:text-3xl">
+        <h1 className="text-dark-gold font-semibold font-poppins text-2xl stable:text-3xl desk:text-2xl desklg:text-3xl">
           Registrate!
         </h1>
         <Reminder>
@@ -136,9 +138,8 @@ export default function Register() {
           <article className="flex flex-col">
             <Button
               text="Registrarse"
-              className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-4 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] stable:text-[1.25rem]"
+              className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-4 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] stable:text-[1.25rem] desk:text-[1rem] desk:mt-2 desklg:text-[1.20rem] desklg:mt-4"
             />
-            {message && <p className="text-gold text-center mt-2">{message}</p>}
           </article>
         </form>
       </section>

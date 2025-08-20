@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { passwordService } from "@/services/api/auth";
@@ -8,6 +7,7 @@ import Key from "@/icons/Key";
 import Answer from "@/icons/Answer";
 import Question from "@/icons/Question";
 
+import { toast } from "@pheralb/toast";
 import GoBack from "@/components/GoBack";
 import Reminder from "@/components/Reminder";
 import Input from "@/components/Input";
@@ -15,7 +15,6 @@ import SelectList from "@/components/SelectList";
 import Button from "@/components/Button";
 
 export default function ForgotPassword() {
-  const [message, setMessage] = useState("");
   const {
     register,
     handleSubmit,
@@ -36,7 +35,9 @@ export default function ForgotPassword() {
       const response = await passwordService.password(userData);
 
       if (response) {
-        setMessage("Recuperación exitosa!");
+        toast.success({
+          text: "Recuperación exitosa!"
+        })
         setTimeout(() => {
           navigate("/login", { state: { registrationSuccess: true } });
         }, 2000);
@@ -52,7 +53,7 @@ export default function ForgotPassword() {
         <div className="flex w-full max-w-[500px]">
           <GoBack></GoBack>
         </div>
-        <h1 className="text-dark-gold font-semibold font-poppins text-2xl mt-2 stable:text-3xl">
+        <h1 className="text-dark-gold font-semibold font-poppins text-2xl mt-2 stable:text-3xl desk:text-2xl desklg:text-3xl">
           Recuperar contraseña
         </h1>
         <Reminder>
@@ -62,7 +63,7 @@ export default function ForgotPassword() {
         </Reminder>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <article className="flex flex-col gap-3 mt-6 w-full">
+          <article className="flex flex-col gap-3 mt-6 desk:gap-2 desk:mt-4 desklg:gap-3 desklg:mt-4 w-full">
             <Input
               type="text"
               name="username"
@@ -119,9 +120,8 @@ export default function ForgotPassword() {
           <article className="flex flex-col">
             <Button
               text="Confirmar"
-              className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-4 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] stable:text-[1.25rem]"
+              className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-4 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] stable:text-[1.25rem] desk:text-[1rem] desklg:text-[1.25rem]"
             />
-            {message && <p className="text-gold text-center mt-2">{message}</p>}
           </article>
         </form>
       </section>

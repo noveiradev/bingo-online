@@ -348,11 +348,11 @@ export default function UserGameRoom() {
       )}
 
       <section className="max-w-[600px] mx-auto flex flex-col h-full items-center justify-center relative pt-4">
-        <div className="flex w-full max-w-[600px] px-2 pb-3">
+        <div className="flex w-full max-w-[600px] px-2 pb-5">
           <GoBack viewType={false} />
         </div>
         <section className="grid grid-rows-[auto_1fr] p-2 w-full h-full gap-1">
-          <article className="relative rounded-lg h-[21.21rem] overflow-hidden bg-white/10">
+          <article className="relative rounded-lg h-[21.21rem] desk:h-[13.8rem] desklg:h-[21.21rem] overflow-hidden bg-white/10">
             <header className="bg-dark-red/85 h-[1.5rem] grid grid-cols-5">
               {BINGO_COLUMNS.map((col) => (
                 <div
@@ -371,10 +371,10 @@ export default function UserGameRoom() {
             />
           </article>
           <article className="flex gap-[0.35rem] overflow-hidden h-full">
-            <div className="bg-[#3C3A3A] overflow-hidden mt-2 rounded-md flex items-center w-full">
+            <div className="bg-[#3C3A3A] overflow-hidden mt-2 desk:mt-1 desklg:mt-2 rounded-md flex items-center w-full">
               <NumbersHistory allNumbers={allNumbers} viewType={true} />
             </div>
-            <div className="bg-[#3C3A3A] mt-2 py-2 rounded-md flex flex-col text-center items-center w-full gap-2">
+            <div className="bg-[#3C3A3A] mt-2 desk:mt-1 desklg:mt-2 py-2 rounded-md flex flex-col text-center items-center w-full gap-2">
               <p className="text-dark-gold text-sm font-bold font-inter">
                 Modalidad seleccionada
               </p>

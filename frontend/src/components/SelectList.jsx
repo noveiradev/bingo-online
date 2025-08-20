@@ -33,7 +33,7 @@ export default function SelectList({
         id={id}
         name={name}
         defaultValue={defaultValue}
-        className={`w-full bg-white/15 border-2 ${
+        className={`w-full bg-white/15 border-2 desk:text-[0.85rem] desk:py-[0.3rem] desklg:py-2 desklg:text-[1rem] ${
           error ? "border-red-500" : "border-yellow-cake/28"
         } rounded-[7px] py-2 ${
           children ? "pl-10" : "pl-3"

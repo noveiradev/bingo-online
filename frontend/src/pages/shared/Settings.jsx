@@ -14,7 +14,6 @@ import ModalDeleteAcc from "@/components/ModalDeleteAcc";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function Settings() {
-  const [message, setMessage] = useState("");
   const [modalView, setModalView] = useState(false);
   const { user } = useAuth();
 
@@ -36,7 +35,9 @@ export default function Settings() {
       const response = await updateService.update(userData);
 
       if (response) {
-        setMessage("Cambios guardados exitosamente!");
+        toast.success({
+          text: "Cambios guardados exitosamente!",
+        });
         setTimeout(() => {
           window.location.reload();
         }, 1000);
@@ -81,7 +82,7 @@ export default function Settings() {
           onSubmit={handleSubmit(onSubmit)}
           className="bg-white/5 w-[95%] h-full border-2 border-gradient-rounded px-8 py-4 overflow-hidden relative max-w-[500px]"
         >
-          <article className="flex flex-col gap-3 mt-6 w-full">
+          <article className="flex flex-col gap-3 mt-6 desk:mt-0 desk:gap-2 w-full">
             <p className="text-sm text-center text-simple-gold underline font-poppins font-semibold">
               Cambiar contraseña
             </p>
@@ -146,17 +147,16 @@ export default function Settings() {
           <article className="flex flex-col">
             <Button
               text="Guardar"
-              className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-4 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613]"
+              className="text-white w-[90%] mx-auto font-semibold py-2 px-4 desk:py-1 desklg:py-2 rounded-[7px] mt-4 desk:mt-2 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] desk:text-sm desklg:text-[1rem]"
             />
-            {message && <p className="text-gold text-center mt-2">{message}</p>}
 
             {user?.role === "admin" ? (
-              <div className="mt-7 w-full gap-2 flex flex-col items-center justify-center">
+              <div className="mt-7 desk:mt-1 desklg:mt-6 w-full gap-2 flex flex-col items-center justify-center">
                 <p className="text-sm text-center text-simple-gold underline font-poppins font-semibold">
                   Reestablece los cartones
                 </p>
                 <span
-                  className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] text-center cursor-pointer"
+                  className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] desk:text-sm desk:py-1 desklg:py-2 desklg:text-[1rem] to-[#D46613] text-center cursor-pointer"
                   onClick={() => {
                     releaseCards();
                   }}
@@ -168,7 +168,7 @@ export default function Settings() {
           </article>
           <span
             onClick={() => setModalView(!modalView)}
-            className="text-[#FF9A9A] underline font-semibold font-poppins text-center mx-auto absolute bottom-5 left-0 right-0 cursor-pointer"
+            className="text-[#FF9A9A] underline font-semibold font-poppins text-center mx-auto absolute bottom-5 desk:bottom-2 left-0 right-0 cursor-pointer"
           >
             Eliminar cuenta
           </span>

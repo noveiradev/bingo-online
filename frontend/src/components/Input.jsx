@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { toast } from "@pheralb/toast";
 
 export default function Input({
   type = "text",
@@ -8,8 +9,14 @@ export default function Input({
   children,
   register,
   error,
-  onChange
+  onChange,
 }) {
+  if (error) {
+    toast.error({
+      text: error.message,
+    });
+  }
+
   return (
     <>
       <div className="relative w-full">
@@ -25,18 +32,12 @@ export default function Input({
           onChange={onChange}
           className={`w-full bg-white/15 border-2 ${
             error ? "border-red-500" : "border-yellow-cake/28"
-          } rounded-[7px] py-2 pl-10 pr-3 text-white/70 focus:outline-none focus:border-yellow-cake/70 transition-colors duration-200 font-inter text-sm ${
+          } rounded-[7px] py-2 pl-10 pr-3 desk:py-[0.3rem] text-white/70 focus:outline-none focus:border-yellow-cake/70 transition-colors duration-200 font-inter text-sm ${
             error ? "placeholder-red-400" : "placeholder-white/50"
-          } stable:text-[1rem]`}
+          } stable:text-[1rem] desk:text-[0.85rem] desklg:text-[1rem] desklg:py-2`}
           {...(register && register(name))}
         />
       </div>
-
-      {error && (
-        <p className="absolute left-0 bottom-30 w-full text-center text-red-400 text-xs font-bold">
-          {error.message}
-        </p>
-      )}
     </>
   );
 }
