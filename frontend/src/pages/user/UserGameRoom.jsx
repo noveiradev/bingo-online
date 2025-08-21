@@ -187,7 +187,7 @@ export default function UserGameRoom() {
   const initSocket = (gameId) => {
     if (!gameId || !user?.id) return;
 
-    const socket = io("http://localhost:3000", { transports: ["websocket"] });
+    const socket = io("https://bingo-online-c97r.onrender.com/", { transports: ["websocket"] });
     socketRef.current = socket;
 
     const userId = user.id;
