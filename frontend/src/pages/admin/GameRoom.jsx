@@ -99,7 +99,7 @@ export default function GameRoom() {
   ]);
 
   useEffect(() => {
-    const socket = io("http://localhost:3000", {
+    const socket = io("https://bingo-online-c97r.onrender.com/", {
       transports: ["websocket"],
     });
 
