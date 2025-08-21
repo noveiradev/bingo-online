@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 import Logo from "@/assets/images/logo.png";
@@ -26,6 +26,8 @@ export default function Login() {
 
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname;
 
   const onSubmit = async (data) => {
     setServerError("");
@@ -34,17 +36,17 @@ export default function Login() {
       const response = await login(data);
 
       if (response.success) {
-        if (response.user?.role === "admin") {
-          setTimeout(() => {
-            setIsLoading(false);
-            navigate("/admin/dashboard");
-          }, [1000]);
-        } else {
-          setTimeout(() => {
-            setIsLoading(false);
-            navigate("/dashboard");
-          }, [1000]);
-        }
+        setTimeout(() => {
+          setIsLoading(false);
+
+          if (from) {
+            navigate(from, { replace: true });
+          } else if (response.user?.role === "admin") {
+            navigate("/admin/dashboard", { replace: true });
+          } else {
+            navigate("/dashboard", { replace: true });
+          }
+        }, 1000);
       } else {
         setIsLoading(false);
         toast.error({
