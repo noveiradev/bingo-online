@@ -13,5 +13,5 @@ export function AuthRoute({ children, requiredRoles = [] }) {
     return <Navigate to="/unauthorized" replace />;
   }
 
-  return children;
+  return children;
 }
