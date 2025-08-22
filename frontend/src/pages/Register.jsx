@@ -52,11 +52,11 @@ export default function Register() {
 
   return (
     <>
-      <section className="flex flex-col items-center justify-center pt-4 px-2">
-        <div className="flex w-full max-w-[500px]">
+      <section className="flex flex-col items-center justify-center py-4 overflow-auto">
+        <div className="flex w-full max-w-[500px] px-2">
           <GoBack></GoBack>
         </div>
-        <h1 className="text-dark-gold font-semibold font-poppins text-2xl stable:text-3xl desk:text-2xl desklg:text-3xl">
+        <h1 className="text-dark-gold font-semibold font-poppins text-xl stable:text-2xl desk:text-2xl desklg:text-3xl">
           Registrate!
         </h1>
         <Reminder>
@@ -65,7 +65,7 @@ export default function Register() {
         </Reminder>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <article className="flex flex-col gap-3 mt-6 w-full">
+          <article className="flex flex-col gap-2 mt-2 w-full">
             <Input
               type="text"
               name="username"
@@ -138,11 +138,11 @@ export default function Register() {
           <article className="flex flex-col">
             <Button
               text="Registrarse"
-              className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-4 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] stable:text-[1.25rem] desk:text-[1rem] desk:mt-2 desklg:text-[1.20rem] desklg:mt-4"
+              className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-2 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] stable:text-[1rem] desk:text-[1rem] desk:mt-2 desklg:text-[1.20rem] desklg:mt-4"
             />
           </article>
         </form>
       </section>
-    </>
-  );
+    </>
+  );
 }

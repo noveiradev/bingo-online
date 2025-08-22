@@ -125,7 +125,7 @@ export default function Accordeon({ userID, username, phone, cards }) {
       </article>
 
       <article
-        className={`w-[65%] max-w-[500px] relative -mt-1 mx-auto bg-[#372c2c] rounded-b-xl transition-all duration-300 overflow-hidden border-3 border-[#FFC62C]/10 shadow-[#FFC623]/25 shadow-md flex flex-col ${
+        className={`w-[90%] max-w-[500px] relative -mt-1 mx-auto bg-[#372c2c] rounded-b-xl transition-all duration-300 overflow-hidden border-3 border-[#FFC62C]/10 shadow-[#FFC623]/25 shadow-md flex flex-col ${
           accordeonView
             ? `max-h-[${200 * cards.length}px] p-2 pt-3 text-[#FFC62C]`
             : "max-h-0 text-transparent opacity-0"
@@ -176,5 +176,5 @@ export default function Accordeon({ userID, username, phone, cards }) {
         />
       </article>
     </section>
-  );
+  );
 }

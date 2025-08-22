@@ -440,7 +440,7 @@ export default function GameRoom() {
             setModalPattern(!modalPattern);
           }}
         >
-          <div className="flex flex-wrap justify-center items-center w-full h-[45rem] gap-2 bg-carbon-gray px-6 py-20 rounded-2xl overflow-auto relative">
+          <div className="flex flex-wrap justify-center items-center w-[30rem] h-[35rem] gap-2 bg-carbon-gray px-6 py-20 rounded-2xl overflow-auto relative border-4 border-gold/30">
             <h2 className="absolute top-0 left-0 text-center w-full text-sm px-10 py-4 text-white font-inter">
               Selecciona una modalidad para tu partida
             </h2>
@@ -457,7 +457,7 @@ export default function GameRoom() {
         />
       )}
 
-      <section className="max-w-[600px] mx-auto flex flex-col h-full items-center justify-center pt-4 relative">
+      <section className="max-w-[600px] mx-auto flex flex-col h-full items-center justify-center relative py-4 overflow-auto">
         <div className="flex w-full max-w-[600px] px-2 pb-3">
           <GoBack viewType={false} />
         </div>
@@ -467,7 +467,7 @@ export default function GameRoom() {
               <img
                 src={Logo}
                 alt="Bingo risas y cartones logo"
-                className="size-[8rem] desk:size-[6rem] desklg:size-[8rem] mb-1 drop-shadow-[0_0_10px_rgba(83,63,27,0.70)]"
+                className="size-[7.95rem] desk:size-[6rem] desklg:size-[8rem] mb-1 drop-shadow-[0_0_10px_rgba(83,63,27,0.70)]"
               />
 
               <div className="w-full">
@@ -545,7 +545,7 @@ export default function GameRoom() {
         ) : (
           <Button
             text="Ver jugadores en la partida"
-            className="text-white absolute bottom-12 desk:top-1 desk:h-[1.5rem] desk:px-2 desk:py-0 text-sm py-2 px-4 bg-blue-gray rounded-lg shadow-lg cursor-pointer"
+            className="text-white absolute top-1 desk:h-[1.5rem] desk:px-2 desk:py-0 text-sm py-[0.10rem] px-4 bg-blue-gray rounded-lg shadow-lg cursor-pointer"
             onClick={() => {
               setPlayersMatch(!playersMatch);
             }}
@@ -553,6 +553,6 @@ export default function GameRoom() {
         )}
         <PatternAdvice></PatternAdvice>
       </section>
-    </>
-  );
+    </>
+  );
 }

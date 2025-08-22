@@ -41,7 +41,7 @@ export default function App() {
       <Router>
         <div className="h-dvh flex flex-col">
           <Header isAdmin={user?.role === "admin" ? user?.role : ""} />
-          <main className="flex-1 bg-layout overflow-y-hidden">
+          <main className="flex-1 bg-layout overflow-y-hidden h-dvh">
             <Routes>
               // Routes with access without authentication
               <Route path="/" element={<RedirectUser />} />

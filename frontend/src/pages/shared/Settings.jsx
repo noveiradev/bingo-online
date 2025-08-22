@@ -80,7 +80,7 @@ export default function Settings() {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="bg-white/5 w-[95%] h-full border-2 border-gradient-rounded px-8 py-4 overflow-hidden relative max-w-[500px]"
+          className="bg-white/5 w-[95%] h-full border-2 border-gradient-rounded px-8 py-4 overflow-auto relative max-w-[500px]"
         >
           <article className="flex flex-col gap-3 mt-6 desk:mt-0 desk:gap-2 w-full">
             <p className="text-sm text-center text-simple-gold underline font-poppins font-semibold">
@@ -168,12 +168,12 @@ export default function Settings() {
           </article>
           <span
             onClick={() => setModalView(!modalView)}
-            className="text-[#FF9A9A] underline font-semibold font-poppins text-center mx-auto absolute bottom-5 desk:bottom-2 left-0 right-0 cursor-pointer"
+            className="text-[#FF9A9A] underline font-semibold font-poppins text-center mx-auto cursor-pointer flex justify-center mt-12"
           >
             Eliminar cuenta
           </span>
         </form>
       </section>
-    </>
-  );
+    </>
+  );
 }

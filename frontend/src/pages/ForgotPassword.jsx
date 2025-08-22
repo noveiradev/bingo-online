@@ -49,8 +49,8 @@ export default function ForgotPassword() {
 
   return (
     <>
-      <section className="flex flex-col items-center justify-center pt-4 px-2">
-        <div className="flex w-full max-w-[500px]">
+      <section className="flex flex-col items-center justify-center py-4 overflow-auto">
+        <div className="flex w-full max-w-[500px] px-2">
           <GoBack></GoBack>
         </div>
         <h1 className="text-dark-gold font-semibold font-poppins text-2xl mt-2 stable:text-3xl desk:text-2xl desklg:text-3xl">
@@ -63,7 +63,7 @@ export default function ForgotPassword() {
         </Reminder>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <article className="flex flex-col gap-3 mt-6 desk:gap-2 desk:mt-4 desklg:gap-3 desklg:mt-4 w-full">
+          <article className="flex flex-col gap-2 mt-2 desk:gap-2 desk:mt-4 desklg:gap-3 desklg:mt-4 w-full">
             <Input
               type="text"
               name="username"
@@ -120,11 +120,11 @@ export default function ForgotPassword() {
           <article className="flex flex-col">
             <Button
               text="Confirmar"
-              className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-4 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] stable:text-[1.25rem] desk:text-[1rem] desklg:text-[1.25rem]"
+              className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-2 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] stable:text-[1rem] desk:text-[1rem] desklg:text-[1.25rem]"
             />
           </article>
         </form>
       </section>
-    </>
-  );
+    </>
+  );
 }

@@ -31,7 +31,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <section className="max-w-[768px] mx-auto flex flex-col items-center justify-center pt-4">
+      <section className="max-w-[768px] mx-auto flex h-full flex-col items-center py-4 overflow-auto">
         {payData && (
           <ModalMobilePay modalFunction={setPayData} payData={payData} />
         )}
@@ -47,12 +47,12 @@ export default function Dashboard() {
         <img
           src={Logo}
           alt="Bingo Online Logo"
-          className="size-[12rem] desk:size-[7rem] desklg:size-[12rem] drop-shadow-[0_0_30px_rgba(83,63,27,0.50)]"
+          className="size-[8rem] desk:size-[7rem] desklg:size-[12rem] drop-shadow-[0_0_30px_rgba(83,63,27,0.50)]"
         />
         <h1 className="text-dark-gold font-semibold font-inter text-2xl">
           Menú
         </h1>
-        <article className="grid grid-cols-2 gap-2 mt-2 px-2 stable:gap-x-3 stable:gap-y-4">
+        <article className="grid grid-cols-2 gap-1 mt-1 px-1 stable:gap-2">
           {option.map((opt, i) => (
             <a
               key={i}
@@ -64,7 +64,7 @@ export default function Dashboard() {
                     }
                   : () => {}
               }
-              className="flex flex-col h-[7rem] desk:h-[5.5rem] desklg:h-[7rem] justify-center items-center p-2 bg-white/10 w-[9rem] stable:w-[10.5rem] text-option border-2 border-dark-red rounded-[12px] shadow-[#DF8E1C]/20 shadow-md"
+              className="flex flex-col h-[6.45rem] desk:h-[5.5rem] desklg:h-[7rem] justify-center items-center p-2 bg-white/10 w-[9rem] stable:w-[10.5rem] text-option border-2 border-dark-red rounded-[12px] shadow-[#DF8E1C]/20 shadow-md"
             >
               <img
                 src={opt.img}
@@ -78,6 +78,6 @@ export default function Dashboard() {
           ))}
         </article>
       </section>
-    </>
-  );
+    </>
+  );
 }

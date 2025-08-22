@@ -120,7 +120,7 @@ export default function CardboardsPlay({ roomId, updateActiveMatchData }) {
     <>
       <section
         className={`absolute bottom-0 left-0 right-0 flex justify-center items-center px-2 w-full ${
-          showCardBoards ? "h-[18.5rem] stable:h-[25.4rem] desk:h-[13rem] desklg:h-[24.5rem]" : "h-[3.2rem] desk:h-[3rem] desklg:h-[3.2rem]"
+          showCardBoards ? "h-[43%] stable:h-[23rem] desk:h-[13rem] desklg:h-[24rem]" : "h-[3.2rem] desk:h-[3rem] desklg:h-[3.2rem]"
         } z-35 transition-all duration-300 `}
       >
         <article className="bg-dark-gold w-full h-full rounded-t-xl flex flex-col">
@@ -212,6 +212,6 @@ export default function CardboardsPlay({ roomId, updateActiveMatchData }) {
           )}
         </article>
       </section>
-    </>
-  );
+    </>
+  );
 }

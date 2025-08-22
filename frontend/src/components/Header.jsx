@@ -34,13 +34,13 @@ export default function Header() {
   return (
     <header className="relative bg-header flex flex-col stable:flex-row stable:py-6 gap-3 items-center justify-center p-2 py-4">
       {changeHeader ? (
-        <div className="flex flex-col gap-1">
-          <h1 className="text-md text-center">
-            Comparte el enlace con los jugadores
+        <div className="flex gap-1 justify-center h-full">
+          <h1 className="text-md">
+            Comparte el enlace
           </h1>
           <Button
-            text={"Copiar enlace"}
-            className="py-1 px-2 bg-blue-gray/85 text-white font-inter text-sm rounded-full w-[60%] mx-auto mb-1 flex justify-center gap-2 items-center"
+            text={"Copiar"}
+            className="px-2 bg-blue-gray/85 text-white font-inter text-sm rounded-full w-fit mx-auto mb-1 flex justify-center gap-2 items-center"
             onClick={handleCopyLink}
           >
             <Copy w={24} h={24} color={"#FFFFFF"}></Copy>
@@ -48,17 +48,19 @@ export default function Header() {
         </div>
       ) : (
         <>
-          <h1 className="text-md text-center">
-            Únete a nuestro grupo de WhatsApp
-          </h1>
-          <a
-            className="py-1 px-4 shadow-[#000]/40 shadow-md bg-ws-button text-white rounded-full flex items-center justify-center gap-2 mb-1 stable:mb-0"
-            href="https://chat.whatsapp.com/G5uW3TqBgGD2NXecXxRDPV?mode=r_t"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Ir a WhatsApp <WhatsApp w="16" h="16"></WhatsApp>
-          </a>
+          <div className="flex gap-2 items-center justify-center">
+            <h1 className="text-md text-center">
+              Únete a nuestro grupo de WhatsApp
+            </h1>
+            <a
+              className="px-3 shadow-[#000]/40 shadow-md bg-ws-button text-white rounded-full flex items-center justify-center gap-2 mb-1 stable:mb-0"
+              href="https://chat.whatsapp.com/G5uW3TqBgGD2NXecXxRDPV?mode=r_t"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Ir <WhatsApp w="16" h="16"></WhatsApp>
+            </a>
+          </div>
         </>
       )}
 
@@ -68,5 +70,5 @@ export default function Header() {
         }
       ></CasinoLights>
     </header>
-  );
+  );
 }

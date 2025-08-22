@@ -36,7 +36,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <section className="max-w-[768px] mx-auto flex flex-col items-center justify-center pt-4">
+      <section className="max-w-[768px] mx-auto flex flex-col items-center justify-center py-4 overflow-auto">
         <article className="w-full max-w-[500px] relative">
           <span
             onClick={logout}
@@ -49,17 +49,17 @@ export default function Dashboard() {
         <img
           src={Logo}
           alt="Bingo Online Logo"
-          className="size-[12rem] desk:size-[7rem] desklg:size-[12rem] drop-shadow-[0_0_30px_rgba(83,63,27,0.50)]"
+          className="size-[8rem] desk:size-[7rem] desklg:size-[12rem] drop-shadow-[0_0_30px_rgba(83,63,27,0.50)]"
         />
         <h1 className="text-dark-gold font-semibold font-inter text-2xl">
           Menú
         </h1>
-        <article className="grid grid-cols-2 gap-2 stable:gap-x-3 stable:gap-y-4 mt-2 px-2">
+        <article className="grid grid-cols-2 gap-1 mt-1 px-1 stable:gap-2">
           {option.map((opt, i) => (
             <LinkOption index={i} opt={opt} />
           ))}
         </article>
       </section>
-    </>
-  );
+    </>
+  );
 }
