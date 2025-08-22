@@ -62,8 +62,8 @@ export default function Login() {
         text: "Error",
         description: error.message || "Ocurrió un error al iniciar sesión",
       });
-    }
-  };
+    }
+  };
   return (
     <>
       {isLoading && (
