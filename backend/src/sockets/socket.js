@@ -60,6 +60,17 @@ export function initSocket(server) {
       }
       console.log('Socket disconnected', socket.id);
     });
+    
+     socket.on('resetBoard', ({ gameId, adminId }) => {
+      if (!gameId) return socket.emit('ERROR', { message: 'gameId is required to reset the board.' });
+
+      const room = `game_${gameId}`;
+
+      console.log(`Admin ${adminId} reinició el tablero del juego ${gameId}`);
+
+      // Emitir a todos los clientes de la room para que reseteen su tablero
+      io.to(room).emit('BOARD_RESET');
+    });
   });
 }
 
