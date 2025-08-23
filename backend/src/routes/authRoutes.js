@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { loginLimiter } from '../middlewares/rateLimiter.js';
 import { registerUser, loginUser, recoverPassword } from '../controllers/authController.js';
 
 const router = Router();
@@ -8,7 +7,7 @@ const router = Router();
 router.post('/register', registerUser);
 
 // Route for user login
-router.post('/login', loginLimiter, loginUser);
+router.post('/login', loginUser);
 
 // Route for recover password
 router.post('/recover-password', recoverPassword);
