@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
+import useSpeech from "@/hooks/useSpeech";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@pheralb/toast";
 import { io } from "socket.io-client";
@@ -36,6 +37,7 @@ function getLetterForNumber(num) {
 export default function UserGameRoom() {
   const { user } = useAuth();
   const { id } = useParams();
+  const { speak } = useSpeech();
   const socketRef = useRef(null);
   const intervalRef = useRef(null);
   const [haveWinner, setHaveWinner] = useState(false);
@@ -187,7 +189,9 @@ export default function UserGameRoom() {
   const initSocket = (gameId) => {
     if (!gameId || !user?.id) return;
 
-    const socket = io("https://bingo-online-c97r.onrender.com/", { transports: ["websocket"] });
+    const socket = io("https://bingo-online-c97r.onrender.com/", {
+      transports: ["websocket"],
+    });
     socketRef.current = socket;
 
     const userId = user.id;
@@ -206,6 +210,20 @@ export default function UserGameRoom() {
 
     socket.on("PLAYER_LEFT", ({ userId: leftId }) => {
       toast.warning({ text: `Jugador ${leftId} salió de la partida.` });
+    });
+
+    socket.on("BOARD_RESET", (data) => {
+      toast.info({
+        text: "📢 Tenemos un ganador",
+        description: "Tu tablero se reiniciará en breve",
+      });
+
+      socket.disconnect();
+
+      setTimeout(() => {
+        localStorage.clear();
+        window.location.reload();
+      }, 3000);
     });
 
     socket.on("BINGO_WINNER", async (data) => {
@@ -285,15 +303,11 @@ export default function UserGameRoom() {
       const lastLetter = lastNum !== null ? getLetterForNumber(lastNum) : null;
       setLastCalled({ num: lastNum, letter: lastLetter });
 
-      window.responsiveVoice.speak(
-        `${lastLetter} ${lastNum}`,
-        "Spanish Latin American Female",
-        {
-          pitch: 1.1, // (0.5 a 2)
-          rate: 1.25, // (0.1 a 1.5)
-          volume: 1,
-        }
-      );
+      speak(`${lastLetter} ${lastNum}`, {
+        pitch: 1.1,
+        rate: 1.25,
+        volume: 1,
+      });
 
       const prevAll = allNumbers.map((n) => String(n));
       const newNewlyCalled = {};
@@ -384,6 +398,6 @@ export default function UserGameRoom() {
         </section>
         <CardboardsPlay roomId={id} updateActiveMatchData={fetchActiveMatch} />
       </section>
-    </>
-  );
+    </>
+  );
 }

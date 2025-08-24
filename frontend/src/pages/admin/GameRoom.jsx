@@ -22,6 +22,7 @@ import {
   startGame,
   boardNumbers,
   possibleWinners,
+  restartMatch,
 } from "@/services/api/admin/liveMatch";
 
 import Logo from "/public/logo.png";
@@ -122,6 +123,26 @@ export default function GameRoom() {
       }
     });
   }, [userId, gameId]);
+
+  const handleEmit = async (gameId, userId) => {
+    try {
+      const response = await restartMatch.restart();
+
+      if (response) {
+        if (socketRef.current) {
+          socketRef.current.emit("resetBoard", {
+            gameId,
+            userId,
+            message: "La partida fue reiniciada",
+          });
+        }
+      } else {
+        console.error("No se pudo reiniciar la partida");
+      }
+    } catch (err) {
+      console.error("Error al reiniciar la partida:", err);
+    }
+  };
 
   const resetStates = () => {
     setActiveNumbers({});
@@ -240,6 +261,7 @@ export default function GameRoom() {
     toast.success({
       text: "Tablero limpiado correctamente",
     });
+    handleEmit(gameId, userId);
   };
 
   const patternModal = () => {
@@ -553,6 +575,6 @@ export default function GameRoom() {
         )}
         <PatternAdvice></PatternAdvice>
       </section>
-    </>
-  );
+    </>
+  );
 }
