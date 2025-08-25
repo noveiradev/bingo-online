@@ -161,9 +161,10 @@ export default function PlayCard({
             text: `${bingoResponse.message} con tu cartón ${cardId}`,
           });
 
+          localStorage.clear();
+          
           setTimeout(() => {
           window.location.reload();
-          localStorage.clear();
           }, 120000);
         } else {
           toast.info({
@@ -285,6 +286,6 @@ export default function PlayCard({
           )}
         </div>
       </article>
-    </>
-  );
+    </>
+  );
 }

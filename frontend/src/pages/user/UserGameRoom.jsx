@@ -6,7 +6,6 @@ import { toast } from "@pheralb/toast";
 import { io } from "socket.io-client";
 
 import { matchService } from "@/services/api/user/match";
-import Logo from "/public/logo.png";
 
 import GoBack from "@/components/GoBack";
 import Button from "@/components/Button";
@@ -219,9 +218,9 @@ export default function UserGameRoom() {
       });
 
       socket.disconnect();
+      localStorage.clear();
 
       setTimeout(() => {
-        localStorage.clear();
         window.location.reload();
       }, 3000);
     });
@@ -241,6 +240,8 @@ export default function UserGameRoom() {
         setSecondsLeft(120);
 
         if (intervalRef.current) clearInterval(intervalRef.current);
+        
+        localStorage.clear();
 
         intervalRef.current = setInterval(() => {
           setSecondsLeft((prev) => {
@@ -248,7 +249,6 @@ export default function UserGameRoom() {
               clearInterval(intervalRef.current);
               intervalRef.current = null;
               setHaveWinner(false);
-              localStorage.clear();
               window.location.reload();
               return 0;
             }
@@ -398,6 +398,6 @@ export default function UserGameRoom() {
         </section>
         <CardboardsPlay roomId={id} updateActiveMatchData={fetchActiveMatch} />
       </section>
-    </>
-  );
+    </>
+  );
 }
