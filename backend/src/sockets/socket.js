@@ -68,7 +68,7 @@ export function initSocket(server) {
 
       console.log(`Admin ${adminId} reinició el tablero del juego ${gameId}`);
 
-      // Emitir a todos los clientes de la room para que reseteen su tablero
+      
       io.to(room).emit('BOARD_RESET');
     });
   });
