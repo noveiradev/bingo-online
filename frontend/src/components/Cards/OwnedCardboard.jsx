@@ -1,3 +1,4 @@
+import { useState } from "react";
 import EmptyCardboard from "@/assets/images/Carton-vacio.webp";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@pheralb/toast";
@@ -11,6 +12,7 @@ export default function OwnedCardboard({
   numbersArray,
 }) {
   const { user } = useAuth();
+  const [disabled, setDisabled] = useState(false);
 
   let gift = is_gift === 1 ? "gift" : "";
 
@@ -30,6 +32,7 @@ export default function OwnedCardboard({
       const response = await cancelReserve.cancelReserve(userData);
 
       if (response.success) {
+        setDisabled((prev) => !prev);
         toast.success({
           text: response.message,
         });
@@ -73,9 +76,10 @@ export default function OwnedCardboard({
           <Button
             text="Cancelar"
             className={`${pay === "pending" ? "bg-coral-red text-white" : "bg-coral-red/50 text-white/50"}  mt-2 font-medium px-2 py-1 rounded-md text-center text-sm w-full cursor-pointer`}
+            disabled={disabled}
             onClick={
               pay === "pending"
-                ? (e) => handleCancelReserve(cardNumber, e)
+                ? (e) => { handleCancelReserve(cardNumber, e); setDisabled((prev) => !prev); }
                 : () => {}
             }
           />

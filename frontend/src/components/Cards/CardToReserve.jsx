@@ -1,3 +1,4 @@
+import { useState } from "react";
 import EmptyCardboard from "@/assets/images/Carton-vacio.webp";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@pheralb/toast";
@@ -6,6 +7,7 @@ import { Fade } from "react-awesome-reveal";
 
 export default function CardToReserve({ cardsInfo = [], viewMode }) {
   const { user } = useAuth();
+  const [disabled, setDisabled] = useState(false);
 
   const handleCardboardReserve = async (cardId, UID, event) => {
     try {
@@ -21,6 +23,7 @@ export default function CardToReserve({ cardsInfo = [], viewMode }) {
           text: response.message,
         });
       } else {
+        setDisabled((prev) => !prev);
         toast.success({
           text: "Cartón reservado exitosamente!",
           description: "Puedes ver tu cartón en la sección de Tus cartones",
@@ -102,8 +105,9 @@ export default function CardToReserve({ cardsInfo = [], viewMode }) {
                     />
                   </div>
                   <button
-                    className="bg-green-apple/63 text-white mt-2 font-medium px-2 py-1 rounded-md text-center text-sm w-full cursor-pointer"
-                    onClick={(e) => handleCardboardReserve(card.id, user.id, e)}
+                    className={`${disabled ? "bg-green-apple/40 cursor-not-allowed text-white/80" : "bg-green-apple/63 cursor-pointer text-white"}  mt-2 font-medium px-2 py-1 rounded-md text-center text-sm w-full`}
+                    onClick={(e) => { handleCardboardReserve(card.id, user.id, e); setDisabled((prev) => !prev); }}
+                    disabled={disabled}
                   >
                     Apartar
                   </button>
@@ -138,8 +142,9 @@ export default function CardToReserve({ cardsInfo = [], viewMode }) {
                     )}
                   </div>
                   <button
-                    className="bg-green-apple/63 text-white mt-2 font-medium px-2 py-1 rounded-md text-center text-sm w-full"
-                    onClick={(e) => handleCardboardReserve(card.id, user.id, e)}
+                    className={`${disabled ? "bg-green-apple/40 cursor-not-allowed text-white/80" : "bg-green-apple/63 cursor-pointer text-white"}  mt-2 font-medium px-2 py-1 rounded-md text-center text-sm w-full`}
+                    onClick={(e) => { handleCardboardReserve(card.id, user.id, e); setDisabled((prev) => !prev); }}
+                    disabled={disabled}
                   >
                     Apartar
                   </button>

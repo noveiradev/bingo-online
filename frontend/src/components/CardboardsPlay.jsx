@@ -18,6 +18,7 @@ export default function CardboardsPlay({ roomId, updateActiveMatchData }) {
   const [cardboards, setCardboards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showCardBoards, setShowCardboards] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   const [selected, setSelected] = useState(() => {
     try {
@@ -97,6 +98,8 @@ export default function CardboardsPlay({ roomId, updateActiveMatchData }) {
   const processSelected = async () => {
     if (selected.length === 0) return;
     try {
+      setDisabled((prev) => !prev);
+
       const toProcess = selected.map(Number);
       const response = await matchService.joinMatch({
         reservationIds: toProcess,
@@ -104,9 +107,9 @@ export default function CardboardsPlay({ roomId, updateActiveMatchData }) {
       });
 
       if (response.message) {
+        setDisabled((prev) => !prev);
         updateActiveMatchData();
       }
-
       setProcessed((prev) =>
         Array.from(new Set([...prev, ...toProcess])).map(String)
       );
@@ -119,9 +122,8 @@ export default function CardboardsPlay({ roomId, updateActiveMatchData }) {
   return (
     <>
       <section
-        className={`absolute bottom-0 left-0 right-0 flex justify-center items-center px-2 w-full ${
-          showCardBoards ? "h-[43%] stable:h-[23rem] desk:h-[13rem] desklg:h-[24rem]" : "h-[3.2rem] desk:h-[3rem] desklg:h-[3.2rem]"
-        } z-35 transition-all duration-300 `}
+        className={`absolute bottom-0 left-0 right-0 flex justify-center items-center px-2 w-full ${showCardBoards ? "h-[43%] stable:h-[23rem] desk:h-[13rem] desklg:h-[24rem]" : "h-[3.2rem] desk:h-[3rem] desklg:h-[3.2rem]"
+          } z-35 transition-all duration-300 `}
       >
         <article className="bg-dark-gold w-full h-full rounded-t-xl flex flex-col">
           <div className="flex flex-col justify-center items-center">
@@ -172,11 +174,11 @@ export default function CardboardsPlay({ roomId, updateActiveMatchData }) {
                   <div className={`w-full my-2 flex justify-center gap-2`}>
                     <button
                       onClick={selected.length === 0 ? null : processSelected}
-                      className={`px-2 py-2 text-xs rounded ${
-                        selected.length === 0
-                          ? "bg-red-500/70 text-white/85 cursor-not-allowed"
-                          : "bg-red-500 text-white cursor-pointer"
-                      }`}
+                      disabled={disabled}
+                      className={`px-2 py-2 text-xs rounded ${selected.length === 0 || disabled === true
+                        ? "bg-red-500/70 text-white/85 cursor-not-allowed"
+                        : "bg-red-500 text-white cursor-pointer"
+                        }`}
                     >
                       Seleccionar cartones
                     </button>
@@ -212,6 +214,6 @@ export default function CardboardsPlay({ roomId, updateActiveMatchData }) {
           )}
         </article>
       </section>
-    </>
-  );
+    </>
+  );
 }

@@ -23,6 +23,7 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [disabled, setDisabled] = useState(false);
 
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
@@ -32,13 +33,13 @@ export default function Login() {
   const onSubmit = async (data) => {
     setServerError("");
     setIsLoading(true);
+    setDisabled((prev) => !prev);
     try {
       const response = await login(data);
 
       if (response.success) {
         setTimeout(() => {
           setIsLoading(false);
-
           if (from) {
             navigate(from, { replace: true });
           } else if (response.user?.role === "admin") {
@@ -49,6 +50,7 @@ export default function Login() {
         }, 1000);
       } else {
         setIsLoading(false);
+        setDisabled((prev) => !prev);
         toast.error({
           text: "Datos incorrectos",
           description: "Verifica tus credenciales e inténtalo de nuevo",
@@ -56,14 +58,15 @@ export default function Login() {
       }
     } catch (error) {
       setServerError(error.message || "Error al iniciar sesión");
+      setDisabled((prev) => !prev);
       setIsLoading(false);
       console.log(serverError);
       toast.error({
         text: "Error",
         description: error.message || "Ocurrió un error al iniciar sesión",
       });
-    }
-  };
+    }
+  };
   return (
     <>
       {isLoading && (
@@ -129,7 +132,8 @@ export default function Login() {
             <article className="flex flex-col">
               <Button
                 text="Iniciar Sesión"
-                className="text-white font-semibold py-2 px-4 rounded-[7px] mt-2 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] stable:text-[1rem] desk:mt-2 desk:py-1 desklg:mt-4 desklg:py-2"
+                disabled={disabled}
+                className={`${disabled ? "cursor-not-allowed bg-gray-700" : "text-white cursor-pointer"} font-semibold py-2 px-4 rounded-[7px] mt-2 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] stable:text-[1rem] desk:mt-2 desk:py-1 desklg:mt-4 desklg:py-2`}
               />
               <div className="flex items-center justify-between w-[95%] mx-auto mt-[.2rem]">
                 <span className="text-dark-gold text-sm font-semibold stable:text-[0.95rem] desk:text-[0.8rem] desklg:text-[0.95rem]">
@@ -146,6 +150,6 @@ export default function Login() {
           </form>
         </section>
       </section>
-    </>
-  );
+    </>
+  );
 }

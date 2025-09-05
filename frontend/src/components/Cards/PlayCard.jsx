@@ -25,6 +25,7 @@ export default function PlayCard({
   const { id } = useParams();
   const { width, height } = useWindowSize();
   const [showConfetti, setShowConfetti] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   const numbers = Array.isArray(numbersArray)
     ? numbersArray
@@ -87,7 +88,7 @@ export default function PlayCard({
       }
 
       const value = numbers[idx];
-      
+
       let called = [];
       try {
         called = JSON.parse(localStorage.getItem("game_all_numbers") || "[]");
@@ -121,14 +122,17 @@ export default function PlayCard({
   };
 
   const handleBingo = async (cardId) => {
+    setDisabled(true);
+
     const markedValues = getMarkedValues();
     if (markedValues.length === 0) {
+      setDisabled(false);
       toast.warning({
         text: "No has marcado ningún número para cantar bingo",
       });
       return;
     }
-
+    
     try {
       const payload = {
         reservationId,
@@ -156,28 +160,32 @@ export default function PlayCard({
         const bingoResponse = await matchService.validateBingo(bingoPayload);
 
         if (bingoResponse?.valid) {
+          setDisabled(true);
           setShowConfetti(true);
           toast.success({
             text: `${bingoResponse.message} con tu cartón ${cardId}`,
           });
 
           localStorage.clear();
-          
+
           setTimeout(() => {
-          window.location.reload();
+            window.location.reload();
           }, 120000);
         } else {
+          setDisabled(false);
           toast.info({
             text: `Aún no tienes BINGO con el cartón ${cardId}`,
           });
         }
       } else {
+        setDisabled(false);
         toast.info({
           text: "No hay números marcados válidos para validar BINGO",
         });
       }
     } catch (e) {
       console.error("Error en BINGO():", e);
+      setDisabled(false);
       toast.error({ text: "Error cantando bingo" });
     }
   };
@@ -253,12 +261,13 @@ export default function PlayCard({
           {processed ? (
             <Button
               text="Cantar BINGO"
+              disabled={disabled}
               onClick={(e) => {
                 e.stopPropagation();
                 handleBingo(cardId);
               }}
               type={"button"}
-              className="cursor-pointer w-full flex justify-center text-xs font-medium text-white font-inter bg-green-600 hover:bg-green-500 px-2 py-1 rounded"
+              className={`${disabled ? "bg-green-600/60 cursor-not-allowed text-white/80" : "bg-green-600 cursor-pointer hover:bg-green-500 text-white"} w-full flex justify-center text-xs font-medium font-inter px-2 py-1 rounded`}
             />
           ) : selected ? (
             <div className="flex w-full justify-center items-center gap-1 text-sm text-white">
@@ -286,6 +295,6 @@ export default function PlayCard({
           )}
         </div>
       </article>
-    </>
-  );
+    </>
+  );
 }

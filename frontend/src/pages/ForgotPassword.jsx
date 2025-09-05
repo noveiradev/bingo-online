@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { passwordService } from "@/services/api/auth";
@@ -20,10 +21,12 @@ export default function ForgotPassword() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [disabled, setDisabled] = useState(false);
 
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
+    setDisabled((prev) => !prev);
     try {
       const userData = {
         username: data.username,
@@ -35,14 +38,19 @@ export default function ForgotPassword() {
       const response = await passwordService.password(userData);
 
       if (response) {
+        setDisabled((prev) => !prev);
+
         toast.success({
           text: "Recuperación exitosa!"
         })
         setTimeout(() => {
           navigate("/login", { state: { registrationSuccess: true } });
         }, 2000);
+      } else {
+        setDisabled((prev) => !prev);
       }
     } catch (error) {
+      setDisabled((prev) => !prev);
       console.error("Registration error:", error);
     }
   };
@@ -120,11 +128,12 @@ export default function ForgotPassword() {
           <article className="flex flex-col">
             <Button
               text="Confirmar"
-              className="text-white w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-2 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] stable:text-[1rem] desk:text-[1rem] desklg:text-[1.25rem]"
+              disabled={disabled}
+              className={`${disabled ? "cursor-not-allowed bg-gray-800" : "text-white cursor-pointer"} w-[90%] mx-auto font-semibold py-2 px-4 rounded-[7px] mt-2 hover:bg-yellow-cake/80 transition-colors duration-200 bg-linear-to-t from-[#794d10] to-[#D46613] stable:text-[1rem] desk:text-[1rem] desklg:text-[1.25rem]`}
             />
           </article>
         </form>
       </section>
-    </>
-  );
+    </>
+  );
 }
